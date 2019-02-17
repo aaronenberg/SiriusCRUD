@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ArticleConfig(AppConfig):
-    name = 'articles'
+class ArticlesConfig(AppConfig):
+    name = 'sirius.articles'
