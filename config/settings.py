@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'articles.apps.ArticlesConfig',
-    'users.apps.UsersConfig',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -88,6 +88,9 @@ DATABASES = {
     }
 }
 
+# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-user-model
+
+AUTH_USER_MODEL = 'users.BaseUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -144,6 +147,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = '/var/www/sirius.com/media/'
 MEDIA_URL = '/media/'
+
+# email system setup 
 
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.environ['EMAIL']
