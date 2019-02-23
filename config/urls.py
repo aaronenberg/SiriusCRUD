@@ -17,16 +17,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers
-from sirius.articles import views
+from articles import views
 
-router = routers.DefaultRouter()
-router.register(r'posts', views.PostViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+    path('', include('articles.urls')),
 # static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

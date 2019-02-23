@@ -1,8 +1,11 @@
+import os
+from django.conf import settings
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django.urls import reverse
 from django.utils.text import slugify
 
-class Post(models.Model):
+
+class Article(models.Model):
 
     RAW_DATA = 'RD'
     ANALYZED_DATA = 'AD'
@@ -26,7 +29,7 @@ class Post(models.Model):
         (CIVIL_ENGINEERING, 'Civil Engineering'),
     )
 
-    title = models.CharField(max_length=255, default='filename', blank=False)
+    title = models.CharField(max_length=255, default='', blank=False)
 
     article_type = models.CharField(max_length=2, choices=ARTICLE_TYPES)
 
@@ -40,17 +43,24 @@ class Post(models.Model):
 
     modified = models.DateTimeField(auto_now=True)
 
+    def get_absolute_url(self):
+        return reverse('article-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(Post, self).save(*args, **kwargs)
+        super(Article, self).save(*args, **kwargs)
 
-class Article(models.Model):
+
+class ArticleMedia(models.Model):
 
     # file will be saved to MEDIA_ROOT/uploads/2019/02/16
     # file url will be MEDIA_URL/uploads/2019/02/16
-    article = models.FileField(upload_to='uploads/%Y/%m/%d')
+    media = models.FileField(upload_to='uploads/%Y/%m/%d')
 
     created = models.DateTimeField(auto_now_add=True)
     
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='articles')
+    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='media')
+
+    # chop off relative path to Storage to get just the name of file
+    def filename(self):
+        return os.path.basename(self.media.name)
