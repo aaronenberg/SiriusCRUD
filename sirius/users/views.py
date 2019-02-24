@@ -14,6 +14,7 @@ class UserCreateView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return not self.request.user.is_authenticated
+
     def get(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()

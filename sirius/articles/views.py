@@ -8,7 +8,7 @@ from .forms import ArticleForm, ArticleMediaFormSet
 
 
 class ArticleListView(ListView):
-    ''' Displays all public articles '''
+    ''' Displays all public articles, restricting raw data viewing to authenticated users '''
 
     model = Article
     context_object_name = 'articles'
