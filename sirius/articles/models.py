@@ -29,6 +29,8 @@ class Article(models.Model):
         (CIVIL_ENGINEERING, 'Civil Engineering'),
     )
 
+    author = models.ForeignKey('users.BaseUser', on_delete=models.CASCADE, related_name='articles')
+
     title = models.CharField(max_length=255, default='', blank=False)
 
     article_type = models.CharField(max_length=2, choices=ARTICLE_TYPES)
@@ -43,6 +45,8 @@ class Article(models.Model):
 
     modified = models.DateTimeField(auto_now=True)
 
+    is_public = models.BooleanField(default=True)
+
     def get_absolute_url(self):
         return reverse('article-detail', kwargs={'slug': self.slug})
 
@@ -55,7 +59,7 @@ class ArticleMedia(models.Model):
 
     # file will be saved to MEDIA_ROOT/uploads/2019/02/16
     # file url will be MEDIA_URL/uploads/2019/02/16
-    media = models.FileField(upload_to='uploads/%Y/%m/%d')
+    article_media = models.FileField(upload_to='uploads/%Y/%m/%d')
 
     created = models.DateTimeField(auto_now_add=True)
     
@@ -63,4 +67,4 @@ class ArticleMedia(models.Model):
 
     # chop off relative path to Storage to get just the name of file
     def filename(self):
-        return os.path.basename(self.media.name)
+        return os.path.basename(self.article_media.name)

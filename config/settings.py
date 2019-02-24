@@ -31,16 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users.apps.UsersConfig',
     'articles.apps.ArticlesConfig',
-    'rest_framework',
-    'rest_framework.authtoken',
     'crispy_forms',
 ]
 
@@ -113,20 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -161,3 +144,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ['EMAIL']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASS']
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/articles/'
+LOGOUT_REDIRECT_URL = '/login/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

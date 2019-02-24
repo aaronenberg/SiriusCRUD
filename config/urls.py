@@ -15,13 +15,11 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import include, path
 from articles import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('', include('articles.urls')),
 # static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/

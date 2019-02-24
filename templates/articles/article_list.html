@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+  <a href="{% url 'article-create' %}">New Article</a>
+</div>
+<ul>
+  {% for article in articles %}
+    <a href="{{ article.get_absolute_url }}">
+      <li> {{ article.title }} </li>
+    </a>
+  {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form action="" method="post" enctype="multipart/form-data">
+  {% crispy form %}
+  {{ articlemedia_form.management_form }}
+  {% for upload_form in articlemedia_form %}
+  <div class="row form-row spacer">
+    <div class="input-group">
+        <button class="btn btn-success add-form-row">+</button>
+      <div class="custom-file col-md-6">
+        {{ upload_form.article_media }}
+      </div>
+      <div class="input-group-append">
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  <input type="Submit" class="btn btn-primary" value="Post">
+  <a href="{% url 'article-list' %}">
+    <button type="button" class="btn">Back</button>
+  </a>
+</form>
+
+{% endblock content %}
+
+{% block custom_js %}
+<script type='text/javascript'>
+  function updateElementIndex(el, prefix, ndx) {
+      var id_regex = new RegExp('(' + prefix + '-\\d+)');
+      var replacement = prefix + '-' + ndx;
+      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+      if (el.id) el.id = el.id.replace(id_regex, replacement);
+      if (el.name) el.name = el.name.replace(id_regex, replacement);
+  }
+  function cloneMore(selector, prefix) {
+      var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+      var newElement = $(selector).clone(true);
+      newElement.find('input').each(function() {
+          var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+          var id = 'id_' + name;
+          $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+      });
+      total++;
+      $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+      $(selector).after(newElement);
+      var conditionRow = $('.form-row:not(:last)');
+      conditionRow.find('.btn.add-form-row')
+      .removeClass('btn-success').addClass('btn-danger')
+      .removeClass('add-form-row').addClass('remove-form-row')
+      .html('x');
+      return false;
+  }
+  function deleteForm(prefix, btn) {
+      var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      if (total > 1){
+          btn.closest('.form-row').remove();
+          var forms = $('.form-row');
+          $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+          for (var i=0, formCount=forms.length; i<formCount; i++) {
+              $(forms.get(i)).find('input').each(function() {
+                  updateElementIndex(this, prefix, i);
+              });
+          }
+      }
+      return false;
+  }
+  $(document).on('click', '.add-form-row', function(e){
+      e.preventDefault();
+      cloneMore('.form-row:last', 'media');
+      return false;
+  });
+  $(document).on('click', '.remove-form-row', function(e){
+      e.preventDefault();
+      deleteForm('media', $(this));
+      return false;
+  });
+</script>
+
+{% endblock custom_js %}

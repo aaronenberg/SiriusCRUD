@@ -1,10 +1,5 @@
-import uuid
-from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
 
 
 STUDENT = 'ST'
@@ -19,7 +14,7 @@ ACCOUNT_TYPES = (
 
 class BaseUserManager(BaseUserManager):
 
-    def _create_user(self, email, account_type, password, **extra_fields):
+    def _create_user(self, email, password, account_type, **extra_fields):
         if not email:
             raise ValueError('Email is required.')
         if not account_type:
@@ -29,13 +24,13 @@ class BaseUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, account_type, password, **extra_fields):
+    def create_user(self, email,  password, account_type, **extra_fields):
         user = self._create_user(email, account_type, password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, account_type, password, **extra_fields):
-        user = self._create_user(email, account_type, password)
+    def create_superuser(self, email, password, account_type, **extra_fields):
+        user = self._create_user(email, password, account_type)
         user.is_staff = True
         user.save(using=self._db)
         return user
@@ -98,16 +93,3 @@ class BaseUser(AbstractBaseUser):
     class Meta:
         verbose_name_plural = "Users"
 
-    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-    def create_auth_token(sender, signal, instance=None, created=False, **kwargs):
-        if created:
-            Token.objects.create(user=instance)
-
-#class Student(models.Model):
-#    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-#                                primary_key=True, related_name='Student')
-#
-#    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-#    def create_auth_token(sender, signal, instance=None, created=False, **kwargs):
-#        if created:
-#            Token.objects.create(user=instance)

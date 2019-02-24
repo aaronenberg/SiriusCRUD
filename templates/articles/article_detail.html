@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+  <div>
+    {{ article.title }}
+  </div>
+  <div>
+    {{ article.description }}
+  </div>
+  <div>
+    {{ article.get_discipline_display }}
+  </div>
+  <div>
+    {{ article.get_article_type_display }}
+  </div>
+  <div>
+    {{ article.created }}
+  </div>
+  <div>
+    {% for media in articlemedia_list %}
+      <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
+    {% endfor %}
+  </div>
+  {% if user.pk == article.author.pk %}
+  <div>
+    <a href="{% url 'article-update' article.slug %}">Edit</a>
+  </div>
+  {% endif %}
+  <div>
+    <a href="{% url 'article-list' %}">Back</a>
+  </div>
+{% endblock content %}
