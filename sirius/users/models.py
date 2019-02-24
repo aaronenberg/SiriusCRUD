@@ -41,7 +41,7 @@ class BaseUser(AbstractBaseUser):
     email = models.EmailField(
         max_length=255,
         unique=True,
-        verbose_name='CSUS Email',
+        verbose_name='School Email',
     )
     account_type = models.CharField(
         max_length=2,
