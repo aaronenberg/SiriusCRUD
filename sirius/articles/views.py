@@ -12,7 +12,12 @@ class ArticleListView(ListView):
 
     model = Article
     context_object_name = 'articles'
-    queryset = Article.objects.filter(is_public=True)
+
+    def get_queryset(self):
+        queryset = Article.objects.filter(is_public=True)
+        if not self.request.user.is_authenticated:
+            return queryset.exclude(article_type='RD')
+        return queryset
 
 
 class ArticleDetail(DetailView):
