@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <div>
+    {{ course.title }}
+  </div>
+  <div>
+    {{ course.description }}
+  </div>
+  {% for course in courses %}
+    <li> {{ course.section }} </li>
+  {% endfor %}
+  <div>
+    <a href="{% url 'course-list' %}">BACK</a>
+  </div>
+{% endblock content %}
