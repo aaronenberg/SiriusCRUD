@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
@@ -8,25 +9,31 @@ from .forms import ArticleForm, ArticleMediaFormSet
 
 
 class ArticleListView(ListView):
-    ''' Displays all public articles, restricting raw data viewing to authenticated users '''
+    ''' Displays a list of articles. Users are able to see all of their own articles, public or private,
+        as well as other users' public articles. Additionally, unauthenticated users may not view 
+        certain types of articles '''
 
     model = Article
     context_object_name = 'articles'
 
     def get_queryset(self):
-        queryset = Article.objects.filter(is_public=True)
-        if not self.request.user.is_authenticated:
-            return queryset.exclude(article_type='RD')
-        return queryset
+        if self.request.user.is_authenticated:
+            return Article.objects.exclude(Q(is_public=False), ~Q(author=self.request.user))
+        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
 
 
 class ArticleDetail(DetailView):
-    ''' Displays a specific, public article and it's uploaded attachments '''
+    ''' Displays details of an article. Allows a user to hide their private articles from
+        other users. Additionally, unauthenticated users may not view certain types of articles '''
 
     model = Article
     context_object_name = 'article'
-    queryset = Article.objects.filter(is_public=True)
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Article.objects.exclude(Q(is_public=False), ~Q(author=self.request.user))
+        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
+            
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['articlemedia_list'] = ArticleMedia.objects.filter(article__pk=self.object.pk)
@@ -53,7 +60,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        articlemedia_form = ArticleMediaFormSet(self.request.POST, self.request.FILES, instance=form.instance)
+        articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=form.instance)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
             return self.form_invalid(form, articlemedia_form) 
@@ -94,7 +101,7 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        articlemedia_form = ArticleMediaFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=self.object)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
             return self.form_invalid(form, articlemedia_form) 
@@ -111,4 +118,4 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_invalid(self, form, articlemedia_form):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
-        return render(request, self.get_template_names(), context)
+        return render(self.request, self.get_template_names(), context)

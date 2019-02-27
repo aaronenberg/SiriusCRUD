@@ -10,9 +10,19 @@
     {{ article.get_subject_display }}
   </div>
   <div>
+
     {{ article.get_article_type_display }}
   </div>
   <div>
+    <label>Published?</label>
+    {{ article.is_public }}
+  </div>
+  <div>
+    <label>Author:</label>
+    {{ article.author }}
+  </div>
+  <div>
+    <label>Created: </label>
     {{ article.created }}
   </div>
   <div>
