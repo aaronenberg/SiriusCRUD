@@ -16,15 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -57,9 +48,6 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            'templates',
-        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,20 +62,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sirius',
-        'USER': 'siriusadmin',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
 
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-user-model
 
@@ -130,21 +104,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Directory where user-uploaded files are saved
-
-MEDIA_ROOT = '/var/www/sirius.com/media/'
 MEDIA_URL = '/media/'
 
-# email system setup 
-
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.environ['EMAIL']
-SERVER_EMAIL = os.environ['EMAIL']
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ['EMAIL']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASS']
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/articles/'
