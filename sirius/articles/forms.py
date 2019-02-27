@@ -19,7 +19,7 @@ class ArticleForm(ModelForm):
         fields = (
             'article_type',
             'description',
-            'discipline',
+            'subject',
             'is_public',
             'title', 
         )
@@ -31,12 +31,12 @@ class ArticleForm(ModelForm):
             Div(
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
                 Field('article_type', wrapper_class='col-md-2'),
-                Field('discipline', wrapper_class='col-md-2'),
+                Field('subject', wrapper_class='col-md-2'),
                 Field('is_public', title="Make this post viewable to everyone.", wrapper_class='col-md-2'),
                 css_class='form-row'
             ),
             Div(
-                Field('description', wrapper_class='col-md-12'),
+                Field('description', autocomplete="off", wrapper_class='col-md-12'),
             )
         )
         self.helper.form_id = 'id-article-form'

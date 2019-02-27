@@ -7,26 +7,30 @@ from django.utils.text import slugify
 
 class Article(models.Model):
 
-    RAW_DATA = 'RD'
     ANALYZED_DATA = 'AD'
-    REPORT = 'RE'
     POSTER = 'PO'
+    RAW_DATA = 'RD'
+    REPORT = 'RE'
     OTHER = 'OT'
     ARTICLE_TYPES = (
-        (RAW_DATA, 'Raw Data'),
         (ANALYZED_DATA, 'Analyzed Data'),
-        (REPORT, 'Report'),
         (POSTER, 'Poster'),
+        (RAW_DATA, 'Raw Data'),
+        (REPORT, 'Report'),
         (OTHER, 'Other'),
     )
     
-    CHEMISTRY = 'CY'
-    BIOLOGY = 'BY'
+    BIOLOGY = 'BI'
+    CHEMISTRY = 'CH'
     CIVIL_ENGINEERING = 'CE'
-    DISCIPLINES = (
-        (CHEMISTRY, 'Chemistry'),
+    ENVIRONMENTAL_STUDIES = 'EN'
+    GEOLOGY = 'GE'
+    SUBJECTS = (
         (BIOLOGY, 'Biology'),
+        (CHEMISTRY, 'Chemistry'),
         (CIVIL_ENGINEERING, 'Civil Engineering'),
+        (ENVIRONMENTAL_STUDIES, 'Environmental Studies'),
+        (GEOLOGY, 'Geology'),
     )
 
     author = models.ForeignKey('users.BaseUser', on_delete=models.CASCADE, related_name='articles')
@@ -37,7 +41,7 @@ class Article(models.Model):
 
     description = models.TextField(max_length=512, blank=True)
 
-    discipline = models.CharField(max_length=2, choices=DISCIPLINES)
+    subject = models.CharField(max_length=2, choices=SUBJECTS)
 
     slug = models.SlugField(unique=True, editable=False)
 
