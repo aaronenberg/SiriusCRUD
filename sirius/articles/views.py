@@ -37,7 +37,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     ''' Displays a form to create a new article and a separate form for uploaded attachments
         only for authenticated users '''
 
-    template_name = 'articles/article_create.html'
+    template_name_suffix = '_create_form'
     model = Article
     form_class = ArticleForm
 
@@ -47,7 +47,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet()
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
-        return render(request, self.template_name, context)
+        return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -69,13 +69,13 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
     def form_invalid(self, form, articlemedia_form):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
-        return render(self.request, self.template_name, context)
+        return render(self.request, self.get_template_names(), context)
 
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     ''' Displays a form to update an existing article only for the original author '''
 
-    template_name = 'articles/article_update_form.html'
+    template_name_suffix = '_update_form'
     model = Article
     form_class = ArticleForm
     
@@ -88,7 +88,7 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet()
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
-        return render(request, self.template_name, context) 
+        return render(request, self.get_template_names(), context) 
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -111,4 +111,4 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_invalid(self, form, articlemedia_form):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
-        return render(request, self.template_name, context)
+        return render(request, self.get_template_names(), context)
