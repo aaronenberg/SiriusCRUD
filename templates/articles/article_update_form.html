@@ -19,14 +19,16 @@
   </div>
   {% endfor %}
   <input type="Submit" class="btn btn-primary" value="Save">
-  <a href="{% url 'article-detail' article.slug %}">
+  <a href="{{ article.get_absolute_url }}">
     <button type="button" class="btn">Back</button>
   </a>
 </form>
 
 {% endblock content %}
 
+
 {% block custom_js %}
+
 <script type='text/javascript'>
   function updateElementIndex(el, prefix, ndx) {
       var id_regex = new RegExp('(' + prefix + '-\\d+)');

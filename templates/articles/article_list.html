@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h1>Articles</h1>
 {% if user.is_authenticated %}
 <div>
@@ -10,9 +11,11 @@
 
 <ul>
   {% for article in articles %}
+  <div>
     <a href="{{ article.get_absolute_url }}">
-      <li> {{ article.title }} </li>
+      {{ article.title }}
     </a>
+  </div>
   {% endfor %}
 </ul>
 

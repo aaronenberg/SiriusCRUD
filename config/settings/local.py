@@ -34,3 +34,7 @@ INSTALLED_APPS += ['debug_toolbar', ]
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
 
 TEMPLATES[0]['DIRS'] = ['templates',]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TEMPLATE_CONTEXT': True,
+}
