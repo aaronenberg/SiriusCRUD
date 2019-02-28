@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Course Subjects</h1>
+
+<h1>{{ subject }} Course </h1>
 {% if user.is_authenticated %}
 <div>
   <a href="{% url 'course-create' %}">New Course</a>
@@ -9,9 +10,8 @@
 {% endif %}
 
 <ul>
-  {% for subject in course_subjects %}
+  {% for subject in subject_courses %}
       <li> {{ subject }} </li>
-    </a>
   {% endfor %}
 </ul>
 

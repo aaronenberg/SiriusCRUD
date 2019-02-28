@@ -85,7 +85,7 @@ class CourseForm(ModelForm):
                 Field('description', autocomplete="off", wrapper_class='col-md-12'),
             ),
             ButtonHolder(
-                Submit('submit', 'Submit', css_class='button white')
+                Submit('submit', 'Save', css_class='button white')
             )
         )
         self.helper.form_id = 'id-article-form'

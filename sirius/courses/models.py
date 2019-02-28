@@ -39,7 +39,7 @@ class Course(models.Model):
     #    return "{:02d}".format(self.section.number)
 
     def get_absolute_url(self):
-        return reverse('course-detail-section-list', kwargs={'slug': self.slug})
+        return reverse('course-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = "{}{}".format(self.get_subject_display(), self.number)
