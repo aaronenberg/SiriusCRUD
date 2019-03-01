@@ -18,6 +18,7 @@ class ArticleForm(ModelForm):
         model = Article
         fields = (
             'article_type',
+            'course',
             'description',
             'subject',
             'is_public',
@@ -32,6 +33,7 @@ class ArticleForm(ModelForm):
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
                 Field('article_type', wrapper_class='col-md-2'),
                 Field('subject', wrapper_class='col-md-2'),
+                Field('course', autocomplete="off", wrapper_class='col-md-6'),
                 css_class='form-row'
             ),
             Div(

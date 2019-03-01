@@ -45,5 +45,7 @@ class Course(models.Model):
         self.slug = "{}{}".format(self.get_subject_display(), self.number)
         super(Course, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.slug + " - " + self.title
     
 

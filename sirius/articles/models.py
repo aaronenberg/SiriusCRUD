@@ -45,6 +45,8 @@ class Article(models.Model):
 
     slug = models.SlugField(unique=True, editable=False)
 
+    course = models.ForeignKey('courses.Course', on_delete=models.CASCADE, related_name='articles')
+
     created = models.DateTimeField(auto_now_add=True)
 
     modified = models.DateTimeField(auto_now=True)
@@ -57,6 +59,9 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Article, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
 
 class ArticleMedia(models.Model):

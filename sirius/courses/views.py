@@ -18,26 +18,8 @@ class CourseListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-#class SubjectCourseListView(LoginRequiredMixin, ListView):
-#    ''' Displays all public courses, restricting raw data viewing to authenticated users '''
-#
-#    model = Course
-#    context_object_name = 'subject_courses'
-#    template_name = "courses/course_subject_list.html"
-#
-#    def get_queryset(self):
-#        self.subject = self.kwargs['subject']
-#        queryset = Course.objects.filter(subject=self.subject)
-#        return queryset
-#    
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        context['subject'] = self.subject
-#        return context
-
-
 class CourseDetailView(DetailView):
-    ''' Displays a specific, public article and it's uploaded attachments '''
+    ''' Displays a specific course and its related, public articles '''
 
     model = Course
     context_object_name = 'course'
@@ -48,6 +30,7 @@ class CourseDetailView(DetailView):
                                 ).filter(number=self.object.number)
         context = super().get_context_data(**kwargs)
         context['courses'] = queryset
+        context['articles'] = self.object.articles.filter(is_public=True)
         return context
 
 

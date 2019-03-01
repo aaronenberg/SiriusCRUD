@@ -12,10 +12,25 @@
   Sections
   {{ course.section }}
   <div>
-    <a href="{% url 'course-update' course.slug %}">EDIT</a>
+    Related Articles
+    <ul>
+      {% for article in articles %}
+      <div>
+        <a href="{{ article.get_absolute_url }}">
+          {{ article.title }}
+        </a>
+      </div>
+      {% endfor %}
+    </ul>
+  <div>
+    <a href="{% url 'course-update' course.slug %}">
+      <button type="button" class="btn">Edit</button>
+    </a>
   </div>
   <div>
-    <a href="{% url 'course-list' %}">BACK</a>
+    <a href="{% url 'course-list' %}">
+      <button type="button" class="btn">Back</button>
+    </a>
   </div>
 
 {% endblock content %}
