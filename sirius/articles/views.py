@@ -49,6 +49,7 @@ class ArticleDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['articlemedia_list'] = ArticleMedia.objects.filter(article__pk=self.object.pk)
+        context['referer_page'] = self.request.META.get('HTTP_REFERER')
         return context
 
 

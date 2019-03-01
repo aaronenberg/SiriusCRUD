@@ -1,36 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <div>
-    Course Title
-    {{ course.title }}
-  </div>
-  <div>
-    Description
-    {{ course.description }}
-  </div>
-  Sections
-  {{ course.section }}
-  <div>
-    Related Articles
-    <ul>
-      {% for article in articles %}
-      <div>
-        <a href="{{ article.get_absolute_url }}">
-          {{ article.title }}
-        </a>
-      </div>
-      {% endfor %}
-    </ul>
-  <div>
-    <a href="{% url 'course-update' course.slug %}">
-      <button type="button" class="btn">Edit</button>
-    </a>
-  </div>
-  <div>
-    <a href="{% url 'course-list' %}">
-      <button type="button" class="btn">Back</button>
-    </a>
-  </div>
+<div>
+  Course Title
+  {{ course.title }}
+</div>
+<div>
+  Description
+  {{ course.description }}
+</div>
+Sections
+{{ course.section }}
+<div>
+  Related Articles
+  <ul>
+    {% for article in articles %}
+    <div>
+      <a href="{{ article.get_absolute_url }}">
+        {{ article.title }}
+      </a>
+    </div>
+    {% endfor %}
+  </ul>
+<div>
+  <a href="{% url 'course-update' course.slug %}">
+    <button type="button" class="btn">Edit</button>
+  </a>
+</div>
+<div>
+  <a href="{{ referer_page }}">
+    <button type="button" class="btn">Back</button>
+  </a>
+</div>
 
 {% endblock content %}

@@ -22,7 +22,9 @@
   </div>
   <div>
     <label>Course: </label>
-    {{ article.course }}
+    <a href="{{ article.course.get_absolute_url }}">
+      {{ article.course }}
+    </a>
   </div>
   <div>
     <label>Created: </label>
@@ -41,11 +43,7 @@
   </div>
   {% endif %}
   <div>
-    {% if article.is_public == True %}
-    <a href="{% url 'article-list' %}">
-    {% else %}
-    <a href="{% url 'draft-list' %}">
-    {% endif %}
+    <a href="{{ referer_page }}">
       <button type="button" class="btn">Back</button>
     </a>
   </div>

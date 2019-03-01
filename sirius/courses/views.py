@@ -31,6 +31,7 @@ class CourseDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['courses'] = queryset
         context['articles'] = self.object.articles.filter(is_public=True)
+        context['referer_page'] = self.request.META.get('HTTP_REFERER')
         return context
 
 
