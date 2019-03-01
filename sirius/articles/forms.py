@@ -43,4 +43,4 @@ class ArticleForm(ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_tag = False
-        self.helper.form_show_labels = False
+        self.helper.form_show_labels = True 
