@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Saved Drafts</h1>
+<div>
+  <a href="{% url 'article-create' %}">New Article</a>
+</div>
+
+<ul>
+  {% for draft in drafts %}
+  <div>
+    <a href="{{ draft.get_absolute_url }}">
+      {{ draft.title }}
+    </a>
+  </div>
+  {% endfor %}
+</ul>
+
+{% endblock %}

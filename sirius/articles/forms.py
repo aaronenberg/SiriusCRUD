@@ -32,7 +32,6 @@ class ArticleForm(ModelForm):
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
                 Field('article_type', wrapper_class='col-md-2'),
                 Field('subject', wrapper_class='col-md-2'),
-                Field('is_public', title="Make this post viewable to everyone.", wrapper_class='col-md-2'),
                 css_class='form-row'
             ),
             Div(

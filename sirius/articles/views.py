@@ -18,8 +18,20 @@ class ArticleListView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Article.objects.exclude(Q(is_public=False), ~Q(author=self.request.user))
+            return Article.objects.exclude(is_public=False)
         return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
+
+
+class DraftListView(LoginRequiredMixin, ListView):
+    ''' Displays a list of the current user's unpublished drafts.
+        The drafts in this list are only available to the currently logged in user. '''
+
+    model = Article
+    context_object_name = 'drafts'
+    template_name = 'articles/draft_list.html'
+
+    def get_queryset(self):
+            return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
 class ArticleDetail(DetailView):
@@ -67,6 +79,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
+        if '_save_draft' in self.request.POST:
+            form.instance.is_public = False
         form.instance.author = self.request.user
         form.save()
         articlemedia = articlemedia_form.save(commit=False)
@@ -108,6 +122,10 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
+        if '_save_draft' in self.request.POST:
+            form.instance.is_public = False
+        else:
+            form.instance.is_public = True
         form.save()
         articlemedia = articlemedia_form.save(commit=False)
         for media in articlemedia:
