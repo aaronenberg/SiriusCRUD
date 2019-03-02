@@ -20,9 +20,9 @@
   <body>
 	{% if user.is_authenticated %}
 		<div class="d-flex flex-row-reverse bd-highlight">
-			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Logout</a></div>
+			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Sign Out</a></div>
 			<div class="p-2 bd-highlight">Placeholder</div>
-			<div class="p-2 bd-highlight">Logged in as: {{ user.email }}</div>
+			<div class="p-2 bd-highlight">Welcome {{ user.email }}</div>
 		</div>
         <div>
 		<nav class="navbar navbar-expand-sm bg-light navbar-light">
