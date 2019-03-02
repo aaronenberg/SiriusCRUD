@@ -7,12 +7,27 @@
     {{ article.description }}
   </div>
   <div>
-    {{ article.get_discipline_display }}
+    {{ article.get_subject_display }}
   </div>
   <div>
     {{ article.get_article_type_display }}
   </div>
   <div>
+    <label>Published?</label>
+    {{ article.is_public }}
+  </div>
+  <div>
+    <label>Author:</label>
+    {{ article.author }}
+  </div>
+  <div>
+    <label>Course: </label>
+    <a href="{{ article.course.get_absolute_url }}">
+      {{ article.course }}
+    </a>
+  </div>
+  <div>
+    <label>Created: </label>
     {{ article.created }}
   </div>
   <div>
@@ -22,10 +37,14 @@
   </div>
   {% if user.pk == article.author.pk %}
   <div>
-    <a href="{% url 'article-update' article.slug %}">Edit</a>
+    <a href="{% url 'article-update' article.slug %}">
+      <button type="button" class="btn">Edit</button>
+    </a>
   </div>
   {% endif %}
   <div>
-    <a href="{% url 'article-list' %}">Back</a>
+    <a href="{{ referer_page }}">
+      <button type="button" class="btn">Back</button>
+    </a>
   </div>
 {% endblock content %}

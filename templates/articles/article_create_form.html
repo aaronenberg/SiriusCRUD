@@ -18,9 +18,18 @@
     </div>
   </div>
   {% endfor %}
-  <input type="Submit" class="btn btn-primary" value="Post">
+  <div class="submit-row">
+    {% block submit %}
+    {% block post %}
+    <input type="Submit" class="btn btn-primary" value="Post">
+    <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+    {% endblock post %}
+    {% endblock submit %}
+  </div>
+  {% block back_navigate %}
   <a href="{% url 'article-list' %}">
-    <button type="button" class="btn">Back</button>
+  {% endblock back_navigate %}
+    <button type="button" class="btn">Cancel</button>
   </a>
 </form>
 

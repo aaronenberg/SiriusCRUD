@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h1>Articles</h1>
 {% if user.is_authenticated %}
 <div>
-  <a href="{% url 'article-create' %}">New Article</a>
+  <a href="{% url 'article-create' %}">New Article</a> <a href="{% url 'draft-list' %}">Saved Drafts</a>
 </div>
 {% endif %}
 
 <ul>
   {% for article in articles %}
+  <div>
     <a href="{{ article.get_absolute_url }}">
-      <li> {{ article.title }} </li>
+      {{ article.title }}
     </a>
+  </div>
   {% endfor %}
 </ul>
 

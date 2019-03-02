@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Courses</h1>
+{% if user.is_authenticated %}
+<div>
+  <a href="{% url 'course-create' %}">New Course</a>
+</div>
+{% endif %}
+
+<ul>
+  {% for course in courses %}
+  <div>
+    <a href="{{ course.get_absolute_url }}">
+      {{ course.title }}
+  </a>
+  </div>
+  {% endfor %}
+</ul>
+
+{% endblock %}

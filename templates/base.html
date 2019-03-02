@@ -19,7 +19,13 @@
   <body>
     {% if user.is_authenticated %}
       <div> logged in as: {{ user.email }} </div>
-      <div> <a href="{% url 'logout' %}">logout</a> </div>
+      <div>
+        <a href="{% url 'logout' %}">logout</a>
+        <a href="{% url 'article-list' %}">Articles</a>
+        {% if user.account_type == 'FA' %}
+        <a href="{% url 'course-list' %}">Courses</a>
+        {% endif %}
+      </div>
     {% endif %}
 
     <div id="content">

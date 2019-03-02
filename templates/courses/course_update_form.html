@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form action="" method="post" enctype="multipart/form-data">
+  {% crispy form %}
+  <a href="{{ course.get_absolute_url }}">
+    <button type="button" class="btn">Back</button>
+  </a>
+</form>
+
+{% endblock content %}
