@@ -12,7 +12,7 @@ FACULTY = 'FA'
 ACCOUNT_TYPES = (
     (STUDENT, 'Student'),
     (TEACHING_ASSISTANT, 'Teaching Assistant'),
-    (FACULTY, 'Faculty'),
+    (FACULTY, 'Instructor'),
 )
 
 
@@ -37,6 +37,7 @@ class BaseUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('account_type', FACULTY)
+        extra_fields.setdefault('first_name', 'superuser')
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -100,7 +101,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __str__(self):
-        return self.email
+        return "{0}    ({1})".format(self.get_full_name(), self.get_account_type_display())
 
     @property
     def is_privileged(self):

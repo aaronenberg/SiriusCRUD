@@ -30,7 +30,11 @@ Sections
   </a>
 </div>
 <div>
+  {% if 'articles' in referer_page %}
   <a href="{{ referer_page }}">
+  {% else %}
+  <a href="{% url 'courses:course-list' %}">
+  {% endif %}
     <button type="button" class="btn">Back</button>
   </a>
 </div>

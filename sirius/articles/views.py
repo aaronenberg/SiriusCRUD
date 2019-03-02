@@ -82,6 +82,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form, articlemedia_form):
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
+        else:
+            form.instance.is_public = True
         form.instance.author = self.request.user
         form.save()
         articlemedia = articlemedia_form.save(commit=False)
