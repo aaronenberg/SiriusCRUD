@@ -22,18 +22,19 @@
         <div> logged in as: {{ user.email }} </div>
         <div>
 		<nav class="navbar navbar-expand-sm bg-light navbar-light">
-			<ul class="navbar-nav">
-				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
-				</li>
+			<ul class="navbar-nav">	
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'article-list' %}">Articles</a>
 				</li>
 				{% if user.account_type == 'FA' %}
 				    <li class="nav-item">
-					    <a class="nav-link" href="#">Link</a>
+					    <a class="nav-link" href="{% url 'course-list' %}">Courses</a>
 				    </li>
 				{% endif %}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+				</li>
+
 			</ul>
 		</nav>
         </div>
