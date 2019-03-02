@@ -35,11 +35,11 @@ class Course(models.Model):
     class Meta:
         unique_together = ("subject", "number")
 
-    #def get_section_display(self):
-    #    return "{:02d}".format(self.section.number)
+    def get_section_display(self, section):
+        return "{:02d}".format(section)
 
     def get_absolute_url(self):
-        return reverse('course-detail', kwargs={'slug': self.slug})
+        return reverse('courses:course-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = "{}{}".format(self.get_subject_display(), self.number)

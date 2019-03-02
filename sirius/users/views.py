@@ -1,16 +1,26 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.conf import settings
+from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.generic.base import View
 from django.views.generic.edit import CreateView
 from .forms import UserCreateForm
 from .models import BaseUser
+from .tokens import account_activation_token
+
+
 
 
 class UserCreateView(UserPassesTestMixin, CreateView):
 
-    template_name = 'users/user_create.html'
     model = BaseUser
     form_class = UserCreateForm
+    template_name = 'users/user_create_form.html'
 
     def test_func(self):
         return not self.request.user.is_authenticated
@@ -20,7 +30,16 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         context = self.get_context_data(form=form)
-        return render(request, self.template_name, context)
+        return render(request, self.get_template_names(), context)
+
+    def send_activation_email(self, request, user, form, token):
+        current_site = get_current_site(request)
+        uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        activation_link = "{0}/activate/?uid={1}&token={2}".format(current_site, uid, token)
+        subject = 'Activate your account'
+        message = "Hello {0}, \n {1}".format(user.first_name, activation_link)
+        to_email = form.cleaned_data.get('email')
+        user.email_user(subject, message)
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -29,16 +48,46 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         context = self.get_context_data(form=form)
         if not form.is_valid():
             return self.form_invalid(form)
-        return self.create_user_and_login(form)
-
-    def create_user_and_login(self, form):
         user = form.save()
-        email = form.cleaned_data['email']
-        password = form.cleaned_data['password1']
-        user = authenticate(email=email, password=password)
-        login(self.request, user)
-        return redirect('article-list')
+        token = account_activation_token.make_token(user)
+        self.send_activation_email(request, user, form, token)
+        return HttpResponse('Please Confirm your email address to complete the registration')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
-        return render(self.request, self.template_name, context)
+        return render(self.request, self.get_template_names(), context)
+
+
+User = get_user_model()
+
+
+class UserActivateView(View):
+
+    template_name = 'users/user_activate_form.html'
+
+    def get(self, request):
+        uidb64 = request.GET.get('uid')
+        token = request.GET.get('token')
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        print(uid, user, token)
+        if not account_activation_token.check_token(user, token):
+            return HttpResponse('Activation link is invalid!')
+        user.is_active = True
+        user.save()
+        login(request, user)
+        form = SetPasswordForm(request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = SetPasswordForm(request.user, request.POST)
+        if not form.is_valid():
+            pass
+        user = form.save()
+        update_session_auth_hash(request, user)
+        return redirect('articles:article-list')
+            
+

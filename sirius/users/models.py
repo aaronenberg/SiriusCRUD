@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -72,11 +73,6 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name='Last Name'
     )
-    middle_initial = models.CharField(
-        max_length=1,
-        blank=True,
-        verbose_name='MI'
-    )
     is_active = models.BooleanField(
         _('active'),
         default=True,
@@ -96,6 +92,12 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = USERNAME_FIELD
+
+    def get_full_name(self):
+        return self.first_name + ' ' + self.last_name
+
+    def get_short_name(self):
+        return self.email
 
     def __str__(self):
         return self.email

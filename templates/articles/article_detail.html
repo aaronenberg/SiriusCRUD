@@ -37,7 +37,7 @@
   </div>
   {% if user.pk == article.author.pk %}
   <div>
-    <a href="{% url 'article-update' article.slug %}">
+    <a href="{% url 'articles:article-update' article.slug %}">
       <button type="button" class="btn">Edit</button>
     </a>
   </div>

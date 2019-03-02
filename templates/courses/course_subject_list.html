@@ -5,7 +5,7 @@
 <h1>{{ subject }} Course </h1>
 {% if user.is_authenticated %}
 <div>
-  <a href="{% url 'course-create' %}">New Course</a>
+  <a href="{% url 'courses:course-create' %}">New Course</a>
 </div>
 {% endif %}
 

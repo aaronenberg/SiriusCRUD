@@ -54,7 +54,7 @@ class Article(models.Model):
     is_public = models.BooleanField(default=True)
 
     def get_absolute_url(self):
-        return reverse('article-detail', kwargs={'slug': self.slug})
+        return reverse('articles:article-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

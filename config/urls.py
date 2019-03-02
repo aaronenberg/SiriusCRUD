@@ -19,9 +19,9 @@ from django.urls import include, path
 
 
 urlpatterns = [
-    path('', include('users.urls')),
-    path('', include('articles.urls')),
-    path('', include('courses.urls')),
+    path('', include('users.urls', namespace='users')),
+    path('', include('articles.urls', namespace='articles')),
+    path('', include('courses.urls', namespace='courses')),
 # static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
