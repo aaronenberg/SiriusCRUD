@@ -10,7 +10,9 @@
   {{ course.description }}
 </div>
 Sections
-{{ course.section }}
+{% for section in course.sections %}
+{{ section | stringformat:"02d" }}
+{% endfor %}
 <div>
   Related Articles
   <ul>

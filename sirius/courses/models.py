@@ -28,15 +28,12 @@ class Course(models.Model):
     
     subject = models.CharField(max_length=2, choices=SUBJECTS)
 
-    section = ArrayField(models.PositiveSmallIntegerField())
+    sections = ArrayField(models.PositiveSmallIntegerField())
 
     title = models.CharField(max_length=99)
 
     class Meta:
         unique_together = ("subject", "number")
-
-    def get_section_display(self, section):
-        return "{:02d}".format(section)
 
     def get_absolute_url(self):
         return reverse('courses:course-detail', kwargs={'slug': self.slug})

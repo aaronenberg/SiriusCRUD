@@ -87,7 +87,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         articlemedia = articlemedia_form.save(commit=False)
         for media in articlemedia:
             media.save()
-        return redirect('article-list')
+        return redirect('articles:article-list')
 
     def form_invalid(self, form, articlemedia_form):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)

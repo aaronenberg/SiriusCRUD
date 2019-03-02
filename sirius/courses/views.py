@@ -63,7 +63,7 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('course-list')
+        return redirect('courses:course-list')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)

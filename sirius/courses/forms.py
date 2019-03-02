@@ -67,7 +67,7 @@ class CourseForm(ModelForm):
     class Meta:
         model = Course
         fields = ('__all__')
-        field_classes = {'section': SimpleRangeArrayField}
+        field_classes = {'sections': SimpleRangeArrayField}
 
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
@@ -76,7 +76,7 @@ class CourseForm(ModelForm):
             Div(
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
                 Field('number', wrapper_class='col-md-2'),
-                Field('section', wrapper_class='col-md-2'),
+                Field('sections', wrapper_class='col-md-2'),
                 Field('subject', wrapper_class='col-md-2'),
                 Field('is_public', title="Make this course viewable to everyone.", wrapper_class='col-md-2'),
                 css_class='form-row'
