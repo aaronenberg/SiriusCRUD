@@ -19,7 +19,11 @@
 
   <body>
 	{% if user.is_authenticated %}
-        <div> logged in as: {{ user.email }} </div>
+		<div class="d-flex flex-row-reverse bd-highlight">
+			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Logout</a></div>
+			<div class="p-2 bd-highlight">Placeholder</div>
+			<div class="p-2 bd-highlight">Logged in as: {{ user.email }}</div>
+		</div>
         <div>
 		<nav class="navbar navbar-expand-sm bg-light navbar-light">
 			<ul class="navbar-nav">	
@@ -31,10 +35,6 @@
 					    <a class="nav-link" href="{% url 'course-list' %}">Courses</a>
 				    </li>
 				{% endif %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'logout' %}">Logout</a>
-				</li>
-
 			</ul>
 		</nav>
         </div>
