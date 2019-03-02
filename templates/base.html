@@ -17,6 +17,7 @@
   </head>
 
   <body>
+	  <div class="container-fluid">
     {% if user.is_authenticated %}
       <div> logged in as: {{ user.email }} </div>
       <div>
@@ -27,6 +28,7 @@
         {% endif %}
       </div>
     {% endif %}
+	</div>
 
     <div id="content">
       {% block content %} {% endblock content %}
