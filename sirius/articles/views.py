@@ -76,7 +76,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=form.instance)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
-            return self.form_invalid(form, articlemedia_form) 
+            return self.form_invalid(form, articlemedia_form, context) 
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
@@ -91,8 +91,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
             media.save()
         return redirect('articles:article-list')
 
-    def form_invalid(self, form, articlemedia_form):
-        context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
+    def form_invalid(self, form, articlemedia_form, context):
         return render(self.request, self.get_template_names(), context)
 
 

@@ -1,8 +1,10 @@
+import datetime
 import os
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 
 class Article(models.Model):
@@ -32,26 +34,59 @@ class Article(models.Model):
         (ENVIRONMENTAL_STUDIES, 'Environmental Studies'),
         (GEOLOGY, 'Geology'),
     )
+    
+    FALL = 'FA'
+    WINTER = 'WI'
+    SPRING = 'SP'
+    SUMMER = 'SU'
+    SEMESTER_CHOICES = (
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+        (SUMMER, 'Summer'),
+    )
 
-    author = models.ForeignKey('users.BaseUser', on_delete=models.CASCADE, related_name='articles')
+    def current_year():
+        return datetime.datetime.now().year
 
-    title = models.CharField(max_length=255, default='', blank=False)
+    YEAR_CHOICES = []
+    for y in range(2000, (current_year()+1)):
+            YEAR_CHOICES.append((y,y))
 
-    article_type = models.CharField(max_length=2, choices=ARTICLE_TYPES)
 
-    description = models.TextField(max_length=512, blank=True)
+    author = models.ForeignKey(
+        'users.BaseUser',
+        on_delete=models.CASCADE,
+        related_name='articles',
+        verbose_name=_('author')
+    )
+    title = models.CharField(_('title'), max_length=255, default='', blank=False)
 
-    subject = models.CharField(max_length=2, choices=SUBJECTS)
+    article_type = models.CharField(_('article_type'), max_length=2, choices=ARTICLE_TYPES)
+
+    description = models.TextField(_('description'), max_length=512, blank=True)
+
+    subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS)
 
     slug = models.SlugField(unique=True, editable=False)
 
-    course = models.ForeignKey('courses.Course', on_delete=models.CASCADE, related_name='articles')
+    course = models.ForeignKey(
+        'courses.Course',
+        on_delete=models.CASCADE,
+        related_name='articles',
+        verbose_name=_('course')
+    )
+    section = models.PositiveSmallIntegerField(blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
     modified = models.DateTimeField(auto_now=True)
 
     is_public = models.BooleanField(default=True)
+
+    semester = models.CharField(_('semester'), max_length=2, choices=SEMESTER_CHOICES, default=FALL)
+
+    year = models.PositiveSmallIntegerField(_('year'), choices=YEAR_CHOICES, default=current_year)
 
     def get_absolute_url(self):
         return reverse('articles:article-detail', kwargs={'slug': self.slug})

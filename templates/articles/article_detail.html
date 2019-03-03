@@ -27,8 +27,12 @@
     </a>
   </div>
   <div>
-    <label>Created: </label>
-    {{ article.created }}
+    <label>Last updated: </label>
+    {{ article.modified }}
+  </div>
+  <div>
+    <label>Semester: </label>
+    {{ article.get_semester_display }} {{ article.year }}
   </div>
   <div>
     {% for media in articlemedia_list %}
@@ -42,9 +46,4 @@
     </a>
   </div>
   {% endif %}
-  <div>
-    <a href="{{ referer_page }}">
-      <button type="button" class="btn">Back</button>
-    </a>
-  </div>
 {% endblock content %}
