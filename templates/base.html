@@ -10,6 +10,7 @@
 
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+	
 
     <title>
       {% block title %} Sirius {% endblock title %}
@@ -17,16 +18,26 @@
   </head>
 
   <body>
-    {% if user.is_authenticated %}
-      <div> logged in as: {{ request.user.email }} </div>
-      <div>
-        <a href="{% url 'users:logout' %}">logout</a>
-        <a href="{% url 'articles:article-list' %}">Articles</a>
-        {% if user.account_type == 'FA' %}
-        <a href="{% url 'courses:course-list' %}">Courses</a>
-        {% endif %}
-        <a href="{% url 'users:account-detail' %}">My Account</a>
-      </div>
+	{% if user.is_authenticated %}
+		<div class="d-flex flex-row-reverse bd-highlight">
+			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Sign Out</a></div>
+			<div class="p-2 bd-highlight"><a href="{% url 'users:account-detail' %}">My Account</a></div>
+			<div class="p-2 bd-highlight">Welcome {{ request.user.email }}</div>
+		</div>
+        <div>
+		<nav class="navbar navbar-expand-sm bg-light navbar-light">
+			<ul class="navbar-nav">	
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'articles:article-list' %}">Articles</a>
+				</li>
+				{% if user.account_type == 'FA' %}
+				    <li class="nav-item">
+					    <a class="nav-link" href="{% url 'courses:course-list' %}">Courses</a>
+				    </li>
+				{% endif %}
+			</ul>
+		</nav>
+        </div>
     {% endif %}
 
     <div id="content">
