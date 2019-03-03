@@ -22,7 +22,7 @@ SERVER_EMAIL = os.environ['EMAIL']
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ['EMAIL']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASS']
+EMAIL_HOST_PASSWORD = os.environ['SIRIUS_EMAIL_PASS']
 
 
 MEDIA_ROOT = os.environ['SIRIUS_MEDIA_ROOT']
