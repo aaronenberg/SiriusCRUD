@@ -20,7 +20,7 @@
   <body>
 	{% if user.is_authenticated %}
 		<div class="d-flex flex-row-reverse bd-highlight">
-			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Sign Out</a></div>
+			<div class="p-2 bd-highlight"><a href="{% url 'users:logout' %}">Sign Out</a></div>
 			<div class="p-2 bd-highlight"><a href="{% url 'users:account-detail' %}">My Account</a></div>
 			<div class="p-2 bd-highlight">Welcome {{ request.user.email }}</div>
 		</div>
@@ -35,6 +35,9 @@
 					    <a class="nav-link" href="{% url 'courses:course-list' %}">Courses</a>
 				    </li>
 				{% endif %}
+				<li class="nav-item">
+					    <a class="nav-link" href="{% url 'articles:search' %}">Search</a>
+				</li>
 			</ul>
 		</nav>
         </div>
