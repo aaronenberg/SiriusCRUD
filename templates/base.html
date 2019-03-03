@@ -22,17 +22,17 @@
 		<div class="d-flex flex-row-reverse bd-highlight">
 			<div class="p-2 bd-highlight"><a href="{% url 'logout' %}">Sign Out</a></div>
 			<div class="p-2 bd-highlight">Placeholder</div>
-			<div class="p-2 bd-highlight">Welcome {{ user.email }}</div>
+			<div class="p-2 bd-highlight"><a href="{% url 'users:account-detail' %}">My Account</a></div>
 		</div>
         <div>
 		<nav class="navbar navbar-expand-sm bg-light navbar-light">
 			<ul class="navbar-nav">	
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'article-list' %}">Articles</a>
+					<a class="nav-link" href="{% url 'articles:article-list' %}">Articles</a>
 				</li>
 				{% if user.account_type == 'FA' %}
 				    <li class="nav-item">
-					    <a class="nav-link" href="{% url 'course-list' %}">Courses</a>
+					    <a class="nav-link" href="{% url 'courses:course-list' %}">Courses</a>
 				    </li>
 				{% endif %}
 			</ul>
