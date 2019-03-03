@@ -34,7 +34,7 @@ class DraftListView(LoginRequiredMixin, ListView):
             return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
-class ArticleDetail(DetailView):
+class ArticleDetailView(DetailView):
     ''' Displays details of an article. Allows a user to hide their private articles from
         other users. Additionally, unauthenticated users may not view certain types of articles '''
 

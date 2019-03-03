@@ -1,7 +1,10 @@
+import re
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
+from django.core.validators import RegexValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -16,24 +19,27 @@ ACCOUNT_TYPES = (
 )
 
 
-class BaseUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
 
-    def _create_user(self, email, password, **extra_fields):
+    def _create_user(self, username, email, password, **extra_fields):
         if not email:
             raise ValueError('Email is required.')
+        if not username:
+            raise ValueError('Username is required.')
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        username = self.model.normalize_username(username)
+        user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email,  password, **extra_fields):
+    def create_user(self, username, email,  password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('account_type', STUDENT)
-        return self._create_user(email, password)
+        return self._create_user(username, email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('account_type', FACULTY)
@@ -45,11 +51,31 @@ class BaseUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
         if extra_fields.get('account_type') is not FACULTY:
             raise ValueError('Superuser must have account type="FA"')
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(username, email, password, **extra_fields)
+
+
+class AlphaNumericUsernameValidator(RegexValidator):
+    regex = r'^_?[a-zA-Z]+?[\w]*$'
+    message = _(
+        'Username must be 30 characters or fewer, must start with either a letter or '
+        'underscore followed by a letter, and may contain a combination of letters, numbers and underscore.'
+    )
+    flags = re.ASCII
 
 
 class BaseUser(AbstractBaseUser, PermissionsMixin):
 
+    username_validator = AlphaNumericUsernameValidator()
+
+    username = models.CharField(
+        max_length=30,
+        primary_key=True,
+        help_text=_('Required. 30 characters or fewer. Letters and digits only.'),
+        validators=[username_validator],
+        error_messages={
+            'unique': _("That username is already taken."),
+        },
+    )
     email = models.EmailField(
         max_length=255,
         unique=True,
@@ -89,10 +115,11 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    objects = BaseUserManager()
+    objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = USERNAME_FIELD
+    USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = ['email']
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
@@ -101,7 +128,12 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __str__(self):
-        return "{0}    ({1})".format(self.get_full_name(), self.get_account_type_display())
+        if not self.get_full_name().isspace():
+            return self.get_full_name()
+        return self.username
+
+    def get_absolute_url(self):
+        return reverse("users:user-detail", kwargs={"pk": self.pk})
 
     @property
     def is_privileged(self):

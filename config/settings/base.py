@@ -112,3 +112,8 @@ LOGIN_REDIRECT_URL = '/articles/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+AUTHENTICATION_BACKENDS = (
+    'users.auth.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)

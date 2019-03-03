@@ -8,7 +8,7 @@ class UserCreateForm(ModelForm):
    
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name",)
+        fields = ("username", "email", "first_name", "last_name",)
         field_classes = {'email': EmailField}
 
     def __init__(self, *args, **kwargs):
@@ -31,3 +31,17 @@ class UserCreateForm(ModelForm):
         if commit:
             user.save()
         return user
+
+
+class AccountTypeUpdateForm(ModelForm):
+   
+    class Meta:
+        model = BaseUser
+        fields = ("account_type",)
+
+
+class AccountUpdateForm(ModelForm):
+   
+    class Meta:
+        model = BaseUser
+        fields = ("email", "first_name", "last_name",)
