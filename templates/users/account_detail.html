@@ -16,5 +16,8 @@
   <button type="button" class="btn">Edit</button>
 </a>
 {% endblock edit %}
+<a href="{% url 'users:password_change' %}">
+  <button type="button" class="btn">Change Password</button>
+</a>
 
 {% endblock content %}
