@@ -15,11 +15,7 @@ class ArticleListView(ListView):
 
     model = Article
     context_object_name = 'articles'
-
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Article.objects.exclude(is_public=False)
-        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
+    queryset = Article.objects.exclude(is_public=False)
 
 
 class DraftListView(LoginRequiredMixin, ListView):
@@ -44,12 +40,15 @@ class ArticleDetailView(DetailView):
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return Article.objects.exclude(Q(is_public=False), ~Q(author=self.request.user))
-        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
+        return Article.objects.exclude(Q(is_public=False))
             
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['articlemedia_list'] = ArticleMedia.objects.filter(article__pk=self.object.pk)
-        context['referer_page'] = self.request.META.get('HTTP_REFERER')
+        if self.request.user.is_authenticated:
+            media = ArticleMedia.objects.filter(article__pk=self.object.pk)
+        else:
+            media = ArticleMedia.objects.filter(Q(article__pk=self.object.pk), ~Q(article_type='RD'))
+        context['articlemedia_list'] = media
         return context
 
 

@@ -38,3 +38,5 @@ TEMPLATES[0]['DIRS'] = ['templates',]
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
+
+FIXTURE_DIRS = ['fixtures']

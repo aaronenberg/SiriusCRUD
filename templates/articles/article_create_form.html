@@ -10,10 +10,9 @@
   <div class="row form-row spacer">
     <div class="input-group">
         <button class="btn btn-success add-form-row">+</button>
+        {{ upload_form.article_type }}
       <div class="custom-file col-md-6">
         {{ upload_form.article_media }}
-      </div>
-      <div class="input-group-append">
       </div>
     </div>
   </div>
@@ -36,6 +35,7 @@
 {% endblock content %}
 
 {% block custom_js %}
+
 <script type='text/javascript'>
   function updateElementIndex(el, prefix, ndx) {
       var id_regex = new RegExp('(' + prefix + '-\\d+)');
@@ -47,10 +47,12 @@
   function cloneMore(selector, prefix) {
       var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
       var newElement = $(selector).clone(true);
-      newElement.find('input').each(function() {
-          var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
-          var id = 'id_' + name;
-          $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+      newElement.find(':input').each(function() {
+          if (typeof($(this).attr('name')) != 'undefined') {
+              var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+              var id = 'id_' + name;
+              $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+          }
       });
       total++;
       $('#id_' + prefix + '-TOTAL_FORMS').val(total);
@@ -69,9 +71,11 @@
           var forms = $('.form-row');
           $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
           for (var i=0, formCount=forms.length; i<formCount; i++) {
-              $(forms.get(i)).find('input').each(function() {
-                  updateElementIndex(this, prefix, i);
-              });
+              if (typeof($(this).attr('name')) != 'undefined') {
+                  $(forms.get(i)).find(':input').each(function() {
+                      updateElementIndex(this, prefix, i);
+                  });
+              }
           }
       }
       return false;

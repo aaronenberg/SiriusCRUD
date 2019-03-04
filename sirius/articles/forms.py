@@ -8,7 +8,7 @@ from courses.models import Course
 ArticleMediaFormSet = inlineformset_factory(
     Article,
     ArticleMedia,
-    fields=('article_media',),
+    fields=('article_media', 'article_type'),
     extra=1,
     widgets={'article_media': FileInput()}
 )
@@ -18,7 +18,6 @@ class ArticleForm(ModelForm):
     class Meta:
         model = Article
         fields = (
-            'article_type',
             'course',
             'section',
             'description',
@@ -35,7 +34,6 @@ class ArticleForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
-                Field('article_type', wrapper_class='col-md-2'),
                 Field('subject', wrapper_class='col-md-2'),
                 Field('course', autocomplete="off", wrapper_class='col-md-6'),
                 Field('section', autocomplete="off", wrapper_class='col-2'),

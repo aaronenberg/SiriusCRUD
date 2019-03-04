@@ -1,5 +1,6 @@
 import datetime
 import os
+import uuid
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -9,19 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 class Article(models.Model):
 
-    ANALYZED_DATA = 'AD'
-    POSTER = 'PO'
-    RAW_DATA = 'RD'
-    REPORT = 'RE'
-    OTHER = 'OT'
-    ARTICLE_TYPES = (
-        (ANALYZED_DATA, 'Analyzed Data'),
-        (POSTER, 'Poster'),
-        (RAW_DATA, 'Raw Data'),
-        (REPORT, 'Report'),
-        (OTHER, 'Other'),
-    )
-    
     BIOLOGY = 'BI'
     CHEMISTRY = 'CH'
     CIVIL_ENGINEERING = 'CE'
@@ -34,7 +22,6 @@ class Article(models.Model):
         (ENVIRONMENTAL_STUDIES, 'Environmental Studies'),
         (GEOLOGY, 'Geology'),
     )
-    
     FALL = 'FA'
     WINTER = 'WI'
     SPRING = 'SP'
@@ -45,14 +32,12 @@ class Article(models.Model):
         (SPRING, 'Spring'),
         (SUMMER, 'Summer'),
     )
-
     def current_year():
         return datetime.datetime.now().year
 
     YEAR_CHOICES = []
     for y in range(2000, (current_year()+1)):
             YEAR_CHOICES.append((y,y))
-
 
     author = models.ForeignKey(
         'users.BaseUser',
@@ -61,8 +46,6 @@ class Article(models.Model):
         verbose_name=_('author')
     )
     title = models.CharField(_('title'), max_length=255, default='', blank=False)
-
-    article_type = models.CharField(_('article_type'), max_length=2, choices=ARTICLE_TYPES)
 
     description = models.TextField(_('description'), max_length=512, blank=True)
 
@@ -101,14 +84,33 @@ class Article(models.Model):
 
 class ArticleMedia(models.Model):
 
-    # file will be saved to MEDIA_ROOT/uploads/2019/02/16
-    # file url will be MEDIA_URL/uploads/2019/02/16
-    article_media = models.FileField(upload_to='uploads/%Y/%m/%d')
+    ANALYZED_DATA = 'AD'
+    POSTER = 'PO'
+    RAW_DATA = 'RD'
+    REPORT = 'RE'
+    OTHER = 'OT'
+    ARTICLE_TYPES = (
+        (ANALYZED_DATA, 'Analyzed Data'),
+        (POSTER, 'Poster'),
+        (RAW_DATA, 'Raw Data'),
+        (REPORT, 'Report'),
+        (OTHER, 'Other'),
+    )
+    article_type = models.CharField(_('article type'), max_length=2, choices=ARTICLE_TYPES)
+
+    # insert uuid to prevent renaming file when a file with same name already exists
+    def upload_to(instance, filename):
+        today = datetime.datetime.now().strftime("%Y%m%d")
+        return 'uploads/{0}/{1}/{2}'.format(today, uuid.uuid4(), filename)
+
+    article_media = models.FileField(upload_to=upload_to)
 
     created = models.DateTimeField(auto_now_add=True)
     
     article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='media')
 
     # chop off relative path to Storage to get just the name of file
+    @property
     def filename(self):
         return os.path.basename(self.article_media.name)
+
