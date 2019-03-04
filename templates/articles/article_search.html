@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+<head>
+
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>Filterable Table</h2>
+<p>Type something in the input field to search the table for title or course:</p>  
+<input id="myInput" type="text" placeholder="Search..">
+<br><br>
+
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+	<th>Course</th>
+  </tr>
+  </thead>
+  <tbody id="myTable">
+  {% for article in articles %}
+  <tr>
+	<td>    
+		<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+	</td>
+	<td>{{ article.course }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+<!-- source: https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table -->
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+<!-- source: https://stackoverflow.com/questions/3160277/jquery-table-sort/19947532#19947532 -->
+$('th').click(function(){
+    var table = $(this).parents('table').eq(0)
+    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+    this.asc = !this.asc
+    if (!this.asc){rows = rows.reverse()}
+    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+})
+function comparer(index) {
+    return function(a, b) {
+        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+    }
+}
+function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+</script>
+{% endblock %}
