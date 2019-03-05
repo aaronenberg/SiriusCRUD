@@ -138,7 +138,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         other users. Additionally, unauthenticated users may not view certain types of articles '''
 
     model = BaseUser
-    context_object_name = 'user'
+    context_object_name = 'current_user'
     template_name = 'users/user_detail.html'
 
 

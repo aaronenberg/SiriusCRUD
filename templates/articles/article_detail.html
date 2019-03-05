@@ -22,7 +22,9 @@
   </div>
   <div>
     <label>Course: </label>
-    <a href="{{ article.course.get_absolute_url }}">
+    {% if article.course %}
+      <a href="{{ article.course.get_absolute_url }}">
+    {% endif %}
       {{ article.course }}
     </a>
   </div>

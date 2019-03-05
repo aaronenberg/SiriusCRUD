@@ -75,9 +75,9 @@ class CourseForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
-                Field('number', wrapper_class='col-md-2'),
+                Field('subject', wrapper_class='col-1'),
+                Field('number', wrapper_class='col-1'),
                 Field('sections', wrapper_class='col-md-2'),
-                Field('subject', wrapper_class='col-md-2'),
                 Field('is_public', title="Make this course viewable to everyone.", wrapper_class='col-md-2'),
                 css_class='form-row'
             ),

@@ -34,7 +34,7 @@ class ArticleForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 Field('title', autocomplete="off", wrapper_class='col-md-6'),
-                Field('subject', wrapper_class='col-md-2'),
+                Field('subject', wrapper_class='col-1'),
                 Field('course', autocomplete="off", wrapper_class='col-md-6'),
                 Field('section', autocomplete="off", wrapper_class='col-2'),
                 Field('semester', wrapper_class='col-2'),
@@ -53,8 +53,12 @@ class ArticleForm(ModelForm):
         self.helper.form_show_labels = True 
 
     def clean_section(self):
-        section = self.cleaned_data['section']
+        section = self.cleaned_data.get('section')
+        if not section:
+            return
         course = self.cleaned_data['course']
+        if section and not course:
+            raise ValidationError("You must also select a course with the section number {%02d}.".format(section))
         course_obj = Course.objects.get(pk=course.pk)
         if section not in course_obj.sections:
            raise ValidationError("That section does not exist for this course")

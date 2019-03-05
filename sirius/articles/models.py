@@ -49,7 +49,7 @@ class Article(models.Model):
 
     description = models.TextField(_('description'), max_length=512, blank=True)
 
-    subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS)
+    subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS, blank=True)
 
     slug = models.SlugField(unique=True, editable=False)
 
@@ -57,9 +57,11 @@ class Article(models.Model):
         'courses.Course',
         on_delete=models.CASCADE,
         related_name='articles',
-        verbose_name=_('course')
+        verbose_name=_('course'),
+        blank=True,
+        null=True
     )
-    section = models.PositiveSmallIntegerField(blank=True)
+    section = models.PositiveSmallIntegerField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -67,9 +69,9 @@ class Article(models.Model):
 
     is_public = models.BooleanField(default=True)
 
-    semester = models.CharField(_('semester'), max_length=2, choices=SEMESTER_CHOICES, default=FALL)
+    semester = models.CharField(_('semester'), max_length=2, choices=SEMESTER_CHOICES, default=FALL, blank=True)
 
-    year = models.PositiveSmallIntegerField(_('year'), choices=YEAR_CHOICES, default=current_year)
+    year = models.PositiveSmallIntegerField(_('year'), choices=YEAR_CHOICES, default=current_year, blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('articles:article-detail', kwargs={'slug': self.slug})

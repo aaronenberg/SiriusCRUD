@@ -2,9 +2,9 @@
 
 {% block content %}
 
-{{ user }}
+{{ current_user }}
 
-{% if request.user.account_type == 'FA' %}
+{% if user.account_type == 'FA' %}
 <div>
 <a href="{% url 'users:account-type-update' user.pk %}">
   <button type="button" class="btn">Promote</button>
@@ -16,8 +16,10 @@
   <button type="button" class="btn">Edit</button>
 </a>
 {% endblock edit %}
+{% if current_user == user %}
 <a href="{% url 'users:password_change' %}">
   <button type="button" class="btn">Change Password</button>
 </a>
+{% endif %}
 
 {% endblock content %}
