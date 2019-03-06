@@ -34,7 +34,10 @@
   </div>
   <div>
     <label>Semester: </label>
-    {{ article.get_semester_display }} {{ article.year }}
+    
+    {% if article.semester %} {{ article.get_semester_display }} {% endif %}
+    {% if article.year %}{{ article.year }} {% endif %}
+    
   </div>
   <div>
     {% for media in articlemedia_list %}

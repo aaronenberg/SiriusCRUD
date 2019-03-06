@@ -10,6 +10,7 @@
 
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    {% block custom_css %} {% endblock custom_css %}
 
     <title>
       {% block title %} Sirius {% endblock title %}
@@ -17,30 +18,36 @@
   </head>
 
   <body>
-    <div class="container">
-
-      {% if user.is_authenticated %}
-        <div> logged in as: {{ user.email }} </div>
-        <div>
-          <a href="{% url 'users:logout' %}">logout</a>
-          <a href="{% url 'articles:article-list' %}">Articles</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'home' %}">SIRIUS</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link {% if 'articles' in request.path %}active{% endif %}" href="{% url 'articles:article-list' %}">Articles</a>
           {% if user.account_type == 'FA' %}
-          <a href="{% url 'courses:course-list' %}">Courses</a>
+          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" href="{% url 'courses:course-list' %}">Courses</a>
           {% endif %}
-          <a href="{% url 'users:account-detail' %}">My Account</a>
         </div>
-      {% endif %}
-
-      <div id="content">
-        {% block content %} {% endblock content %}
+        {% if user.is_authenticated %}
+        <div class="navbar-nav ml-auto">
+          <a class="nav-item nav-link" href="{% url 'users:account-detail' %}">{{ user.email }}</a>
+          <a class="nav-item nav-link" href="{% url 'users:logout' %}">logout</a>
+        </div>
+        {% endif %}
       </div>
+    </nav>
 
+    <div class="container">
+        {% block content %} {% endblock content %}
     </div>
 
     <!-- Optional JavaScript -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     {% block custom_js %} {% endblock custom_js %}
   </body>
 </html>

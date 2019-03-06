@@ -1,26 +1,89 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'articles/styles.css' %}">
+{% endblock custom_css %}
+
 
 {% block content %}
 
 <form action="" method="post" enctype="multipart/form-data">
-  {% crispy form %}
-  {{ articlemedia_form.management_form }}
-  {% for upload_form in articlemedia_form %}
-  <div class="row form-row spacer">
-    <div class="input-group">
-        <button class="btn btn-success add-form-row">+</button>
-        {{ upload_form.article_type }}
-      <div class="custom-file col-md-6">
-        {{ upload_form.article_media }}
+  {% csrf_token %}
+
+  <div class="form-row justify-content-center">
+    <div class="form-group col-6">
+      <div class="form-row justify-content-start">
+        <label for="article_title" class="control-label bmd-label-floating">Title</label>
+        {{ form.title }}
       </div>
     </div>
   </div>
+
+  <div class="form-row justify-content-center">
+    <div class="form-group col-5">
+      <div class="form-row justify-content-start">
+        <label for="article_course" class="bmd-label-static">Course</label>
+        <div class="form-row col-11 justify-content-start">
+          {{form.course}}
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-1">
+      <div class="form-row justify-content-end">
+        <label for="article_course_section" class="bmd-label-static">Section</label>
+        {{ form.section }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row justify-content-center">
+    <div class="form-group col-5">
+      <div class="form-row justify-content-start">
+        <label for="article_semester" class="bmd-label-static">Semester</label>
+        <div class="form-row col-11 justify-content-start">
+          {{ form.semester }}
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-1">
+      <div class="form-row justify-content-end">
+        <label for="article_year" class="bmd-label-static">Year</label>
+        {{ form.year }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row justify-content-center">
+    <div class="form-group col-6">
+      <label for="article_description" class="bmd-label-static">Description</label>
+      {{ form.description }}
+    </div>
+  </div>
+
+  {{ articlemedia_form.management_form }}
+
+  {% for upload_form in articlemedia_form %}
+  <div class="row justify-content-center">
+    <div class="form-group col-6">
+    <div class="row form-row spacer">
+      <div class="input-group">
+        <button class="btn btn-success add-form-row">+</button>
+        {{ upload_form.article_type }}
+        <div class="custom-file col-md-6">
+          {{ upload_form.article_media }}
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
   {% endfor %}
+  <div class="position-sticky text-right">
   <div class="submit-row">
     {% block submit %}
     {% block post %}
-    <input type="Submit" class="btn btn-primary" value="Post">
+    <button type="Submit" class="btn btn-primary" value="Post">Post</button>
     <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
     {% endblock post %}
     {% endblock submit %}
@@ -30,6 +93,7 @@
   {% endblock back_navigate %}
     <button type="button" class="btn">Cancel</button>
   </a>
+  </div>
 </form>
 
 {% endblock content %}
@@ -61,7 +125,7 @@
       conditionRow.find('.btn.add-form-row')
       .removeClass('btn-success').addClass('btn-danger')
       .removeClass('add-form-row').addClass('remove-form-row')
-      .html('x');
+      .html('&#120273;');
       return false;
   }
   function deleteForm(prefix, btn) {

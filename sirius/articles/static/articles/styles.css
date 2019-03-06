@@ -1,0 +1,25 @@
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .select-fix-height {
+        height: 34px !important;
+        line-height: 34px !important;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+}
+@-moz-document url-prefix() {
+    .select-fix-height {
+        height: 31px !important;
+        padding-bottom: 0px;
+        padding-top: 0;
+    }
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .select-fix-height {
+        height: 36px !important;
+        line-height: 36px !important;
+    }
+}
+
+.submit-row {
+    position: fixed;
+}

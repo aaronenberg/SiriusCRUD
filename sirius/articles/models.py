@@ -3,6 +3,7 @@ import os
 import uuid
 from django.conf import settings
 from django.db import models
+from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -26,17 +27,17 @@ class Article(models.Model):
     WINTER = 'WI'
     SPRING = 'SP'
     SUMMER = 'SU'
-    SEMESTER_CHOICES = (
+    SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
         (FALL, 'Fall'),
         (WINTER, 'Winter'),
         (SPRING, 'Spring'),
         (SUMMER, 'Summer'),
-    )
+    ]
     def current_year():
         return datetime.datetime.now().year
 
-    YEAR_CHOICES = []
-    for y in range(2000, (current_year()+1)):
+    YEAR_CHOICES = [] + BLANK_CHOICE_DASH
+    for y in reversed(range(2000, (current_year()+1))):
             YEAR_CHOICES.append((y,y))
 
     author = models.ForeignKey(
@@ -47,7 +48,7 @@ class Article(models.Model):
     )
     title = models.CharField(_('title'), max_length=255, default='', blank=False)
 
-    description = models.TextField(_('description'), max_length=512, blank=True)
+    description = models.TextField(_('description'), max_length=512, blank=True, help_text=_("Type a description..."))
 
     subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS, blank=True)
 
@@ -91,13 +92,13 @@ class ArticleMedia(models.Model):
     RAW_DATA = 'RD'
     REPORT = 'RE'
     OTHER = 'OT'
-    ARTICLE_TYPES = (
+    ARTICLE_TYPES = BLANK_CHOICE_DASH + [
         (ANALYZED_DATA, 'Analyzed Data'),
         (POSTER, 'Poster'),
         (RAW_DATA, 'Raw Data'),
         (REPORT, 'Report'),
         (OTHER, 'Other'),
-    )
+    ]
     article_type = models.CharField(_('article type'), max_length=2, choices=ARTICLE_TYPES)
 
     # insert uuid to prevent renaming file when a file with same name already exists
