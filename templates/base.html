@@ -1,15 +1,18 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'base/styles.css' %}">
     {% block custom_css %} {% endblock custom_css %}
 
     <title>
@@ -18,14 +21,14 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="{% url 'home' %}">SIRIUS</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link {% if 'articles' in request.path %}active{% endif %}" href="{% url 'articles:article-list' %}">Articles</a>
+          <a class="nav-item nav-link {% if 'articles' or 'drafts' in request.path %}active{% endif %}" href="{% url 'articles:article-list' %}">Articles</a>
           {% if user.account_type == 'FA' %}
           <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" href="{% url 'courses:course-list' %}">Courses</a>
           {% endif %}
@@ -39,7 +42,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div id="container" class="container-fluid">
         {% block content %} {% endblock content %}
     </div>
 

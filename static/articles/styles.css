@@ -20,6 +20,25 @@
     }
 }
 
-.submit-row {
+body, html {
+    height: 100%;
+}
+body {
+    padding-top: 15vh;
+}
+
+#container {
+    position:fixed;
+}
+
+form {
+    height: 70vh;
+}
+
+.navbar-submit {
     position: fixed;
+    height:11vh;
+    bottom:0;
+    margin:0;
+    padding:0;
 }

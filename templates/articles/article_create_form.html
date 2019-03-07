@@ -9,90 +9,93 @@
 
 {% block content %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form class="justify-content-center" action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
 
-  <div class="form-row justify-content-center">
-    <div class="form-group col-6">
-      <div class="form-row justify-content-start">
+  <div class="form-row col-12 justify-content-center">
+    <div class="form-group col-12">
+      <div class="form-row">
         <label for="article_title" class="control-label bmd-label-floating">Title</label>
         {{ form.title }}
       </div>
     </div>
   </div>
 
-  <div class="form-row justify-content-center">
-    <div class="form-group col-5">
-      <div class="form-row justify-content-start">
+  <div class="form-row col-12 justify-content-center">
+    <div class="form-group col-10">
+      <div class="form-row">
         <label for="article_course" class="bmd-label-static">Course</label>
-        <div class="form-row col-11 justify-content-start">
+        <div class="form-row col-11">
           {{form.course}}
         </div>
       </div>
     </div>
-    <div class="form-group col-1">
-      <div class="form-row justify-content-end">
+    <div class="form-group col-2">
+      <div class="form-row">
         <label for="article_course_section" class="bmd-label-static">Section</label>
         {{ form.section }}
       </div>
     </div>
   </div>
 
-  <div class="form-row justify-content-center">
-    <div class="form-group col-5">
-      <div class="form-row justify-content-start">
+  <div class="form-row col-12 justify-content-center">
+    <div class="form-group col-10">
+      <div class="form-row">
         <label for="article_semester" class="bmd-label-static">Semester</label>
-        <div class="form-row col-11 justify-content-start">
+        <div class="form-row col-11">
           {{ form.semester }}
         </div>
       </div>
     </div>
-    <div class="form-group col-1">
-      <div class="form-row justify-content-end">
+    <div class="form-group col-2">
+      <div class="form-row">
         <label for="article_year" class="bmd-label-static">Year</label>
         {{ form.year }}
       </div>
     </div>
   </div>
 
-  <div class="form-row justify-content-center">
-    <div class="form-group col-6">
+  <div class="form-row col-12 justify-content-center">
+    <div class="form-group col-12">
+      <div class="form-row">
       <label for="article_description" class="bmd-label-static">Description</label>
       {{ form.description }}
+      </div>
     </div>
   </div>
 
   {{ articlemedia_form.management_form }}
 
   {% for upload_form in articlemedia_form %}
-  <div class="row justify-content-center">
-    <div class="form-group col-6">
-    <div class="row form-row spacer">
-      <div class="input-group">
-        <button class="btn btn-success add-form-row">+</button>
-        {{ upload_form.article_type }}
-        <div class="custom-file col-md-6">
+  <div class="form-row col-12 justify-content-center spacer">
+    <div class="form-group col-12">
+      <div class="form-row media-upload spacer">
+        <div class="custom-file col-11">
           {{ upload_form.article_media }}
+        </div>
+        <div class="input-group row col-11 col-md-5">
+          <button class="btn btn-success add-form-row">+</button>
+          {{ upload_form.article_type }}
         </div>
       </div>
     </div>
-    </div>
   </div>
   {% endfor %}
-  <div class="position-sticky text-right">
-  <div class="submit-row">
-    {% block submit %}
-    {% block post %}
-    <button type="Submit" class="btn btn-primary" value="Post">Post</button>
-    <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
-    {% endblock post %}
-    {% endblock submit %}
-  </div>
-  {% block back_navigate %}
-  <a href="{% url 'articles:article-list' %}">
-  {% endblock back_navigate %}
-    <button type="button" class="btn">Cancel</button>
-  </a>
+
+  <div class="container fixed-bottom navbar-submit">
+    <nav class="navbar">
+      <div class="navbar-nav">
+        <div class="submit-row">
+            {% block submit %}
+            <input type="Submit" class="btn btn-primary" value="Post">
+            <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+            {% endblock submit %}
+        </div>
+      </div>
+        {% block back_navigate %}
+        <a class="btn" href="{% url 'articles:article-list' %}">Cancel</a>
+        {% endblock back_navigate %}
+    </nav>
   </div>
 </form>
 
@@ -121,7 +124,7 @@
       total++;
       $('#id_' + prefix + '-TOTAL_FORMS').val(total);
       $(selector).after(newElement);
-      var conditionRow = $('.form-row:not(:last)');
+      var conditionRow = $('.media-upload:not(:last)');
       conditionRow.find('.btn.add-form-row')
       .removeClass('btn-success').addClass('btn-danger')
       .removeClass('add-form-row').addClass('remove-form-row')
@@ -146,7 +149,7 @@
   }
   $(document).on('click', '.add-form-row', function(e){
       e.preventDefault();
-      cloneMore('.form-row:last', 'media');
+      cloneMore('.media-upload:last', 'media');
       return false;
   });
   $(document).on('click', '.remove-form-row', function(e){

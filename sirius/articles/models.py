@@ -74,8 +74,14 @@ class Article(models.Model):
 
     year = models.PositiveSmallIntegerField(_('year'), choices=YEAR_CHOICES, default=current_year, blank=True, null=True)
 
-    def get_absolute_url(self):
-        return reverse('articles:article-detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self, article=None):
+        if not article:
+            return reverse('articles:article-detail', kwargs={'slug': self.slug})
+        if not isinstance(article, Article):
+            raise ValueError("{} is not of type {}".format(type(article), Article))
+        if article.is_public:
+            return reverse('articles:article-detail', kwargs={'slug': self.slug})
+        return reverse('articles:draft-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

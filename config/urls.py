@@ -22,7 +22,7 @@ from articles.views import ArticleListView
 urlpatterns = [
     path('', ArticleListView.as_view(), name="home"),
     path('', include('users.urls', namespace='users')),
-    path('articles/', include('articles.urls', namespace='articles')),
+    path('', include('articles.urls', namespace='articles')),
     path('courses/', include('courses.urls', namespace='courses')),
 # static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% load article_tags %}
+
+
 {% block content %}
+
   <div>
     {{ article.title }}
   </div>
@@ -46,9 +50,15 @@
   </div>
   {% if user.pk == article.author.pk %}
   <div>
-    <a href="{% url 'articles:article-update' article.slug %}">
-      <button type="button" class="btn">Edit</button>
-    </a>
+        <a class="btn" 
+           href="{% if article.is_public %}
+                  {% url 'articles:article-update' article.slug %}
+                 {% else %}
+                  {% url 'articles:draft-update' article.slug %}
+                 {% endif %}">
+           Edit
+        </a>
   </div>
   {% endif %}
+
 {% endblock content %}

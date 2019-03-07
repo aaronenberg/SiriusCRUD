@@ -25,9 +25,7 @@ Sections
     {% endfor %}
   </ul>
 <div>
-  <a href="{% url 'courses:course-update' course.slug %}">
-    <button type="button" class="btn">Edit</button>
-  </a>
+  <a class="btn" href="{% url 'courses:course-update' course.slug %}">Edit</a>
 </div>
 
 {% endblock content %}

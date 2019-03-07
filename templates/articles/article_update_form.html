@@ -1,18 +1,20 @@
 {% extends "articles/article_create_form.html" %}
-{% load crispy_forms_tags %}
+{% load article_tags %}
 
 {% block submit %}
-{% block post %}{% endblock post %}
-
-{% if article.is_public == False %}
-<input type="Submit" class="btn btn-primary" value="Post">
-{% else %}
-<input type="Submit" class="btn btn-primary" value="Save">
-<input type="Submit" class="btn btn-danger" value="Make Private" name="_save_draft">
-{% endif %}
-
+<input type="Submit"
+       class="btn btn-primary" 
+       value="{% if article.is_public %}
+              Save{% else %}Post
+              {% endif %}">
+<input type="Submit"
+       class="btn btn-danger" 
+       name="_save_draft"
+       value="{% if article.is_public %}
+              Make Private{% else %}Save Draft
+              {% endif %}"> 
 {% endblock submit %}
 
 {% block back_navigate %}
-<a href="{% url 'articles:article-detail' article.slug %}">
+<a class="btn" href="{% get_absolute_url article %}">Cancel</a>
 {% endblock back_navigate %}
