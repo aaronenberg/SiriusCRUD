@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Setting django environment..."
-source /home/sirius/django-env/bin/activate
-
