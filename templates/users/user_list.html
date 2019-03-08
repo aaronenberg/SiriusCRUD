@@ -2,9 +2,9 @@
 
 {% block content %}
 
-{% for user in users %}
+{% for a_user in users %}
 <div>
-  <a href="{{ user.get_absolute_url }}">{{ user }}</a>
+  <a href="{{ a_user.get_absolute_url }}">{{ a_user }}</a>
 </div>
 {% endfor %}
 

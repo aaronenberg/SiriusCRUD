@@ -43,6 +43,13 @@
                     href="{% url 'courses:course-list' %}">
                     Courses
           </a>
+          <a class="nav-item nav-link 
+                    {% if 'user' in request.path or 'account' in request.path %}
+                    active
+                    {% endif %}" 
+                    href="{% url 'users:user-list' %}">
+                    Users
+          </a>
           {% endif %}
         </div>
         {% if user.is_authenticated %}
