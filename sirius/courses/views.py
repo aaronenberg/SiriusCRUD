@@ -13,17 +13,12 @@ class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses'
 
-    def get_queryset(self):
-        queryset = Course.objects.filter(is_public=True)
-        return queryset
-
 
 class CourseDetailView(DetailView):
     ''' Displays a specific course and its related, public articles '''
 
     model = Course
     context_object_name = 'course'
-    queryset = Course.objects.filter(is_public=True)
 
     def get_context_data(self, **kwargs):
         queryset = Course.objects.filter(subject=self.object.subject

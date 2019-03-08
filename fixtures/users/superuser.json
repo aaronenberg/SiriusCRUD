@@ -1,0 +1,20 @@
+[
+{
+    "model": "users.baseuser",
+    "pk": "aaron",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$8yqxLHDbmJiw$aGPEgoj19DLE88VOIJO/2sAxG1C6CMI9x0KSoTsaHqE=",
+        "last_login": null,
+        "is_superuser": true,
+        "email": "aaronenberg@csus.edu",
+        "account_type": "FA",
+        "first_name": "superuser",
+        "last_name": "",
+        "is_active": true,
+        "is_staff": true,
+        "date_joined": "2019-03-03T18:40:40.746Z",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]

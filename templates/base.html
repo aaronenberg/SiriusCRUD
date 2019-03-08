@@ -1,16 +1,19 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-	
+
+    <link rel="stylesheet" type="text/css" href="{% static 'base/styles.css' %}">
+    {% block custom_css %} {% endblock custom_css %}
 
     <title>
       {% block title %} Sirius {% endblock title %}
@@ -18,40 +21,56 @@
   </head>
 
   <body>
-	{% if user.is_authenticated %}
-		<div class="d-flex flex-row-reverse bd-highlight">
-			<div class="p-2 bd-highlight"><a href="{% url 'users:logout' %}">Sign Out</a></div>
-			<div class="p-2 bd-highlight"><a href="{% url 'users:account-detail' %}">My Account</a></div>
-			<div class="p-2 bd-highlight">Welcome {{ request.user.email }}</div>
-		</div>
-        <div>
-		<nav class="navbar navbar-expand-sm bg-light navbar-light">
-			<ul class="navbar-nav">	
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'articles:article-list' %}">Articles</a>
-				</li>
-				{% if user.account_type == 'FA' %}
-				    <li class="nav-item">
-					    <a class="nav-link" href="{% url 'courses:course-list' %}">Courses</a>
-				    </li>
-				{% endif %}
-				<li class="nav-item">
-					    <a class="nav-link" href="{% url 'articles:search' %}">Search</a>
-				</li>
-			</ul>
-		</nav>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'home' %}">SIRIUS</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link 
+                    {% if 'articles' in request.path or 'drafts' in request.path %}
+                    active
+                    {% endif %}"
+                    href="{% url 'articles:article-list' %}">
+                    Articles
+          </a>
+          {% if user.account_type == 'FA' %}
+          <a class="nav-item nav-link 
+                    {% if 'courses' in request.path %}
+                    active
+                    {% endif %}" 
+                    href="{% url 'courses:course-list' %}">
+                    Courses
+          </a>
+          {% endif %}
+          <a class="nav-item nav-link 
+                    {% if 'search' in request.path in request.path %}
+                    active
+                    {% endif %}"
+                    href="{% url 'articles:search' %}">
+                    Search
+          </a>
         </div>
-    {% endif %}
+        {% if user.is_authenticated %}
+        <div class="navbar-nav ml-auto">
+          <a class="nav-item nav-link" href="{% url 'users:account-detail' %}">{{ user.email }}</a>
+          <a class="nav-item nav-link" href="{% url 'users:logout' %}">logout</a>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
 
-    <div id="content">
-      {% block content %} {% endblock content %}
+    <div id="container" class="container-fluid">
+        {% block content %} {% endblock content %}
     </div>
 
     <!-- Optional JavaScript -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     {% block custom_js %} {% endblock custom_js %}
   </body>
 </html>

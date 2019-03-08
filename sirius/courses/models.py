@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
 from django.contrib.postgres.fields import ArrayField
 
@@ -10,25 +11,23 @@ class Course(models.Model):
     CIVIL_ENGINEERING = 'CE'
     ENVIRONMENTAL_STUDIES = 'ES'
     GEOLOGY = 'GE'
-    SUBJECTS = (
+    SUBJECT_CHOICES = BLANK_CHOICE_DASH + [
         (BIOLOGY, 'BIO'),
         (CHEMISTRY, 'CHEM'),
         (CIVIL_ENGINEERING, 'CE'),
         (ENVIRONMENTAL_STUDIES, 'ENVS'),
         (GEOLOGY, 'GEOL'),
-    )
+    ]
 
     description = models.TextField(blank=True)
-
-    is_public = models.BooleanField(default=True)
 
     number = models.CharField(max_length=4)
 
     slug = models.SlugField(editable=False)
     
-    subject = models.CharField(max_length=2, choices=SUBJECTS)
+    subject = models.CharField(max_length=2, choices=SUBJECT_CHOICES)
 
-    sections = ArrayField(models.PositiveSmallIntegerField())
+    sections = ArrayField(models.PositiveSmallIntegerField(blank=True, null=True), blank=True, null=True)
 
     title = models.CharField(max_length=99)
 

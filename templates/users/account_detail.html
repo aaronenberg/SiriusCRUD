@@ -2,22 +2,27 @@
 
 {% block content %}
 
-{{ user }}
+{{ current_user }}
+({{ current_user.get_account_type_display }})
 
-{% if request.user.account_type == 'FA' %}
+{% if user.account_type == 'FA' %}
 <div>
-<a href="{% url 'users:account-type-update' user.pk %}">
-  <button type="button" class="btn">Promote</button>
-</a>
+  <a href="{% url 'users:account-type-update' user.pk %}">
+    <button type="button" class="btn">Promote</button>
+  </a>
 </div>
 {% endif %}
 {% block edit %}
-<a href="{% url 'users:account-update' %}">
-  <button type="button" class="btn">Edit</button>
-</a>
+
+  <button type="button" class="btn">
+    <a href="{% url 'users:account-update' %}">Edit</a>
+  </button>
 {% endblock edit %}
-<a href="{% url 'users:password_change' %}">
-  <button type="button" class="btn">Change Password</button>
-</a>
+{% if current_user == user %}
+
+  <button type="button" class="btn">
+    <a href="{% url 'users:password_change' %}">Change Password</a>
+  </button>
+{% endif %}
 
 {% endblock content %}

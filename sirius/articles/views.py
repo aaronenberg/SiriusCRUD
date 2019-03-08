@@ -17,23 +17,7 @@ class ArticleListView(ListView):
 
     model = Article
     context_object_name = 'articles'
-
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Article.objects.exclude(is_public=False)
-        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
-
-
-class DraftListView(LoginRequiredMixin, ListView):
-    ''' Displays a list of the current user's unpublished drafts.
-        The drafts in this list are only available to the currently logged in user. '''
-
-    model = Article
-    context_object_name = 'drafts'
-    template_name = 'articles/draft_list.html'
-
-    def get_queryset(self):
-            return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
+    queryset = Article.objects.exclude(is_public=False)
 
 
 class ArticleDetailView(DetailView):
@@ -44,14 +28,15 @@ class ArticleDetailView(DetailView):
     context_object_name = 'article'
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Article.objects.exclude(Q(is_public=False), ~Q(author=self.request.user))
-        return Article.objects.exclude(Q(is_public=False) | Q(article_type='RD'))
+        return Article.objects.exclude(Q(is_public=False))
             
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['articlemedia_list'] = ArticleMedia.objects.filter(article__pk=self.object.pk)
-        context['referer_page'] = self.request.META.get('HTTP_REFERER')
+        if self.request.user.is_authenticated:
+            media = ArticleMedia.objects.filter(article__pk=self.object.pk)
+        else:
+            media = ArticleMedia.objects.filter(Q(article__pk=self.object.pk), ~Q(article_type='RD'))
+        context['articlemedia_list'] = media
         return context
 
 
@@ -78,7 +63,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=form.instance)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
-            return self.form_invalid(form, articlemedia_form) 
+            return self.form_invalid(form, articlemedia_form, context) 
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
@@ -93,8 +78,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
             media.save()
         return redirect('articles:article-list')
 
-    def form_invalid(self, form, articlemedia_form):
-        context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
+    def form_invalid(self, form, articlemedia_form, context):
         return render(self.request, self.get_template_names(), context)
 
 
@@ -122,7 +106,11 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=self.object)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
+        actual_is_public = form.instance.is_public
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
+            # not using BooleanField widget in form. it's initial value is always False,
+            # so is_public becomes False after calling form.is_valid()
+            form.instance.is_public = actual_is_public
             return self.form_invalid(form, articlemedia_form) 
         return self.form_valid(form, articlemedia_form)
 
@@ -136,8 +124,8 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         for media in articlemedia:
             media.save()
         if 'title' in form.changed_data:
-            return redirect(self.object, permanent=True)
-        return redirect(self.object)
+            return redirect('articles:article-list', permanent=True)
+        return redirect('articles:article-list')
 
     def form_invalid(self, form, articlemedia_form):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
@@ -156,3 +144,26 @@ class SearchPageView(TemplateView):
 		context['subjects'] = Article.objects.order_by('subject').distinct('subject')
 		context['courses'] = Course.objects.all()
 		return context
+
+class DraftListView(LoginRequiredMixin, ListView):
+    ''' Displays a list of the current user's unpublished drafts.
+        The drafts in this list are only available to the currently logged in user. '''
+
+    model = Article
+    context_object_name = 'drafts'
+    template_name = 'articles/draft_list.html'
+
+    def get_queryset(self):
+            return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
+
+
+class DraftDetailView(LoginRequiredMixin, ArticleDetailView):
+    ''' Displays details of an article. Allows a user to hide their private articles from
+        other users. Additionally, unauthenticated users may not view certain types of articles '''
+
+    model = Article
+    context_object_name = 'article'
+
+    def get_queryset(self):
+        return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
+           
