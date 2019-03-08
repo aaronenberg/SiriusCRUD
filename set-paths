@@ -1,9 +1,0 @@
-#!/bin/bash
-
-echo "Exporting paths..."
-export SIRIUS_SECRET_KEY='xuh!op8&e6*q@f1)^t7q$k352ffq7-ya+2ejc(d#5#@1l$)^#v'
-export EMAIL="SiriusCRUD@gmail.com"
-export SIRIUS_EMAIL_PASS="siriuspassword"
-export PYTHONPATH="$PYTHONPATH:/share/drive1/share/sirius/SiriusCRUD:/share/drive1/share/SiriusCRUD/sirius"
-export DJANGO_SETTINGS_MODULE="config.settings.local"
-export SIRIUS_MEDIA_ROOT="/home/sirius/media"
