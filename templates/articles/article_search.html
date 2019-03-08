@@ -48,12 +48,14 @@ td, th {
     <th>Title</th>
 	<th>Course</th>
 	<th>Subject</th>
+	<th>Date</th>
   </tr>
   {% for article in articles %}
   <tr>
-	<td data-input="title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
-	<td data-input="course">{{ article.course }}</td>
-	<td data-input="subject">{{ article.get_subject_display }}</td>
+	<td class="filter" data-input="title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
+	<td class="filter" data-input="course">{{ article.course }}</td>
+	<td class="filter" data-input="subject">{{ article.get_subject_display }}</td>
+	<td> {{ article.created }} </td>
   </tr>
   {% endfor %}
 </table>
@@ -65,25 +67,18 @@ td, th {
 {% block custom_js %}
 <script>
 var $filterableRows = $('#articleTable').find('tr').not(':first'),
-		$inputs = $('.search-key');
-
+		$inputs = $('.search-key');	
+var itemsNotFiltered = 1;
 $inputs.on('input', function() {
-
 	$filterableRows.hide().filter(function() {
-  	return $(this).find('td').filter(function() {
-    	
-		var tdText = $(this).text().toLowerCase(),
-      		inputValue = $('#' + $(this).data('input')).val().toLowerCase();
-		
-    
+  	return $(this).find('td.filter').filter(function() {
+		var tdText = $(this).text().toLowerCase(), 
+			inputValue = $('#' + $(this).data('input')).val().toLowerCase();
 		return tdText.indexOf(inputValue) != -1;
     
-    }).length == $(this).find('td').length;
+    }).length == $(this).find('td').length - itemsNotFiltered;
   }).show();
-
 });
-
-
 <!-- source: https://stackoverflow.com/questions/3160277/jquery-table-sort/19947532#19947532 -->
 $('th').click(function(){
     var table = $(this).parents('table').eq(0)
