@@ -104,7 +104,12 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet(request.POST, request.FILES, instance=self.object)
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
+        actual_is_public = form.instance.is_public
         if not all([form.is_valid(), articlemedia_form.is_valid()]):
+            print(form.cleaned_data)
+            # not using BooleanField widget in form. it's initial value is always False,
+            # so is_public becomes False after calling form.is_valid()
+            form.instance.is_public = actual_is_public
             return self.form_invalid(form, articlemedia_form) 
         return self.form_valid(form, articlemedia_form)
 

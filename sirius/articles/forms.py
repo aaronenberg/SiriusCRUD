@@ -1,4 +1,4 @@
-from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField
+from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField
 from django.forms.widgets import TextInput, Select, NumberInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
@@ -77,7 +77,7 @@ class ArticleForm(ModelForm):
         self.fields['description'].widget = Textarea(attrs={
             'id': 'article_description',
             'class': 'form-control',
-            'name': 'course_description',
+            'name': 'description',
         })
 
     def clean_section(self):
@@ -87,9 +87,8 @@ class ArticleForm(ModelForm):
         course = self.cleaned_data.get('course')
         if section and not course:
             raise ValidationError("You must also select a course with section {:02d}.".format(section))
-        course_obj = Course.objects.get(pk=course.pk)
-        if section not in course_obj.sections:
-           raise ValidationError("That section does not exist for this course")
+        if section not in course.sections:
+            raise ValidationError("Section {0} does not exist for course {1}".format(section, course))
         return section
 
 

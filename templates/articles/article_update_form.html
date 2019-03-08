@@ -3,10 +3,12 @@
 
 {% block submit %}
 <input type="Submit"
+       name="post"
        class="btn btn-primary" 
        value="{% if article.is_public %}
               Save{% else %}Post
               {% endif %}">
+
 <input type="Submit"
        class="btn btn-danger" 
        name="_save_draft"
@@ -16,5 +18,5 @@
 {% endblock submit %}
 
 {% block back_navigate %}
-<a class="btn" href="{% get_absolute_url article %}">Cancel</a>
+<a class="btn" name="cancel" href="{% get_absolute_url article %}">Cancel</a>
 {% endblock back_navigate %}

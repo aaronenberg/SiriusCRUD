@@ -30,13 +30,16 @@ form {
 }
 }
 @media (min-width: 576px) and (max-width: 1199.98px) {
-form {
-    margin-left: 15%;
-    margin-right: 15%;
-}
+    form {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
 }
 
 .navbar-submit {
     height:13vh;
     bottom:0;
+}
+
+div.alert {
 }

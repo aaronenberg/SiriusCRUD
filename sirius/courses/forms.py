@@ -1,5 +1,14 @@
 import re
-from django.forms import inlineformset_factory, ModelForm, ValidationError
+from django.forms import (
+    inlineformset_factory,
+    ModelForm,
+    ValidationError,
+    ChoiceField, 
+    Select, 
+    NumberInput,
+    TextInput,
+    Textarea,
+)
 from django.contrib.postgres.forms import SimpleArrayField
 from django.contrib.postgres.utils import prefix_validation_error
 from crispy_forms.helper import FormHelper
@@ -64,35 +73,46 @@ class SimpleRangeArrayField(SimpleArrayField):
 
 class CourseForm(ModelForm):
 
+    subject = ChoiceField(choices=Course.SUBJECT_CHOICES,
+        widget = Select(attrs={
+            'id': 'course_subject',
+            'class': 'form-control custom-select select-fix-height',
+            'name': 'subject',
+        }),
+        required=False,
+    )
     class Meta:
         model = Course
-        fields = ('__all__')
+        fields = (
+            'title',
+            'subject',
+            'number',
+            'sections',
+            'description'
+        )
         field_classes = {'sections': SimpleRangeArrayField}
 
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Div(
-                Field('title', autocomplete="off", wrapper_class='col-md-6'),
-                Field('subject', wrapper_class='col-1'),
-                Field('number', wrapper_class='col-1'),
-                Field('sections', wrapper_class='col-md-2'),
-                Field('is_public', title="Make this course viewable to everyone.", wrapper_class='col-md-2'),
-                css_class='form-row'
-            ),
-            Div(
-                Field('description', autocomplete="off", wrapper_class='col-md-12'),
-            ),
-            ButtonHolder(
-                Submit('submit', 'Save', css_class='button white')
-            )
-        )
-        self.helper.form_id = 'id-article-form'
-        self.helper.form_class = 'blueForms'
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_tag = True
-        self.helper.form_show_labels = True
 
-        self.helper.add_input
+        self.fields['title'].widget = TextInput(attrs={
+            'id': 'course_title',
+            'class': 'form-control',
+            'name': 'title',
+        })
+        self.fields['number'].widget = NumberInput(attrs={
+            'id': 'course_number',
+            'class': 'form-control',
+            'name': 'number',
+        })
+        self.fields['sections'].widget = TextInput(attrs={
+            'id': 'course_sections',
+            'class': 'form-control',
+            'name': 'sections',
+        })
+        self.fields['description'].widget = Textarea(attrs={
+            'id': 'article_description',
+            'class': 'form-control',
+            'name': 'description',
+        })
+

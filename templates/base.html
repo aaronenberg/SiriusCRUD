@@ -28,9 +28,21 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link {% if 'articles' or 'drafts' in request.path %}active{% endif %}" href="{% url 'articles:article-list' %}">Articles</a>
+          <a class="nav-item nav-link 
+                    {% if 'articles' in request.path or 'drafts' in request.path %}
+                    active
+                    {% endif %}"
+                    href="{% url 'articles:article-list' %}">
+                    Articles
+          </a>
           {% if user.account_type == 'FA' %}
-          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" href="{% url 'courses:course-list' %}">Courses</a>
+          <a class="nav-item nav-link 
+                    {% if 'courses' in request.path %}
+                    active
+                    {% endif %}" 
+                    href="{% url 'courses:course-list' %}">
+                    Courses
+          </a>
           {% endif %}
         </div>
         {% if user.is_authenticated %}
