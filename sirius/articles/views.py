@@ -6,6 +6,8 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from .models import Article, ArticleMedia
 from .forms import ArticleForm, ArticleMediaFormSet
+from django.views.generic.base import TemplateView
+from courses.models import Course
 
 
 class ArticleListView(ListView):
@@ -129,6 +131,19 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = self.get_context_data(form=form, articlemedia_form=articlemedia_form)
         return render(self.request, self.get_template_names(), context)
 
+class SearchPageView(TemplateView):
+	# Code that the html file was based on:
+	# https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table
+	# http://api.jquery.com/toggle/ uses the toggle function to hide
+	# the matched search keys
+	template_name = 'articles/article_search.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['articles'] = Article.objects.exclude(Q(is_public=False)).order_by('-created')
+		context['subjects'] = Article.objects.order_by('subject').distinct('subject')
+		context['courses'] = Course.objects.all()
+		return context
 
 class DraftListView(LoginRequiredMixin, ListView):
     ''' Displays a list of the current user's unpublished drafts.
