@@ -48,7 +48,12 @@ class Article(models.Model):
     )
     title = models.CharField(_('title'), max_length=255, default='', blank=False)
 
-    description = models.TextField(_('description'), max_length=512, blank=True, help_text=_("Type a description..."))
+    description = models.TextField(
+        _('description'),
+        max_length=512,
+        blank=True,
+        help_text=_("Type a description...")
+    )
 
     subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS, blank=True)
 
@@ -70,9 +75,19 @@ class Article(models.Model):
 
     is_public = models.BooleanField(default=True)
 
-    semester = models.CharField(_('semester'), max_length=2, choices=SEMESTER_CHOICES, default=FALL, blank=True)
-
-    year = models.PositiveSmallIntegerField(_('year'), choices=YEAR_CHOICES, default=current_year, blank=True, null=True)
+    semester = models.CharField(
+        _('semester'),
+        max_length=2,
+        choices=SEMESTER_CHOICES,
+        default=FALL, blank=True
+    )
+    year = models.PositiveSmallIntegerField(
+        _('year'),
+        choices=YEAR_CHOICES,
+        default=current_year,
+        blank=True,
+        null=True
+    )
 
     def get_absolute_url(self, article=None):
         if not article:
@@ -105,15 +120,20 @@ class ArticleMedia(models.Model):
         (REPORT, 'Report'),
         (OTHER, 'Other'),
     ]
-    article_type = models.CharField(_('article type'), max_length=2, choices=ARTICLE_TYPES)
 
     # insert uuid to prevent renaming file when a file with same name already exists
     def upload_to(instance, filename):
         today = datetime.datetime.now().strftime("%Y%m%d")
         return 'uploads/{0}/{1}/{2}'.format(today, uuid.uuid4(), filename)
 
-    article_media = models.FileField(upload_to=upload_to)
+    article_media = models.FileField(_('file upload'), upload_to=upload_to)
 
+    article_type = models.CharField(
+        _('article type'),
+        max_length=2,
+        choices=ARTICLE_TYPES,
+        help_text=_("Select the file type")
+    )
     created = models.DateTimeField(auto_now_add=True)
     
     article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='media')

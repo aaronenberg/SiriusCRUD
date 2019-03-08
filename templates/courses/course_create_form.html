@@ -78,7 +78,9 @@
             {% endblock submit %}
         </div>
       </div>
+      {% block cancel_navigate %}
       <a class="btn" href="{% url 'courses:course-list' %}">
+      {% endblock %}
         CANCEL
       </a>
     </nav>

@@ -13,7 +13,7 @@
     {% for field in form %}
         {% for error in field.errors %}
             <div class="alert alert-danger">
-              <strong>Error on field "{{ field.name |capfirst }}": {{ error |escape }}</strong>
+              <strong>Error on field "{{ field.label |capfirst }}": {{ error |escape }}</strong>
             </div>
         {% endfor %}
     {% endfor %}
@@ -24,6 +24,20 @@
     {% endfor %}
 {% endif %}
 
+{% if articlemedia_form.errors %}
+    {% for field in articlemedia_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+              <strong>Error on field "{{ field.name |capfirst }}": {{ error |escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in articlemedia_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <form class="justify-content-center" action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
