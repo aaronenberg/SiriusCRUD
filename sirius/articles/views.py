@@ -149,12 +149,10 @@ class SearchPageView(TemplateView):
 	# http://api.jquery.com/toggle/ uses the toggle function to hide
 	# the matched search keys
 	template_name = 'articles/article_search.html'
-	
-	
-	
-	
+
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['articles'] = Article.objects.all()
+		context['subjects'] = Course.objects.distinct('subject')
 		context['courses'] = Course.objects.all()
 		return context

@@ -25,42 +25,34 @@ tr:nth-child(even) {
   <div class="row">
     <div class="col-sm">
 		Title:
-		<input id="SearchTitle" type="text" placeholder="Title...">
-    </div>
-    <div class="col-sm">
-		Placeholder
+		<input type="text" id="title" class="search-key" placeholder="Title...">
     </div>
     <div class="col-sm">
 		Course:
-		<select name="SearchCourse">
-			<option value="" selected></option>
-			{% for course in courses %}
-			<option value="{{ course.id }}">{{ course.title }}</option>
-			{% endfor %}
-			<option value="test">Test</option>
-		</select>
+		<input type="text" id="course" class="search-key" placeholder="Course...">
+    </div>
+	    <div class="col-sm">
+		Subject:
+		<input type="text" id="subject" class="search-key" placeholder="Subject...">
     </div>
   </div>
 </div>
 
 
-<table>
+<table id="articleTable">
   <thead>
   <tr>
     <th>Title</th>
 	<th>Course</th>
+	<th>Subject</th>
   </tr>
-  </thead>
-  <tbody id="myTable">
   {% for article in articles %}
   <tr>
-	<td class="TitleClass">    
-		<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-	</td>
-	<td>{{ article.course }}</td>
+	<td data-input="title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
+	<td data-input="course">{{ article.course }}</td>
+	<td data-input="subject">{{ article.get_subject_display }}</td>
   </tr>
   {% endfor %}
-  </tbody>
 </table>
 
 </body>
@@ -69,19 +61,24 @@ tr:nth-child(even) {
 
 {% block custom_js %}
 <script>
-<!-- source: https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table -->
-$(document).ready(function(){
-  $("#SearchTitle").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable td.TitleClass").filter(function() {
-      ($(this).parent()).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
+var $filterableRows = $('#articleTable').find('tr').not(':first'),
+		$inputs = $('.search-key');
+
+$inputs.on('input', function() {
+
+	$filterableRows.hide().filter(function() {
+  	return $(this).find('td').filter(function() {
+    	
+      var tdText = $(this).text().toLowerCase(),
+      		inputValue = $('#' + $(this).data('input')).val().toLowerCase();
+    
+    	return tdText.indexOf(inputValue) != -1;
+    
+    }).length == $(this).find('td').length;
+  }).show();
+
 });
 
-$(".selectChange").change(function (){
-    alert($(this).val());
-});
 
 <!-- source: https://stackoverflow.com/questions/3160277/jquery-table-sort/19947532#19947532 -->
 $('th').click(function(){

@@ -32,10 +32,10 @@ tr:nth-child(even) {
     </div>
     <div class="col-sm">
 		Course:
-		<select name="SearchCourse">
+		<select id="SearchSubject">
 			<option value="" selected></option>
-			{% for course in courses %}
-			<option value="{{ course.id }}">{{ course.title }}</option>
+			{% for subject in subjects %}
+			<option value="{{ subject.subject }}">{{ subject.get_subject_display }}</option>
 			{% endfor %}
 			<option value="test">Test</option>
 		</select>
@@ -49,6 +49,7 @@ tr:nth-child(even) {
   <tr>
     <th>Title</th>
 	<th>Course</th>
+	<th>Subject</th>
   </tr>
   </thead>
   <tbody id="myTable">
@@ -57,7 +58,8 @@ tr:nth-child(even) {
 	<td class="TitleClass">    
 		<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
 	</td>
-	<td>{{ article.course }}</td>
+	<td class="CourseClass">{{ article.course }}</td>
+	<td class="SubjectClass">{{ article.get_subject_display }}</td>
   </tr>
   {% endfor %}
   </tbody>
@@ -71,19 +73,21 @@ tr:nth-child(even) {
 <script>
 <!-- source: https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table -->
 $(document).ready(function(){
-  var count = 1
   $("#SearchTitle").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-		var title =($(this).children(":eq("+0+")"))
-		$(this).toggle(title.text().toLowerCase().indexOf(value) > -1)
+    var title = $(this).val().toLowerCase();
+    $("#myTable td.TitleClass").filter(function() {
+      ($(this).parent()).toggle($(this).text().toLowerCase().indexOf(title) > -1)
     });
   });
 });
 
-$(".selectChange").change(function (){
-    alert($(this).val());
-});
+$("#SearchSubject").change(function() {
+	console.log($(this).val());
+	var subject = $(this).val();
+	$("#myTable td.SearchSubject").filter(function() {
+      ($(this).parent()).toggle($(this).text().toLowerCase().indexOf(title) > -1)
+    });
+})
 
 <!-- source: https://stackoverflow.com/questions/3160277/jquery-table-sort/19947532#19947532 -->
 $('th').click(function(){
