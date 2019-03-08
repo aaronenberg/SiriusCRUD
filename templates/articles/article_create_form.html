@@ -24,6 +24,7 @@
     {% endfor %}
 {% endif %}
 
+
 <form class="justify-content-center" action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
 
@@ -89,7 +90,7 @@
           {{ upload_form.article_media }}
         </div>
         <div class="input-group row col-11 col-md-5">
-          <button class="btn btn-success add-form-row">+</button>
+          <button class="btn btn-success add-media-upload">+</button>
           {{ upload_form.article_type }}
         </div>
       </div>
@@ -140,17 +141,17 @@
       $('#id_' + prefix + '-TOTAL_FORMS').val(total);
       $(selector).after(newElement);
       var conditionRow = $('.media-upload:not(:last)');
-      conditionRow.find('.btn.add-form-row')
+      conditionRow.find('.btn.add-media-upload')
       .removeClass('btn-success').addClass('btn-danger')
-      .removeClass('add-form-row').addClass('remove-form-row')
+      .removeClass('add-media-upload').addClass('remove-media-upload')
       .html('&#120273;');
       return false;
   }
   function deleteForm(prefix, btn) {
       var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
       if (total > 1){
-          btn.closest('.form-row').remove();
-          var forms = $('.form-row');
+          btn.closest('.media-upload').remove();
+          var forms = $('.media-upload');
           $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
           for (var i=0, formCount=forms.length; i<formCount; i++) {
               if (typeof($(this).attr('name')) != 'undefined') {
@@ -162,12 +163,12 @@
       }
       return false;
   }
-  $(document).on('click', '.add-form-row', function(e){
+  $(document).on('click', '.add-media-upload', function(e){
       e.preventDefault();
       cloneMore('.media-upload:last', 'media');
       return false;
   });
-  $(document).on('click', '.remove-form-row', function(e){
+  $(document).on('click', '.remove-media-upload', function(e){
       e.preventDefault();
       deleteForm('media', $(this));
       return false;
