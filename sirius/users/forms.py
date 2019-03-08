@@ -45,3 +45,11 @@ class AccountUpdateForm(ModelForm):
     class Meta:
         model = BaseUser
         fields = ("email", "first_name", "last_name",)
+
+    def clean_email(self):
+        whitelist = ['edu']
+        email = self.cleaned_data['email']
+        top_level_domain = email.rsplit('.').pop()
+        if top_level_domain not in whitelist:
+            raise ValidationError("Email must be a valid school email that ends with .edu")
+        return email

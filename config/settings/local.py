@@ -4,6 +4,8 @@ DEBUG = True
 
 SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
 
+ALLOWED_HOSTS += ['*']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -38,3 +40,5 @@ TEMPLATES[0]['DIRS'] = ['templates',]
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
+
+FIXTURE_DIRS = ['fixtures']

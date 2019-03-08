@@ -1,0 +1,45 @@
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .select-fix-height {
+        height: 33px !important;
+        line-height: 33px !important;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+}
+@-moz-document url-prefix() {
+    .select-fix-height {
+        height: 31px !important;
+        padding-bottom: 0px;
+        padding-top: 0;
+    }
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .select-fix-height {
+        height: 36px !important;
+        line-height: 36px !important;
+    }
+}
+form {
+    overflow-y: auto;
+    height: 70vh;
+}
+@media (min-width:1200px) {
+form {
+    margin-left: 30%;
+    margin-right: 30%;
+}
+}
+@media (min-width: 576px) and (max-width: 1199.98px) {
+    form {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+}
+
+.navbar-submit {
+    height:13vh;
+    bottom:0;
+}
+
+div.alert {
+}

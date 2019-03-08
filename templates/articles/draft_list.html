@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load article_tags %}
 
 {% block content %}
 
@@ -10,7 +11,7 @@
 <ul>
   {% for draft in drafts %}
   <div>
-    <a href="{{ draft.get_absolute_url }}">
+    <a href="{% get_absolute_url draft %}">
       {{ draft.title }}
     </a>
   </div>

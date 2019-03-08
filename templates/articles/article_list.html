@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load article_tags %}
 
 {% block content %}
 
@@ -12,7 +13,7 @@
 <ul>
   {% for article in articles %}
   <div>
-    <a href="{{ article.get_absolute_url }}">
+    <a href="{% get_absolute_url article %}">
       {{ article.title }}
     </a>
   </div>

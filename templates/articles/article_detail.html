@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% load article_tags %}
+
+
 {% block content %}
+
   <div>
     {{ article.title }}
   </div>
@@ -22,13 +26,22 @@
   </div>
   <div>
     <label>Course: </label>
-    <a href="{{ article.course.get_absolute_url }}">
+    {% if article.course %}
+      <a href="{{ article.course.get_absolute_url }}">
+    {% endif %}
       {{ article.course }}
     </a>
   </div>
   <div>
-    <label>Created: </label>
-    {{ article.created }}
+    <label>Last updated: </label>
+    {{ article.modified }}
+  </div>
+  <div>
+    <label>Semester: </label>
+    
+    {% if article.semester %} {{ article.get_semester_display }} {% endif %}
+    {% if article.year %}{{ article.year }} {% endif %}
+    
   </div>
   <div>
     {% for media in articlemedia_list %}
@@ -37,14 +50,15 @@
   </div>
   {% if user.pk == article.author.pk %}
   <div>
-    <a href="{% url 'articles:article-update' article.slug %}">
-      <button type="button" class="btn">Edit</button>
-    </a>
+        <a class="btn" 
+           href="{% if article.is_public %}
+                  {% url 'articles:article-update' article.slug %}
+                 {% else %}
+                  {% url 'articles:draft-update' article.slug %}
+                 {% endif %}">
+           Edit
+        </a>
   </div>
   {% endif %}
-  <div>
-    <a href="{{ referer_page }}">
-      <button type="button" class="btn">Back</button>
-    </a>
-  </div>
+
 {% endblock content %}
