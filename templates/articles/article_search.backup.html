@@ -71,10 +71,12 @@ tr:nth-child(even) {
 <script>
 <!-- source: https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table -->
 $(document).ready(function(){
+  var count = 1
   $("#SearchTitle").on("keyup", function() {
     var value = $(this).val().toLowerCase();
-    $("#myTable td.TitleClass").filter(function() {
-      ($(this).parent()).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    $("#myTable tr").filter(function() {
+		var title =($(this).children(":eq("+0+")"))
+		$(this).toggle(title.text().toLowerCase().indexOf(value) > -1)
     });
   });
 });

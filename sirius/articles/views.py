@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 from .models import Article, ArticleMedia
 from .forms import ArticleForm, ArticleMediaFormSet
 from django.views.generic.base import TemplateView
+from courses.models import Course
 
 
 class ArticleListView(ListView):
@@ -149,7 +150,11 @@ class SearchPageView(TemplateView):
 	# the matched search keys
 	template_name = 'articles/article_search.html'
 	
+	
+	
+	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['articles'] = Article.objects.all()
+		context['courses'] = Course.objects.all()
 		return context
