@@ -1,4 +1,4 @@
-from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField
+from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
@@ -6,6 +6,14 @@ from .models import Article, ArticleMedia
 from courses.models import Course
 
 
+#class BaseArticleMediaFormSet(BaseFormSet):
+#    def clean_article_type(self):
+#        for form in self.forms:
+#            article_type = form.cleaned_data['article_type']
+#            media = form.cleaned_data['article_media']
+#            if article_type and not media:
+#                raise forms.ValidationError("File type was chosen without uploading a file.")
+#        return article_type
 
 ArticleMediaFormSet = inlineformset_factory(
     Article,
@@ -13,12 +21,12 @@ ArticleMediaFormSet = inlineformset_factory(
     fields=('article_media', 'article_type'),
     extra=1,
     widgets={'article_media': FileInput(attrs={
-                'class': 'custom-file'
+                'class': 'custom-file',
             }),
             'article_type': Select(attrs={
                 'class': 'form-control select-fix-height'
-                })
-            }
+            })
+    }
 )
 
 class ArticleForm(ModelForm):
@@ -80,15 +88,21 @@ class ArticleForm(ModelForm):
             'name': 'description',
         })
 
-    def clean_section(self):
-        section = self.cleaned_data.get('section')
-        if not section:
-            return
-        course = self.cleaned_data.get('course')
-        if section and not course:
-            raise ValidationError("You must also select a course with section {:02d}.".format(section))
-        if section not in course.sections:
-            raise ValidationError("Section {0} does not exist for course {1}".format(section, course))
-        return section
+    def clean(self):
+        cleaned_data = super().clean()
+        section = cleaned_data.get('section')
+        course = cleaned_data.get('course')
+        if section:
+            if not course:
+                raise ValidationError("You must also select a course with section {:02d}.".format(section))
+            if section not in course.sections:
+                raise ValidationError("Section {0} does not exist for course {1}".format(section, course))
+
+    def clean_year(self):
+        year = self.cleaned_data.get('year')
+        if year:
+            return year
+        return None
+
 
 
