@@ -152,8 +152,7 @@ class SearchPageView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		#context['articles'] = Article.objects.order_by('-created')
-		context['articles'] =  Article.objects.exclude(Q(is_public=False))
+		context['articles'] = Article.objects.exclude(Q(is_public=False)).order_by('-created')
 		context['subjects'] = Article.objects.order_by('subject').distinct('subject')
 		context['courses'] = Course.objects.all()
 		return context
