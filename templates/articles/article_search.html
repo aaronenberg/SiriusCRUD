@@ -15,9 +15,6 @@ td, th {
   padding: 8px;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
 </style>
 </head>
 <body>
@@ -33,7 +30,13 @@ tr:nth-child(even) {
     </div>
 	    <div class="col-sm">
 		Subject:
-		<input type="text" id="subject" class="search-key" placeholder="Subject...">
+		<select id="subject" class="search-key">
+			<option value="" selected></option>
+			{% for subject in subjects %}
+			<option value="{{ subject.get_subject_display }}">{{ subject.get_subject_display }}</option>
+			{% endfor %}
+		</select>
+		<!-- <input type="text" id="subject" class="search-key" placeholder="Subject..."> -->
     </div>
   </div>
 </div>
@@ -69,10 +72,11 @@ $inputs.on('input', function() {
 	$filterableRows.hide().filter(function() {
   	return $(this).find('td').filter(function() {
     	
-      var tdText = $(this).text().toLowerCase(),
+		var tdText = $(this).text().toLowerCase(),
       		inputValue = $('#' + $(this).data('input')).val().toLowerCase();
+		
     
-    	return tdText.indexOf(inputValue) != -1;
+		return tdText.indexOf(inputValue) != -1;
     
     }).length == $(this).find('td').length;
   }).show();
