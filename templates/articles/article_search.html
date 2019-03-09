@@ -30,7 +30,7 @@ td, th {
     </div>
 	    <div class="col-sm">
 		Subject:
-		<select id="subject" class="search-key">
+		<select id="subject" class="search-key" style="width: 50px;">
 			<option value="" selected></option>
 			{% for subject in subjects %}
 			<option value="{{ subject.get_subject_display }}">{{ subject.get_subject_display }}</option>
@@ -54,7 +54,7 @@ td, th {
   <tr>
 	<td class="filter" data-input="title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
 	<td class="filter" data-input="course">{{ article.course }}</td>
-	<td class="filter" data-input="subject">{{ article.get_subject_display }}</td>
+	<td class="filter" data-input="subject">{{ article.course.get_subject_display }}</td>
 	<td> {{ article.created }} </td>
   </tr>
   {% endfor %}
