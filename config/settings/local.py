@@ -4,7 +4,7 @@ DEBUG = True
 
 SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
 
-ALLOWED_HOSTS += []
+ALLOWED_HOSTS += ['*']
 
 DATABASES = {
     'default': {
