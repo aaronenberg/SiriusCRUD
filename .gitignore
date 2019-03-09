@@ -117,4 +117,3 @@ dmypy.json
 run-server
 set-env
 set-path
-config/settings/local.py
