@@ -1,4 +1,5 @@
 import datetime
+import itertools
 import os
 import uuid
 from django.conf import settings
@@ -11,18 +12,6 @@ from django.utils.translation import gettext_lazy as _
 
 class Article(models.Model):
 
-    BIOLOGY = 'BI'
-    CHEMISTRY = 'CH'
-    CIVIL_ENGINEERING = 'CE'
-    ENVIRONMENTAL_STUDIES = 'EN'
-    GEOLOGY = 'GE'
-    SUBJECTS = (
-        (BIOLOGY, 'Biology'),
-        (CHEMISTRY, 'Chemistry'),
-        (CIVIL_ENGINEERING, 'Civil Engineering'),
-        (ENVIRONMENTAL_STUDIES, 'Environmental Studies'),
-        (GEOLOGY, 'Geology'),
-    )
     FALL = 'FA'
     WINTER = 'WI'
     SPRING = 'SP'
@@ -54,8 +43,6 @@ class Article(models.Model):
         blank=True,
         help_text=_("Type a description...")
     )
-
-    subject = models.CharField(_('subject'), max_length=2, choices=SUBJECTS, blank=True)
 
     slug = models.SlugField(unique=True, editable=False)
 
@@ -98,11 +85,25 @@ class Article(models.Model):
             return reverse('articles:article-detail', kwargs={'slug': self.slug})
         return reverse('articles:draft-detail', kwargs={'slug': self.slug})
 
+
+    def generate_slug(self):
+        max_length = self._meta.get_field('slug').max_length
+        slug = slugify(self.title)[:max_length]
+        if not Article.objects.filter(slug=slug).exists():
+            return slug
+        for i in itertools.count(1):
+            slug_truncated = slug[:max_length - len(str(i)) - 1]
+            if not Article.objects.filter(slug="{}-{}".format(slug_truncated, i)).exists():
+                return "{}-{}".format(slug_truncated, i)
+        return
+
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        self.slug = self.generate_slug()
         super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
+        if len(self.title) >= 75:
+            return self.title[:72] + "..."
         return self.title
 
 

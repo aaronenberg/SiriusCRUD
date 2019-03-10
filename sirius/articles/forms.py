@@ -1,4 +1,4 @@
-from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseFormSet
+from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
@@ -6,18 +6,21 @@ from .models import Article, ArticleMedia
 from courses.models import Course
 
 
-#class BaseArticleMediaFormSet(BaseFormSet):
-#    def clean_article_type(self):
-#        for form in self.forms:
-#            article_type = form.cleaned_data['article_type']
-#            media = form.cleaned_data['article_media']
-#            if article_type and not media:
-#                raise forms.ValidationError("File type was chosen without uploading a file.")
-#        return article_type
+class BaseArticleMediaFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            article_type = form.cleaned_data.get('article_type')
+            media = form.cleaned_data.get('article_media')
+            if article_type and not media:
+                raise ValidationError("File type was chosen without uploading a file.")
+            if media and not article_type:
+                raise ValidationError("Select a file type for the file being uploaded.")
 
 ArticleMediaFormSet = inlineformset_factory(
     Article,
     ArticleMedia,
+    formset=BaseArticleMediaFormSet,
     fields=('article_media', 'article_type'),
     extra=1,
     widgets={'article_media': FileInput(attrs={
@@ -63,7 +66,6 @@ class ArticleForm(ModelForm):
             'course',
             'section',
             'description',
-            'subject',
             'semester',
             'year',
             'is_public',
@@ -94,7 +96,7 @@ class ArticleForm(ModelForm):
         course = cleaned_data.get('course')
         if section:
             if not course:
-                raise ValidationError("You must also select a course with section {:02d}.".format(section))
+                raise ValidationError("Please select a course with section {:02d}.".format(section))
             if section not in course.sections:
                 raise ValidationError("Section {0} does not exist for course {1}".format(section, course))
 
@@ -103,6 +105,4 @@ class ArticleForm(ModelForm):
         if year:
             return year
         return None
-
-
 
