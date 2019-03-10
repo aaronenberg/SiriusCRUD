@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.postgres.search import SearchVector
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
@@ -150,7 +151,7 @@ class DraftListView(LoginRequiredMixin, ListView):
         The drafts in this list are only available to the currently logged in user. '''
 
     model = Article
-    context_object_name = 'drafts'
+    context_object_name = 'articles'
     template_name = 'articles/draft_list.html'
 
     def get_queryset(self):
@@ -167,3 +168,18 @@ class DraftDetailView(LoginRequiredMixin, ArticleDetailView):
     def get_queryset(self):
         return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
            
+
+class IndexView(ListView):
+    model = Article
+    context_object_name = 'articles'
+    template_name = 'articles/index.html'
+
+
+class SearchResultsView(ListView):
+    model = Article
+    context_object_name = 'articles'
+    template_name = 'articles/search_results_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        return Article.objects.annotate(search=SearchVector('description', 'title')).filter(search=query)

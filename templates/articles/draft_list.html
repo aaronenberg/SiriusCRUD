@@ -1,21 +1,11 @@
-{% extends "base.html" %}
+{% extends "articles/article_list.html" %}
 {% load article_tags %}
 
-{% block content %}
 
-<h1>Saved Drafts</h1>
+{% block header %}
 <div>
-  <a href="{% url 'articles:article-create' %}">New Article</a>
+  <h1>Saved Drafts</h1>
 </div>
-
-<ul>
-  {% for draft in drafts %}
-  <div>
-    <a href="{% get_absolute_url draft %}">
-      {{ draft.title }}
-    </a>
-  </div>
-  {% endfor %}
-</ul>
-
 {% endblock %}
+
+{%block draft-nav %}{%endblock%}

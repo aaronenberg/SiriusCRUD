@@ -19,24 +19,29 @@
         line-height: 36px !important;
     }
 }
+
 form {
     overflow-y: auto;
     height: 70vh;
+    margin-top:2%;
 }
+
 @media (min-width:1200px) {
-form {
-    margin-left: 30%;
-    margin-right: 30%;
+    form {
+        margin-left: 30%;
+        margin-right: 30%;
+    }
 }
-}
+
 @media (min-width: 576px) and (max-width: 1199.98px) {
-form {
-    margin-left: 15%;
-    margin-right: 15%;
-}
+    form {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
 }
 
 .navbar-submit {
-    height:13vh;
-    bottom:0;
+    position:fixed;
+    margin-bottom: 0%;
 }
+

@@ -3,21 +3,39 @@
 
 {% block content %}
 
-<h1>Articles</h1>
+{% block header %}
+<div>
+  <h1>Articles</h1>
+</div>
+{% endblock %}
+
 {% if user.is_authenticated %}
 <div>
-  <a href="{% url 'articles:article-create' %}">New Article</a> <a href="{% url 'articles:draft-list' %}">Saved Drafts</a>
+  <a 
+    class="btn" 
+    href="{% url 'articles:article-create' %}">
+    Create Article
+  </a>
+{% block draft-nav %}
+  <a 
+    class="btn"
+    href="{% url 'articles:draft-list' %}">
+    Saved Drafts
+  </a>
+{% endblock %}
 </div>
 {% endif %}
 
+{% block article-list %}
 <ul>
   {% for article in articles %}
   <div>
     <a href="{% get_absolute_url article %}">
-      {{ article.title }}
+      {{ article }}
     </a>
   </div>
   {% endfor %}
 </ul>
+{% endblock article-list %}
 
 {% endblock %}

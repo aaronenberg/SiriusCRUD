@@ -25,21 +25,14 @@
 {% endif %}
 
 {% if articlemedia_form.errors %}
-    {% for field in articlemedia_form %}
-        {% for error in field.errors %}
-            <div class="alert alert-danger">
-              <strong>Error on field "{{ field.name |capfirst }}": {{ error |escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in articlemedia_form.non_field_errors %}
+    {% for error in articlemedia_form.non_form_errors %}
         <div class="alert alert-danger">
             <strong>{{ error|escape }}</strong>
         </div>
     {% endfor %}
 {% endif %}
 
-<form class="justify-content-center" action="" method="post" enctype="multipart/form-data">
+<form id="article-form" class="justify-content-center custom-validation" action="" method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
 
   <div class="form-row col-12 justify-content-center">
@@ -47,6 +40,9 @@
       <div class="form-row">
         <label for="article_title" class="control-label bmd-label-floating">Title</label>
         {{ form.title }}
+        <div class="invalid-feedback">
+          Enter a title
+        </div>
       </div>
     </div>
   </div>
@@ -56,7 +52,7 @@
       <div class="form-row">
         <label for="article_course" class="bmd-label-static">Course</label>
         <div class="form-row col-11">
-          {{form.course}}
+          {{ form.course }}
         </div>
       </div>
     </div>

@@ -16,11 +16,11 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
-from articles.views import ArticleListView
+from articles.views import IndexView
 
 
 urlpatterns = [
-    path('', ArticleListView.as_view(), name="home"),
+    path('', IndexView.as_view(), name="index"),
     path('', include('users.urls', namespace='users')),
     path('', include('articles.urls', namespace='articles')),
     path('courses/', include('courses.urls', namespace='courses')),

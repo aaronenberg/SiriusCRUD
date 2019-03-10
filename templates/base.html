@@ -21,8 +21,9 @@
   </head>
 
   <body>
+    {% block navbar %}
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'home' %}">SIRIUS</a>
+      <a class="navbar-brand" href="{% url 'index' %}">SIRIUS</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -35,7 +36,7 @@
                     href="{% url 'articles:article-list' %}">
                     Articles
           </a>
-          {% if user.account_type == 'FA' %}
+          {% if user.user_type == 'FA' %}
           <a class="nav-item nav-link 
                     {% if 'courses' in request.path %}
                     active
@@ -51,22 +52,40 @@
                     Users
           </a>
           {% endif %}
-	  <a class="nav-item nav-link
+          <a class="nav-item nav-link
 	           {% if 'search' in request.path %}
-		   active
-		   {% endif %}"
-                   href="{% url 'articles:search' %}">
-		   Search
-	 </a>
+             active
+             {% endif %}"
+             href="{% url 'articles:search' %}">
+             Search
+           </a>
         </div>
-        {% if user.is_authenticated %}
         <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link" href="{% url 'users:account-detail' %}">{{ user.email }}</a>
+          <form method="GET" action="{% url 'articles:search-results' %}" id="id-search-form" class="custom-validation" novalidate>
+            <div class="bmd-form-group bmd-collapse-inline pull-xs-right">
+              <div class="form-row">
+                <span id="search" class="">
+                  <input class="form-control" required type="text" value="{{request.GET.query}}" id="search" name="query" placeholder="Search">
+                </span>
+                <button 
+                  class="btn bmd-btn-icon btn-search" 
+                  for="search" 
+                  >
+                  <i class="material-icons">search</i>
+                </button>  
+              </div>
+            </div>
+          </form>
+        {% if user.is_authenticated %}
+          <a class="nav-item nav-link" href="{% url 'users:account-detail' %}">{{ user.email | lower}}</a>
           <a class="nav-item nav-link" href="{% url 'users:logout' %}">logout</a>
-        </div>
+        {% else %}
+          <a class="nav-item nav-link" href="{% url 'users:login' %}">login</a>
         {% endif %}
+        </div>
       </div>
     </nav>
+    {% endblock navbar %}
 
     <div id="container" class="container-fluid">
         {% block content %} {% endblock content %}
@@ -78,5 +97,26 @@
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     {% block custom_js %} {% endblock custom_js %}
+
+    <script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('custom-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+</script>
   </body>
 </html>
