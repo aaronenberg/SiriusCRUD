@@ -20,21 +20,21 @@
     }
 }
 
-form {
+form#user-form {
     overflow-y: auto;
     height: 70vh;
     margin-top:2%;
 }
 
 @media (min-width:1200px) {
-    form {
+    form#user-form {
         margin-left: 30%;
         margin-right: 30%;
     }
 }
 
 @media (min-width: 576px) and (max-width: 1199.98px) {
-    form {
+    form#user-form {
         margin-left: 15%;
         margin-right: 15%;
     }
