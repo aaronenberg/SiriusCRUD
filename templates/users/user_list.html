@@ -2,6 +2,12 @@
 
 {% block content %}
 
+{% block header %}
+<div>
+  <h1>Users</h1>
+</div>
+{% endblock %}
+
 {% for a_user in users %}
 <div>
   <a href="{{ a_user.get_absolute_url }}">{{ a_user }}</a>

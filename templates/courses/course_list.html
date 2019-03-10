@@ -4,16 +4,14 @@
 
 <h1>Courses</h1>
 {% if user.is_authenticated %}
-<div>
-  <a href="{% url 'courses:course-create' %}">New Course</a>
-</div>
+  <a class="btn" href="{% url 'courses:course-create' %}">Create Course</a>
 {% endif %}
 
 <ul>
   {% for course in courses %}
   <div>
     <a href="{{ course.get_absolute_url }}">
-      {{ course.title }}
+      {{ course }}
   </a>
   </div>
   {% endfor %}

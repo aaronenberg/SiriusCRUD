@@ -7,7 +7,7 @@
         "last_login": null,
         "is_superuser": true,
         "email": "aaronenberg@csus.edu",
-        "account_type": "FA",
+        "user_type": "FA",
         "first_name": "superuser",
         "last_name": "",
         "is_active": true,

@@ -24,8 +24,8 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('password-reset/success/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('users/', views.UserListView.as_view(), name='user-list'),
-    path('user/<pk>/', views.UserDetailView.as_view(), name='user-detail'),
+    path('users/<pk>/', views.UserDetailView.as_view(), name='user-detail'),
+    path('users/<pk>/edit/', views.UserUpdateView.as_view(), name='user-update'),
     path('account/', views.AccountDetailView.as_view(), name='account-detail'),
-    path('account-edit/', views.AccountUpdateView.as_view(), name='account-update'),
-    path('user/set-account-type/<pk>/', views.AccountTypeUpdateView.as_view(), name='account-type-update'),
+    path('account/edit/', views.AccountUpdateView.as_view(), name='account-update'),
 ]

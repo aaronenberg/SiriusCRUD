@@ -13,7 +13,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from .forms import AccountTypeUpdateForm, AccountUpdateForm, UserCreateForm
+from .forms import AccountUpdateForm, AccountUpdateFormPrivileged, UserCreateForm
 from .models import BaseUser
 from .tokens import account_activation_token
 
@@ -90,17 +90,19 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         return render(self.request, self.get_template_names(), context)
 
 
-class AccountTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     model = BaseUser
-    form_class = AccountTypeUpdateForm
-    template_name = 'users/account_type_update_form.html'
+    form_class = AccountUpdateFormPrivileged
+    template_name = 'users/account_update_form.html'
 
     def test_func(self):
-        return self.request.user.account_type == 'FA'
+        return self.request.user.user_type == 'FA'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        if self.request.user == self.object:
+            return redirect("users:account-update")
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         context = self.get_context_data(form=form)
@@ -113,8 +115,6 @@ class AccountTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         if not form.is_valid():
             return self.form_invalid(form)
         user = form.save()
-        if request.user == user:
-            return redirect("users:account-detail")
         return redirect("users:user-detail", pk=user.pk)
 
     def form_invalid(self, form):
@@ -130,22 +130,25 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'users/user_list.html'
 
     def test_func(self):
-        return self.request.user.account_type == 'FA'
+        return self.request.user.user_type == 'FA'
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
-    ''' Displays details of an article. Allows a user to hide their private articles from
-        other users. Additionally, unauthenticated users may not view certain types of articles '''
+    ''' Displays details of a user. '''
 
     model = BaseUser
     context_object_name = 'user_object'
     template_name = 'users/user_detail.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.user == self.object:
+            return redirect("users:account-detail")
+        return super().get(request, *args, **kwargs)
 
 
 class AccountDetailView(LoginRequiredMixin, DetailView):
-    ''' Displays details of an article. Allows a user to hide their private articles from
-        other users. Additionally, unauthenticated users may not view certain types of articles '''
+    ''' Displays account details of the currently logged in user.'''
 
     model = BaseUser
     context_object_name = 'user_object'
@@ -154,8 +157,8 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
     def get_object(self):
         return self.request.user
             
-User = get_user_model()
 
+User = get_user_model()
 
 class UserActivateView(View):
 

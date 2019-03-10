@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 STUDENT = 'ST'
 TEACHING_ASSISTANT = 'TA'
 FACULTY = 'FA'
-ACCOUNT_TYPES = (
+USER_TYPE_CHOICES = (
     (STUDENT, 'Student'),
     (TEACHING_ASSISTANT, 'Teaching Assistant'),
     (FACULTY, 'Instructor'),
@@ -36,21 +36,21 @@ class UserManager(BaseUserManager):
     def create_user(self, username, email,  password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        extra_fields.setdefault('account_type', STUDENT)
+        extra_fields.setdefault('user_type', STUDENT)
         return self._create_user(username, email, password, **extra_fields)
 
     def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('account_type', FACULTY)
+        extra_fields.setdefault('user_type', FACULTY)
         extra_fields.setdefault('first_name', 'superuser')
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        if extra_fields.get('account_type') is not FACULTY:
-            raise ValueError('Superuser must have account type="FA"')
+        if extra_fields.get('user_type') is not FACULTY:
+            raise ValueError('Superuser must have user type="FA"')
         return self._create_user(username, email, password, **extra_fields)
 
 
@@ -84,11 +84,11 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that email already exists."),
         },
     )
-    account_type = models.CharField(
+    user_type = models.CharField(
         max_length=2,
         default=STUDENT,
-        choices=ACCOUNT_TYPES,
-        verbose_name='Account Type'
+        choices=USER_TYPE_CHOICES,
+        verbose_name='User Type'
     )
     first_name = models.CharField(
         max_length=30,
@@ -137,7 +137,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_privileged(self):
-        return self.is_staff or self.account_type in [TEACHING_ASSISTANT, FACULTY]
+        return self.is_staff or self.user_type in [TEACHING_ASSISTANT, FACULTY]
 
     class Meta:
         verbose_name_plural = "Users"

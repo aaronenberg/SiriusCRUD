@@ -3,18 +3,18 @@
 {% block content %}
 
 {{ user_object }}
-({{ user_object.get_account_type_display }})
-
-{% if user.account_type == 'FA' %}
-<div>
-  <a href="{% url 'users:account-type-update' user_object.pk %}">
-    <button type="button" class="btn">Promote</button>
-  </a>
-</div>
-{% endif %}
+({{ user_object.get_user_type_display }})
 
 {% block edit %}
-<a class="btn" href="{% url 'users:account-update' %}">Edit</a>
+<a 
+  class="btn" 
+  href="{% if user_object == user %}
+          {% url 'users:account-update' %}
+        {% else %}
+          {% url 'users:user-update' user_object.pk %}
+        {% endif %}">
+  Edit
+</a>
 {% endblock edit %}
 
 {% if user == user_object %}
