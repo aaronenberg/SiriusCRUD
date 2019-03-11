@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm as DjangoPasswordChangeForm
 from django.forms import ValidationError, EmailField, ModelForm, TextInput, ChoiceField, Select
 from .models import BaseUser, USER_TYPE_CHOICES
 
@@ -43,7 +43,7 @@ class AccountUpdateFormPrivileged(ModelForm):
     )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type",)
+        fields = ("email", "first_name", "last_name", "user_type", "username")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -62,9 +62,16 @@ class AccountUpdateFormPrivileged(ModelForm):
             'class': 'form-control',
             'name': 'last_name',
         })
+        self.fields['username'].widget = TextInput(attrs={
+            'id': 'user_username',
+            'class': 'form-control',
+            'name': 'username',
+            'autocomplete': 'new-password',
+        })
         self.fields['email'].disabled = True
         self.fields['first_name'].disabled = True
         self.fields['last_name'].disabled = True
+        self.fields['username'].disabled = True
 
 
 class AccountUpdateForm(ModelForm):
@@ -78,13 +85,14 @@ class AccountUpdateForm(ModelForm):
     )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type",)
+        fields = ("email", "first_name", "last_name", "user_type", "username")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
         if instance and instance.user_type != 'FA':
             self.fields['user_type'].disabled = True
+        self.fields['username'].disabled = True
         self.fields['email'].widget = TextInput(attrs={
             'id': 'user_email',
             'class': 'form-control',
@@ -103,6 +111,12 @@ class AccountUpdateForm(ModelForm):
             'name': 'last_name',
             'autocomplete': 'new-password',
         })
+        self.fields['username'].widget = TextInput(attrs={
+            'id': 'user_username',
+            'class': 'form-control',
+            'name': 'username',
+            'autocomplete': 'new-password',
+        })
 
     def clean_email(self):
         whitelist = ['edu']
@@ -111,4 +125,14 @@ class AccountUpdateForm(ModelForm):
         if top_level_domain not in whitelist:
             raise ValidationError("Email must be a valid school email that ends with .edu")
         return email
+
+
+class PasswordChangeForm(DjangoPasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['new_password2'].label = 'Confirm Password'
+        print(self.fields['new_password2'].label)
 

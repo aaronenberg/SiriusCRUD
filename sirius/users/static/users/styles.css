@@ -20,21 +20,19 @@
     }
 }
 
-form#user-form {
-    overflow-y: auto;
-    height: 70vh;
-    margin-top:2%;
+form#user-form, form#password-change-form {
+    margin-top:10%;
 }
 
 @media (min-width:1200px) {
-    form#user-form {
+    form#user-form, form#password-change-form{
         margin-left: 30%;
         margin-right: 30%;
     }
 }
 
 @media (min-width: 576px) and (max-width: 1199.98px) {
-    form#user-form {
+    form#user-form, form#password-change-form{
         margin-left: 15%;
         margin-right: 15%;
     }

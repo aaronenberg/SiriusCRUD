@@ -12,7 +12,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('activate/', views.UserActivateView.as_view(), name='activate'),
     path('account/password-change/',
-         auth_views.PasswordChangeView.as_view(success_url=reverse_lazy('users:password_change_done')),
+         views.PasswordChangeView.as_view(success_url=reverse_lazy('users:password_change_done')),
          name="password_change"),
     path('account/password-change/success/', auth_views.PasswordChangeDoneView.as_view(), name="password_change_done"),
     path('password-reset/',
