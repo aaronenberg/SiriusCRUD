@@ -22,8 +22,9 @@
 
 form#article-form {
     overflow-y: auto;
-    height: 70vh;
-    margin-top:2%;
+    max-height: 70vh;
+    margin-top:5%;
+    margin-bottom:40px;
 }
 
 @media (min-width:1200px) {
@@ -42,10 +43,6 @@ form#article-form {
 
 .navbar-submit {
     position:fixed;
+    bottom: 0;
 }
-
-form#search-form {
-    position-left: 10%;
-}
-
 

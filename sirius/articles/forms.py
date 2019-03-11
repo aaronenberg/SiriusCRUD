@@ -17,6 +17,7 @@ class BaseArticleMediaFormSet(BaseInlineFormSet):
             if media and not article_type:
                 raise ValidationError("Select a file type for the file being uploaded.")
 
+
 ArticleMediaFormSet = inlineformset_factory(
     Article,
     ArticleMedia,
@@ -25,6 +26,7 @@ ArticleMediaFormSet = inlineformset_factory(
     extra=1,
     widgets={'article_media': FileInput(attrs={
                 'class': 'custom-file',
+                'multiple': True
             }),
             'article_type': Select(attrs={
                 'class': 'form-control select-fix-height'

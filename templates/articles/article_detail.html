@@ -16,24 +16,14 @@
   <div>
     {{ article.get_article_type_display }}
   </div>
-  <div>
-    <label>Published?</label>
-    {{ article.is_public }}
-  </div>
-  <div>
-    <label>Author:</label>
-    {{ article.author }}
-  </div>
+  {% if article.course %}
   <div>
     <label>Course: </label>
-    {% if article.course %}
-      <a href="{{ article.course.get_absolute_url }}">
-    {% endif %}
-      {{ article.course }}
-    </a>
+    <a href="{{ article.course.get_absolute_url }}">{{ article.course }}</a>
   </div>
+  {% endif %}
   <div>
-    <label>Last updated: </label>
+    <label>Last updated by {{ article.author.get_full_name }} at: </label>
     {{ article.modified }}
   </div>
   <div>
@@ -44,9 +34,18 @@
     
   </div>
   <div>
-    {% for media in articlemedia_list %}
-      <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
+    <ul>
+    {% for type in ARTICLE_TYPES %}
+      {{ type }}
+      {% for media in articlemedia_list %}
+        {% if media.get_article_type_display == type %}
+        <li>
+          <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
+        </li>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
+    </ul>
   </div>
   {% if user.pk == article.author.pk %}
   <div>

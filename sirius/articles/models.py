@@ -85,7 +85,6 @@ class Article(models.Model):
             return reverse('articles:article-detail', kwargs={'slug': self.slug})
         return reverse('articles:draft-detail', kwargs={'slug': self.slug})
 
-
     def generate_slug(self):
         max_length = self._meta.get_field('slug').max_length
         slug = slugify(self.title)[:max_length]

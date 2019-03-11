@@ -38,6 +38,8 @@ class ArticleDetailView(DetailView):
         else:
             media = ArticleMedia.objects.filter(Q(article__pk=self.object.pk), ~Q(article_type='RD'))
         context['articlemedia_list'] = media
+        types = [t['article_type'] for t in media.values('article_type')]
+        context['ARTICLE_TYPES'] = [t[1] for t in ArticleMedia.ARTICLE_TYPES if t[0] in types]
         return context
 
 
@@ -74,7 +76,13 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
             form.instance.is_public = True
         form.instance.author = self.request.user
         form.save()
-        articlemedia = articlemedia_form.save(commit=False)
+        # for a file field to accept multiple files we save each file creating a new ArticleMedia object
+        articlemedia = []
+        for i, file_field in enumerate(self.request.FILES.keys()):
+            for f in self.request.FILES.getlist(file_field):
+                article_type = articlemedia_form.forms[i].cleaned_data['article_type']
+                article = articlemedia_form.forms[i].cleaned_data['article']
+                articlemedia.append(ArticleMedia(article_media=f, article_type=article_type, article=article))
         for media in articlemedia:
             media.save()
         return redirect('articles:article-list')
@@ -182,4 +190,4 @@ class SearchResultsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('query')
-        return Article.objects.annotate(search=SearchVector('description', 'title')).filter(search=query)
+        return Article.objects.annotate(search=SearchVector('description', 'title')).filter(search=query, is_public=True)
