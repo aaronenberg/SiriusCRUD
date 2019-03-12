@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for section in sections %}
+<option value="{{ section }}">{{ section | stringformat:"02d" }}</option>
+{% endfor %}

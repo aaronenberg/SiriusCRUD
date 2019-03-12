@@ -18,7 +18,7 @@ class ArticleListView(ListView):
 
     model = Article
     context_object_name = 'articles'
-    queryset = Article.objects.exclude(is_public=False)
+    queryset = Article.objects.exclude(is_public=False).order_by('-modified')
 
 
 class ArticleDetailView(DetailView):
@@ -129,7 +129,12 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.is_public = True
         form.save()
-        articlemedia = articlemedia_form.save(commit=False)
+        articlemedia = []
+        for i, file_field in enumerate(self.request.FILES.keys()):
+            for f in self.request.FILES.getlist(file_field):
+                article_type = articlemedia_form.forms[i].cleaned_data['article_type']
+                article = articlemedia_form.forms[i].cleaned_data['article']
+                articlemedia.append(ArticleMedia(article_media=f, article_type=article_type, article=article))
         for media in articlemedia:
             media.save()
         if 'title' in form.changed_data:
@@ -191,3 +196,11 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
         return Article.objects.annotate(search=SearchVector('description', 'title')).filter(search=query, is_public=True)
+
+
+def get_course_sections(request):
+    course_id = request.GET.get('course')
+    course = Course.objects.get(pk=course_id)
+    sections = course.sections
+    return render(request, 'articles/section_dropdown_list_options.html', {'sections': sections})
+

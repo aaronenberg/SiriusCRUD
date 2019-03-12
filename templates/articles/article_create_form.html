@@ -32,7 +32,13 @@
     {% endfor %}
 {% endif %}
 
-<form id="article-form" class="justify-content-center custom-validation" action="" method="post" enctype="multipart/form-data" novalidate>
+<form 
+  id="article-form" 
+  class="custom-validation"
+  method="post"
+  data-sections-url="{% url 'articles:ajax-get-sections' %}"
+  enctype="multipart/form-data"
+  novalidate>
   {% csrf_token %}
 
   <div class="form-row col-12 justify-content-center">
@@ -184,5 +190,25 @@
       return false;
   });
 </script>
+<script>
+  $("#article_course").change(function ()
+  {
+    var url = $("#article-form").attr("data-sections-url");
+    var course_id = $(this).val();
 
+    if (course_id)
+    {
+      $.ajax({
+        url: url,
+        data: {'course': course_id},
+        success: function (data)
+        {
+          $("#article_course_section").html(data);
+        }
+      });
+    }
+    else
+      $("#article_course_section").html("");
+  });
+</script>
 {% endblock custom_js %}

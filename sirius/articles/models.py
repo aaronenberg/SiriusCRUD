@@ -35,7 +35,7 @@ class Article(models.Model):
         related_name='articles',
         verbose_name=_('author')
     )
-    title = models.CharField(_('title'), max_length=255, default='', blank=False)
+    title = models.CharField(_('title'), max_length=255, blank=False)
 
     description = models.TextField(
         _('description'),
@@ -66,7 +66,8 @@ class Article(models.Model):
         _('semester'),
         max_length=2,
         choices=SEMESTER_CHOICES,
-        default=FALL, blank=True
+        default=FALL,
+        blank=True
     )
     year = models.PositiveSmallIntegerField(
         _('year'),

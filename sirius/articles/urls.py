@@ -14,5 +14,6 @@ urlpatterns = [
     path('drafts/<slug:slug>/edit/', views.ArticleUpdateView.as_view(), name='draft-update'),
     path('articles/<slug:slug>/', views.ArticleDetailView.as_view(), name='article-detail'),
     path('articles/<slug:slug>/edit/', views.ArticleUpdateView.as_view(), name='article-update'),
+    path('ajax/get-sections/', views.get_course_sections, name='ajax-get-sections'),
 ]
 

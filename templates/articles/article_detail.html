@@ -41,6 +41,7 @@
         {% if media.get_article_type_display == type %}
         <li>
           <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
+          {{ media.created }}
         </li>
         {% endif %}
       {% endfor %}

@@ -1,3 +1,4 @@
+from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
 from crispy_forms.helper import FormHelper
@@ -53,6 +54,14 @@ class ArticleForm(ModelForm):
         required=False,
         initial=Article.current_year
     )
+    section = ChoiceField(
+        widget = Select(attrs={
+            'id': 'article_course_section',
+            'class': 'form-control custom-select select-fix-height',
+            'name': 'section',
+        }),
+        required=False,
+    )
     course = ModelChoiceField(queryset=Course.objects.all(),
         widget = Select(attrs={
             'id': 'article_course',
@@ -76,15 +85,11 @@ class ArticleForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ArticleForm, self).__init__(*args, **kwargs)
+
         self.fields['title'].widget = TextInput(attrs={
             'id': 'article_title',
             'class': 'form-control',
             'name': 'title',
-        })
-        self.fields['section'].widget = TextInput(attrs={
-            'id': 'article_course_section',
-            'class': 'form-control',
-            'name': 'course_section',
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'article_description',
@@ -92,15 +97,19 @@ class ArticleForm(ModelForm):
             'name': 'description',
         })
 
-    def clean(self):
-        cleaned_data = super().clean()
-        section = cleaned_data.get('section')
-        course = cleaned_data.get('course')
-        if section:
-            if not course:
-                raise ValidationError("Please select a course with section {:02d}.".format(section))
-            if section not in course.sections:
-                raise ValidationError("Section {0} does not exist for course {1}".format(section, course))
+        section_choices = []
+        if 'course' in self.data and self.data['course']:
+            section_choices += BLANK_CHOICE_DASH
+            course_id = self.data.get('course')
+            course = Course.objects.get(pk=course_id)
+            for section in course.sections:
+                section_choices.append((section, "{:02d}".format(section)))
+        elif self.instance.pk and self.instance.course:
+            section_choices += BLANK_CHOICE_DASH
+            course = self.instance.course
+            for section in course.sections:
+                section_choices.append((section, "{:02d}".format(section)))
+        self.fields['section'].choices = section_choices
 
     def clean_year(self):
         year = self.cleaned_data.get('year')
@@ -108,3 +117,8 @@ class ArticleForm(ModelForm):
             return year
         return None
 
+    def clean_section(self):
+        section = self.cleaned_data.get('section')
+        if section:
+            return section
+        return None
