@@ -114,12 +114,11 @@
   </div>
   {% endfor %}
 
-  <div class="container fixed-bottom navbar-submit">
-    <nav class="navbar">
+    <nav class="navbar navbar-default navbar-dark navbar-submit fixed-bottom">
       <div class="navbar-nav">
         <div class="submit-row">
             {% block submit %}
-            <input type="Submit" class="btn btn-primary" value="Post">
+            <input type="Submit" class="btn btn-raised btn-primary" value="Post">
             <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
             {% endblock submit %}
         </div>
@@ -128,7 +127,6 @@
         <a class="btn" href="{% url 'articles:article-list' %}">Cancel</a>
         {% endblock back_navigate %}
     </nav>
-  </div>
 </form>
 
 {% endblock content %}

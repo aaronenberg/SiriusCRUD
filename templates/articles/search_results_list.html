@@ -1,14 +1,21 @@
 {% extends "base.html" %}
+{% load static article_tags %}
 
 
 {% block content %}
 
-{% for article in articles %}
-<ul>
-  <li>
-    <a class="btn" href="{% url 'articles:article-detail' article.slug %}">{{ article }}</a>
-  </li>
-</ul>
-{% endfor %}
+<div class="list-group align-items-center">
+  {% for article in articles %}
+  <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+     href="{% get_absolute_url article %}">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ article }}</h5>
+      <small>{{ article.modified }}</small>
+    </div>
+    <p class="mb-1">{{ article.course }}</p>
+    <small>{{ article.author }}</small>
+  </a>
+  {% endfor %}
+</div>
 
 {% endblock content %}

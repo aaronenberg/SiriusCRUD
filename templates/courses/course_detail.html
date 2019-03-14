@@ -24,8 +24,10 @@ Sections
     </div>
     {% endfor %}
   </ul>
+{% if user.user_type == 'FA' %}
 <div>
-  <a class="btn" href="{% url 'courses:course-update' course.slug %}">Edit</a>
+  <a class="btn btn-raised" href="{% url 'courses:course-update' course.slug %}">Edit</a>
 </div>
+{% endif %}
 
 {% endblock content %}

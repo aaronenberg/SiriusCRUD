@@ -36,3 +36,11 @@
 <p><a href="{% url 'users:password_reset' %}">Forgot password?</a></p>
 <p><a href="{% url 'users:register' %}">Create Account</a></p>
 {% endblock %}
+
+{% block custom_js %}
+<script>
+  $(document).ready(function () {
+      $('#id_username').trigger('focus')
+  })
+</script>
+{% endblock %}

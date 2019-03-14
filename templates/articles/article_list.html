@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-{% load article_tags %}
+{% load static article_tags %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'articles/styles.css' %}">
+{% endblock custom_css %}
 
 {% block content %}
 
@@ -9,33 +13,43 @@
 </div>
 {% endblock %}
 
-{% if user.is_authenticated %}
-<div>
-  <a 
-    class="btn" 
-    href="{% url 'articles:article-create' %}">
-    Create Article
-  </a>
-{% block draft-nav %}
-  <a 
-    class="btn"
-    href="{% url 'articles:draft-list' %}">
-    Saved Drafts
-  </a>
-{% endblock %}
-</div>
-{% endif %}
-
-{% block article-list %}
-<ul>
-  {% for article in articles %}
+<div id="content">
+  {% if user.is_authenticated %}
   <div>
-    <a href="{% get_absolute_url article %}">
-      {{ article }}
+    <a 
+      class="btn btn-raised" 
+      href="{% url 'articles:article-create' %}">
+      + Create Article
     </a>
+    {% block draft-nav %}
+    <a 
+      class="btn btn-raised"
+      href="{% url 'articles:draft-list' %}">
+      Saved Drafts
+    </a>
+    {% endblock %}
   </div>
-  {% endfor %}
-</ul>
-{% endblock article-list %}
+  {% endif %}
+
+  {% block article-list %}
+  <div class="list-group align-items-center">
+      {% for article in articles %}
+        <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+           href="{% get_absolute_url article %}">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ article }}</h5>
+            <small>{{ article.modified }}</small>
+          </div>
+          <p class="mb-1">{{ article.course }}</p>
+          <small>{{ article.author }}</small>
+        </a>
+      {% endfor %}
+  </div>
+  {% endblock article-list %}
+</div>
 
 {% endblock %}
+
+{% block custom_js %}
+
+{% endblock custom_js %}

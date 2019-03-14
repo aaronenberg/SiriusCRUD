@@ -1,5 +1,9 @@
 {% extends "courses/course_create_form.html" %}
 
+{% block submit %}
+<input type="Submit" class="btn btn-raised btn-primary" value="UPDATE">
+{% endblock submit %}
+
 {% block cancel_navigate %}
 <a class="btn" href="{{ course.get_absolute_url }}">
 {% endblock %}

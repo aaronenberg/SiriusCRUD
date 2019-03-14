@@ -3,18 +3,21 @@
 {% block content %}
 
 <h1>Courses</h1>
-{% if user.is_authenticated %}
-  <a class="btn" href="{% url 'courses:course-create' %}">Create Course</a>
+{% if user.user_type == 'FA' %}
+  <a class="btn btn-raised" href="{% url 'courses:course-create' %}">+ Create Course</a>
 {% endif %}
 
-<ul>
-  {% for course in courses %}
-  <div>
-    <a href="{{ course.get_absolute_url }}">
-      {{ course }}
-  </a>
+  <div class="list-group align-items-center">
+    {% for course in courses %}
+    <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+       href="{{ course.get_absolute_url }}">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ course }}</h5>
+      </div>
+      <p class="mb-1">{{ article.course }}</p>
+      <small>{{ article.author }}</small>
+    </a>
+    {% endfor %}
   </div>
-  {% endfor %}
-</ul>
 
 {% endblock %}

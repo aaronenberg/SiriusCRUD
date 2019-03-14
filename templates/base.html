@@ -22,13 +22,13 @@
 
   <body>
     {% block navbar %}
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav id="id-main-nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="{% url 'index' %}">SIRIUS</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav mr-auto">
+        <div id="nav-left" class="navbar-nav">
           <a class="nav-item nav-link 
                     {% if 'articles' in request.path or 'drafts' in request.path %}
                     active
@@ -36,7 +36,6 @@
                     href="{% url 'articles:article-list' %}">
                     Articles
           </a>
-          {% if user.user_type == 'FA' %}
           <a class="nav-item nav-link 
                     {% if 'courses' in request.path %}
                     active
@@ -44,6 +43,7 @@
                     href="{% url 'courses:course-list' %}">
                     Courses
           </a>
+          {% if user.user_type == 'FA' %}
           <a class="nav-item nav-link 
                     {% if 'user' in request.path or 'account' in request.path %}
                     active
@@ -60,7 +60,7 @@
              Search
            </a>
         </div>
-        <div class="navbar-nav ml-auto">
+        <div id="nav-right" class="navbar-nav">
           <form method="GET" action="{% url 'articles:search-results' %}" id="id-search-form" class="custom-validation" novalidate>
             <div class="bmd-form-group bmd-collapse-inline pull-xs-right">
               <div class="form-row">
@@ -89,6 +89,40 @@
 
     <div id="container" class="container-fluid">
         {% block content %} {% endblock content %}
+
+        {% if is_paginated %}
+        <nav id="id_paginator" class="fixed-bottom" aria-label="articles list pages">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="btn page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">Previous</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="btn page-item disabled"><span>Previous</span></li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+              {% if page_obj.number == i %}
+            <li class="btn page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% else %}
+            <li class="page-item"><a class="btn" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="btn  btn-default page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">Next</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="btn page-item disabled"><span>Next</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
     </div>
 
     <!-- Bootstrap JavaScript -->
@@ -130,5 +164,11 @@
         }, false);
       })();
     </script>
+<script>
+  $('.list-group-item-action').hover(
+      function(){ $(this).addClass('active') },
+      function(){ $(this).removeClass('active') }
+  )
+</script>
   </body>
 </html>
