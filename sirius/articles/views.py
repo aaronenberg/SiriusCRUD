@@ -2,12 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from .models import Article, ArticleMedia
 from .forms import ArticleForm, ArticleMediaFormSet
-from django.views.generic.base import TemplateView
 from courses.models import Course
 
 
@@ -19,6 +19,7 @@ class ArticleListView(ListView):
     model = Article
     context_object_name = 'articles'
     queryset = Article.objects.exclude(is_public=False).order_by('-modified')
+    paginate_by = 10
 
 
 class ArticleDetailView(DetailView):
@@ -41,6 +42,16 @@ class ArticleDetailView(DetailView):
         types = [t['article_type'] for t in media.values('article_type')]
         context['ARTICLE_TYPES'] = [t[1] for t in ArticleMedia.ARTICLE_TYPES if t[0] in types]
         return context
+
+
+def flatten_formset_file_fields(formset):
+    media = []
+    for i, file_field in enumerate(formset.files.keys()):
+        for fp in formset.files.getlist(file_field):
+            article_type = formset.forms[i].cleaned_data['article_type']
+            article = formset.forms[i].cleaned_data['article']
+            media.append(ArticleMedia(article_media=fp, article_type=article_type, article=article))
+    return media
 
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
@@ -76,13 +87,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
             form.instance.is_public = True
         form.instance.author = self.request.user
         form.save()
-        # for a file field to accept multiple files we save each file creating a new ArticleMedia object
-        articlemedia = []
-        for i, file_field in enumerate(self.request.FILES.keys()):
-            for f in self.request.FILES.getlist(file_field):
-                article_type = articlemedia_form.forms[i].cleaned_data['article_type']
-                article = articlemedia_form.forms[i].cleaned_data['article']
-                articlemedia.append(ArticleMedia(article_media=f, article_type=article_type, article=article))
+        # for a file field to accept multiple files we save each file, creating a new ArticleMedia object
+        articlemedia = flatten_formset_file_fields(articlemedia_form)
         for media in articlemedia:
             media.save()
         return redirect('articles:article-list')
@@ -129,12 +135,7 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.is_public = True
         form.save()
-        articlemedia = []
-        for i, file_field in enumerate(self.request.FILES.keys()):
-            for f in self.request.FILES.getlist(file_field):
-                article_type = articlemedia_form.forms[i].cleaned_data['article_type']
-                article = articlemedia_form.forms[i].cleaned_data['article']
-                articlemedia.append(ArticleMedia(article_media=f, article_type=article_type, article=article))
+        articlemedia = flatten_formset_file_fields(articlemedia_form)
         for media in articlemedia:
             media.save()
         if 'title' in form.changed_data:
