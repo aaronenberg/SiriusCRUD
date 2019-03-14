@@ -12,6 +12,8 @@ class CourseListView(LoginRequiredMixin, ListView):
 
     model = Course
     context_object_name = 'courses'
+    queryset = Course.objects.all().order_by('subject', 'number')
+    paginate_by = 10
 
 
 class CourseDetailView(DetailView):
@@ -65,7 +67,6 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return render(self.request, self.get_template_names(), context)
 
 
-
 class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     ''' Displays a form to update an existing course only for faculty users '''
 
@@ -100,5 +101,5 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
-        return render(request, self.get_template_names(), context)
+        return render(self.request, self.get_template_names(), context)
 

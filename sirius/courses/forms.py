@@ -100,7 +100,7 @@ class CourseForm(ModelForm):
             'class': 'form-control',
             'name': 'title',
         })
-        self.fields['number'].widget = NumberInput(attrs={
+        self.fields['number'].widget = TextInput(attrs={
             'id': 'course_number',
             'class': 'form-control',
             'name': 'number',
@@ -116,3 +116,9 @@ class CourseForm(ModelForm):
             'name': 'description',
         })
 
+    def clean_number(self):
+        number = self.cleaned_data.get('number')
+        number_pattern = re.compile('^\d{1,3}[a-zA-Z]?$')
+        if not number_pattern.match(number):
+            raise ValidationError("Course number invalid: course number may have upto 4 digits followed by a letter.")
+        return number
