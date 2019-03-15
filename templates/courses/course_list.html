@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Courses</h1>
-{% if user.user_type == 'FA' %}
+{% if user.is_superuser %}
   <a class="btn btn-raised" href="{% url 'courses:course-create' %}">+ Create Course</a>
 {% endif %}
 

@@ -40,7 +40,7 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = CourseForm
 
     def test_func(self):
-        return self.request.user.user_type == 'FA'
+        return self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         self.object = None

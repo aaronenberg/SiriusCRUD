@@ -110,7 +110,7 @@ MEDIA_URL = '/media/'
 
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/articles/'
+LOGIN_REDIRECT_URL = '/courses/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
