@@ -29,5 +29,8 @@ Sections
   <a class="btn btn-raised" href="{% url 'courses:course-update' course.slug %}">Edit</a>
 </div>
 {% endif %}
+<div>
+  <a class="btn btn-raised" href="{% url 'articles:article-create' %}">Create Article</a>
+</div>
 
 {% endblock content %}

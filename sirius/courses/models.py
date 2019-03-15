@@ -23,7 +23,7 @@ class Course(models.Model):
 
     number = models.CharField(max_length=4)
 
-    slug = models.SlugField(editable=False)
+    slug = models.SlugField(primary_key=True, editable=False)
     
     subject = models.CharField(max_length=2, choices=SUBJECT_CHOICES)
 

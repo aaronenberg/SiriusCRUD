@@ -117,8 +117,8 @@ class CourseForm(ModelForm):
         })
 
     def clean_number(self):
-        number = self.cleaned_data.get('number')
-        number_pattern = re.compile('^\d{1,3}[a-zA-Z]?$')
+        number = self.cleaned_data.get('number').upper()
+        number_pattern = re.compile('^\d{1,3}[A-Z]?$')
         if not number_pattern.match(number):
-            raise ValidationError("Course number invalid: course number may have upto 4 digits followed by a letter.")
+            raise ValidationError("Course number format invalid: Course number must have atleast 1 number optionally followed by a letter.")
         return number

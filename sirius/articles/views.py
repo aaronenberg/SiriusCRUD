@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector
 from django.db.models import Q
@@ -6,6 +7,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from django.urls import NoReverseMatch, reverse
 from .models import Article, ArticleMedia
 from .forms import ArticleForm, ArticleMediaFormSet
 from courses.models import Course
@@ -50,8 +52,23 @@ def flatten_formset_file_fields(formset):
         for fp in formset.files.getlist(file_field):
             article_type = formset.forms[i].cleaned_data['article_type']
             article = formset.forms[i].cleaned_data['article']
+            import pdb; pdb.set_trace()
             media.append(ArticleMedia(article_media=fp, article_type=article_type, article=article))
     return media
+
+
+def get_course_from_url(url):
+    course_slug_pattern = re.compile('[A-Z]{3,4}\d{1,3}[A-Z]?')
+    match = course_slug_pattern.search(url) 
+    if match:
+        slug = match.group()
+        try:
+            path = reverse('courses:course-detail', kwargs={'slug': slug})
+        except NoReverseMatch:
+            return None
+        return Course.objects.get(slug=slug)
+    else:
+        return None
 
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
@@ -64,6 +81,10 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
     def get(self, request, *args, **kwargs):
         self.object = None
+        referer_page = self.request.META.get('HTTP_REFERER')
+        if referer_page and reverse('courses:course-list') in referer_page:
+            course = get_course_from_url(referer_page)
+            self.initial = {'course': course}
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet()
