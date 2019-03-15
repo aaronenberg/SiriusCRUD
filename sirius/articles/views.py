@@ -58,7 +58,7 @@ def flatten_formset_file_fields(formset):
 
 
 def get_course_from_url(url):
-    course_slug_pattern = re.compile('[A-Z]{3,4}\d{1,3}[A-Z]?')
+    course_slug_pattern = re.compile('[A-Z]{2,4}\d{1,3}[A-Z]?')
     match = course_slug_pattern.search(url) 
     if match:
         slug = match.group()
@@ -83,6 +83,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         self.object = None
         referer_page = self.request.META.get('HTTP_REFERER')
         if referer_page and reverse('courses:course-list') in referer_page:
+            import pdb; pdb.set_trace()
             course = get_course_from_url(referer_page)
             self.initial = {'course': course}
         form_class = self.get_form_class()
