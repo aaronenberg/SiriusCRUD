@@ -31,17 +31,33 @@
   </div>
   {% endif %}
 
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+		Title:
+		<input type="text" id="title" class="search-key" placeholder="Title...">
+    </div>
+    <div class="col-sm">
+		Course:
+		<input type="text" id="course" class="search-key" placeholder="Course...">
+  </div>
+  <div class="col-sm">
+		Author:
+		<input type="text" id="author" class="search-key" placeholder="Author...">
+  </div>
+</div>
+
   {% block article-list %}
-  <div class="list-group align-items-center">
+  <div class="list-group align-items-center" id="articleTable">
       {% for article in articles %}
         <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
            href="{% get_absolute_url article %}">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ article }}</h5>
-            <small>{{ article.modified }}</small>
+            <h5 data-input="title" class="filter mb-1">{{ article }}</h5>
+            <small>{{ article.modified }}</small> -->
           </div>
-          <p class="mb-1">{{ article.course }}</p>
-          <small>{{ article.author }}</small>
+          <p data-input="course" class="filter mb-1">{{ article.course }}</p>
+          <small data-input="author" class="filter">{{ article.author }}</small>
         </a>
       {% endfor %}
   </div>
@@ -51,5 +67,18 @@
 {% endblock %}
 
 {% block custom_js %}
-
+<script>
+var $filterableRows = $('#articleTable').find("a"),
+		$inputs = $('.search-key');	
+$inputs.on('input', function() {
+	$filterableRows.hide().filter(function() {
+  	return $(this).find('.filter').filter(function() {
+		var tdText = $(this).text().toLowerCase(), 
+			inputValue = $('#' + $(this).data('input')).val().toLowerCase();
+		return tdText.indexOf(inputValue) != -1;
+    
+    }).length == $(this).find('.filter').length;
+  }).show();
+});
+</script>
 {% endblock custom_js %}
