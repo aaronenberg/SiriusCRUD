@@ -20,7 +20,7 @@
     }
 }
 form#course-form {
-    overflow-y: auto;
+    margin-top: 5rem;
     height: 70vh;
 }
 @media (min-width:1200px) {
@@ -40,3 +40,4 @@ form#course-form {
     height:13vh;
     bottom:0;
 }
+

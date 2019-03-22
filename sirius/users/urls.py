@@ -8,7 +8,7 @@ app_name = 'users'
 
 urlpatterns = [
     path('register/', views.UserCreateView.as_view(), name='register'),
-    path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
+    path('login/', views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('activate/', views.UserActivateView.as_view(), name='activate'),
     path('account/password-change/',
@@ -26,6 +26,5 @@ urlpatterns = [
     path('users/', views.UserListView.as_view(), name='user-list'),
     path('users/<pk>/', views.UserDetailView.as_view(), name='user-detail'),
     path('users/<pk>/edit/', views.UserUpdateView.as_view(), name='user-update'),
-    path('account/', views.AccountDetailView.as_view(), name='account-detail'),
     path('account/edit/', views.AccountUpdateView.as_view(), name='account-update'),
 ]

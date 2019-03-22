@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% load static article_tags %}
 
+{% block title %}
+  '{{ request.GET.query }}' Search Results | SIRIUS
+{% endblock title %}
 
 {% block content %}
+
+{% block header %}
+<div>
+  <h5>'{{ request.GET.query }}' search results</h5>
+</div>
+{% endblock %}
 
 <div class="list-group align-items-center">
   {% for article in articles %}
@@ -10,7 +19,7 @@
      href="{% get_absolute_url article %}">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{ article }}</h5>
-      <small>{{ article.modified }}</small>
+      <small>{{ article.timesince_published }}</small>
     </div>
     <p class="mb-1">{{ article.course }}</p>
     <small>{{ article.author }}</small>

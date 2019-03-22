@@ -5,49 +5,165 @@
 <link rel="stylesheet" type="text/css" href="{% static 'users/styles.css' %}">
 {% endblock %}
 
+{% block title %}
+  Account Update | SIRIUS
+{% endblock title %}
+
 {% block content %}
 
-<form id="user-form" method="post" action="">
+<form id="user-form" method="post" action="" novalidate>
   {% csrf_token %}
 
   <div class="form-group">
-    <label for="user_email" class="control-label bmd-label-static">Email Address</label>
+    <label for="user_email" class="bmd-label-static">Email Address</label>
     {{ form.email }}
     {{ form.email.errors }}
   </div>
 
   <div class="form-group">
-    <label for="user_username" class="control-label bmd-label-static">Username</label>
+    <label for="user_username" class="bmd-label-static">Username</label>
     {{ form.username }}
   </div>
 
-  <div class="form-row col-12 justify-content-between">
-    <div class="form-group col-5">
+  <div class="form-row justify-content-between">
+    <div class="form-group col-6">
         <label for="user_first_name" class="bmd-label-static">First Name</label>
-        <div class="form-row">
           {{ form.first_name }}
-        </div>
     </div>
-    <div class="form-group col-5">
+    <div class="form-group col-6">
         <label for="user_last_name" class="bmd-label-static">Last Name</label>
-        <div class="form-row">
           {{ form.last_name }}
-        </div>
     </div>
   </div>
 
-  {% if form.user_type %}
-  <div class="form-row col-12">
-    <div class="form-group col-12">
-      <div class="form-row">
-      <label for="course_description" class="bmd-label-static">User Type</label>
+  {% if form.user_type and user.user_type == 'FA' %}
+    <div class="form-group">
+      <label for="user_user_type" class="bmd-label-static">User Type</label>
         {{ form.user_type }}
+    </div>
+  {% endif  %}
+
+  {% if user.user_type == 'FA' and form.instance.pk == user.pk %}
+  <label for="mysirius_courses" class="bmd-label-static">MySIRIUS Courses</label>
+  <div class="modal fade" id="add-courses-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="courses-modal-title">Courses</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <small>Select the courses you are currently teaching:</small>
+          {{ form.courses }}
+        </div>
+        <div class="modal-footer">
+          <button id="user-courses-submit" type="Submit" class="btn btn-primary">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
+  <div id="mysirius-courses-row">
+    <div id="mysirius-courses" class="list-group">
+      {% for course in users_courses %}
+      <a class="justify-content-center list-group-item list-group-item-action align-items-center"
+         href="{{ course.get_absolute_url }}">
+          <span>{{ course }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="form-row justify-content-end">
+    <button id="id-user-courses-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#add-courses-modal">
+      Add/Remove Courses
+    </button>
+  </div>
   {% endif  %}
-
-  <input class="btn btn-raised" type="Submit" value="Save">
+  <div id="account-form-submit-row" class="form-row justify-content-between">
+  <input class="btn btn-raised btn-primary" type="Submit" value="Save">
+  <a class="btn btn-raised btn-info" href="{% url 'users:password_change' %}">Change Password</a>
+  </div>
 </form>
 
 {% endblock content %}
+
+{% block custom_js %}
+<script>
+  function get_selected_courses() {
+      var selected_courses = [];
+
+      $('#id-sirius-courses').find(':selected').each(function() {
+            selected_courses.push($(this).text())
+      })
+      return selected_courses
+  }
+
+  $(document).ready(function()
+  {
+      var saved_courses = get_selected_courses();
+
+      $('#id-sirius-courses option').click(function(e)
+      {
+          var course_option = $(this);
+          var course_option_is_selected = course_option.prop('selected');
+          var course_id = course_option.text();
+
+          if (course_option_is_selected) {
+            if (saved_courses.includes(course_id)) {
+                $('#mysirius-courses').append(
+                  '<a><span class="justify-content-center list-group-item list-group-item-action">'+ course_id +'</span></a>'
+                );
+            }
+            else {
+                $('#mysirius-courses').append(
+                  '<a><span class="unsaved-course justify-content-center list-group-item list-group-item-action">'+ course_id +'</span></a>'
+                );
+            }
+          }
+          else {
+              var selector = $('#mysirius-courses a:contains(' + course_id + ')')
+              $(selector).remove();
+          }
+      });
+  });
+
+  // prevents need for holding ctrl to select multiple elements in courses modal
+  $("#id-sirius-courses").mousedown(function(e){
+      e.preventDefault();
+
+      var select = this;
+      var scroll = select .scrollTop;
+
+      e.target.selected = !e.target.selected;
+
+      setTimeout(function(){select.scrollTop = scroll;}, 0);
+
+      $(select ).focus();
+  }).mousemove(function(e){e.preventDefault()});
+
+
+  $('#add-courses-modal').on('shown.bs.modal', function (e) {
+      $('#add-courses-modal').on('click', '#user-courses-submit', function (e) {
+          $('#user-form').submit(function(e) {
+              e.preventDefault();
+              var form = $(this)
+
+              $('#add-courses-modal').modal('hide')
+
+              $('#add-courses-modal').on('hidden.bs.modal', function (e) {
+                form.unbind('submit').submit();
+              });
+          });
+      });
+  });
+  
+
+  $(document).on('click', '#id-user-courses-button', function() {
+      $('.alert').alert('close');
+  });
+  $('select').change(function() {
+      $('.alert').alert('close');
+  });
+</script>
+{% endblock custom_js %}

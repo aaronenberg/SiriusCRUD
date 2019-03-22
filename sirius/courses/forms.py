@@ -79,7 +79,6 @@ class CourseForm(ModelForm):
             'class': 'form-control custom-select select-fix-height',
             'name': 'subject',
         }),
-        required=False,
     )
     class Meta:
         model = Course

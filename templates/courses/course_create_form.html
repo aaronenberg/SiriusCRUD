@@ -2,9 +2,15 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+
 {% block custom_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'courses/styles.css' %}">
 {% endblock custom_css %}
+
+
+{% block title %}
+  Create Course | SIRIUS
+{% endblock title %}
 
 {% block content %}
 
@@ -29,7 +35,7 @@
   <div class="form-row col-12 justify-content-center">
     <div class="form-group col-12">
       <div class="form-row">
-        <label for="course_title" class="control-label bmd-label-floating">Title</label>
+        <label for="course_title" class="control-label bmd-label-static">Title</label>
         {{ form.title }}
       </div>
     </div>
@@ -69,10 +75,9 @@
       </div>
     </div>
   </div>
-  <div class="container fixed-bottom navbar-submit">
     <nav class="navbar">
       <div class="navbar-nav">
-        <div class="submit-row">
+        <div class="form-row submit-row">
             {% block submit %}
             <input type="Submit" class="btn btn-raised btn-primary" value="CREATE">
             {% endblock submit %}
@@ -84,7 +89,14 @@
         CANCEL
       </a>
     </nav>
-  </div>
 </form>
 
 {% endblock content %}
+
+{% block custom_js %}
+<script>
+  $('#course_title').disableAutoFill();
+  $('#course_sections').disableAutoFill();
+  $('#course_number').disableAutoFill();
+</script>
+{% endblock custom_js %}

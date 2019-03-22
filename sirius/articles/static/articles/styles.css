@@ -20,15 +20,23 @@
     }
 }
 
-form#article-form {
+#article-media-forms {
     overflow-y: auto;
-    max-height: 81vh;
-
+    border: solid;
+    border-color: rgb(100,180,180);
+    border-width: .15rem;
+    background-color: rgba(18,85,74, 0.1);
+    padding-left:10px;
+    overflow-y: auto;
+    height:20vh;
+    max-height:20vh;
+    margin-bottom: 0.3rem;
 }
 
 @media (min-width:1200px) {
     form#article-form {
         width:45%;
+        height:100%;
         margin-left: auto;
         margin-right: auto;
     }
@@ -43,7 +51,10 @@ form#article-form {
 
 @media (max-width: 576px) {
     form#article-form {
-    max-height: 75vh;
+        max-height: 75vh;
     }
 }
-
+input-group>.custom-file-control:not(:first-child), .input-group>.custom-select:not(:first-child), .input-group>.form-control:not(:first-child) {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}

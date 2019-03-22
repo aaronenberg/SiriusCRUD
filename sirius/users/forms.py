@@ -1,6 +1,20 @@
-from django.contrib.auth.forms import PasswordChangeForm as DjangoPasswordChangeForm
-from django.forms import ValidationError, EmailField, ModelForm, TextInput, ChoiceField, Select
+from django.contrib.auth import forms as auth_forms
+from django.forms import (
+    CharField,
+    ValidationError,
+    EmailField,
+    ModelForm,
+    TextInput,
+    ChoiceField,
+    Select,
+    SelectMultiple,
+    HiddenInput,
+    ModelMultipleChoiceField,
+    PasswordInput
+)
+from django.utils.translation import gettext_lazy as _
 from .models import BaseUser, USER_TYPE_CHOICES
+from courses.models import Course
 
 
 class UserCreateForm(ModelForm):
@@ -83,15 +97,24 @@ class AccountUpdateForm(ModelForm):
             'name': 'user_type',
         }),
     )
+    courses = ModelMultipleChoiceField(queryset=Course.objects.all(),
+        widget = SelectMultiple(attrs={
+            'id': 'id-sirius-courses',
+            'class': 'custom-select form-control',
+            'name': 'courses',
+        }),
+        required=False,
+    )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type", "username")
+        fields = ("email", "first_name", "last_name", "user_type", "username", "courses")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
         if instance and instance.user_type != 'FA':
             self.fields['user_type'].disabled = True
+            self.fields['user_type'].widget = HiddenInput()
         self.fields['username'].disabled = True
         self.fields['email'].widget = TextInput(attrs={
             'id': 'user_email',
@@ -127,12 +150,28 @@ class AccountUpdateForm(ModelForm):
         return email
 
 
-class PasswordChangeForm(DjangoPasswordChangeForm):
+class PasswordChangeForm(auth_forms.PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
-        self.fields['new_password2'].label = 'Confirm Password'
-        print(self.fields['new_password2'].label)
 
+
+class AuthenticationForm(auth_forms.AuthenticationForm):
+
+    username = auth_forms.UsernameField(widget=TextInput(attrs={
+        'autofocus': True,
+        'placeholder': 'Username/Email',
+        })
+    )
+    password = CharField(
+        label=_("Password"),
+        strip=False,
+        widget=PasswordInput(attrs={
+            'placeholder': 'Password',
+        }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(AuthenticationForm, self).__init__(*args, **kwargs)

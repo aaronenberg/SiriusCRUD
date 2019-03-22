@@ -5,6 +5,10 @@
 <link rel="stylesheet" type="text/css" href="{% static 'articles/styles.css' %}">
 {% endblock custom_css %}
 
+{% block title %}
+  Articles | SIRIUS
+{% endblock title %}
+
 {% block content %}
 
 {% block header %}
@@ -19,7 +23,7 @@
     <a 
       class="btn btn-raised" 
       href="{% url 'articles:article-create' %}">
-      + Create Article
+      + New Article
     </a>
     {% block draft-nav %}
     <a 
@@ -38,7 +42,7 @@
            href="{% get_absolute_url article %}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ article }}</h5>
-            <small>{{ article.modified }}</small>
+            <small>{{ article.timesince_published }}</small>
           </div>
           <p class="mb-1">{{ article.course }}</p>
           <small>{{ article.author }}</small>

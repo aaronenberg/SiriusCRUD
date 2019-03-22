@@ -52,7 +52,6 @@ def flatten_formset_file_fields(formset):
         for fp in formset.files.getlist(file_field):
             article_type = formset.forms[i].cleaned_data['article_type']
             article = formset.forms[i].cleaned_data['article']
-            import pdb; pdb.set_trace()
             media.append(ArticleMedia(article_media=fp, article_type=article_type, article=article))
     return media
 

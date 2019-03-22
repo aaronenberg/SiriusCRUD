@@ -1,0 +1,66 @@
+{% load static %}
+
+<nav id="id-main-nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/sirius-logo-32x32.ico' %}"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div id="nav-left" class="navbar-nav">
+      <a class="nav-item nav-link 
+                {% if 'articles' in request.path or 'drafts' in request.path %}
+                active
+                {% endif %}"
+                href="{% url 'articles:article-list' %}">
+                Articles
+      </a>
+      <a class="nav-item nav-link 
+                {% if 'courses' in request.path %}
+                active
+                {% endif %}" 
+                href="{% url 'courses:course-list' %}">
+                Courses
+      </a>
+      {% if user.user_type == 'FA' %}
+      <a class="nav-item nav-link 
+                {% if 'user' in request.path or 'account' in request.path %}
+                active
+                {% endif %}" 
+                href="{% url 'users:user-list' %}">
+                Users
+      </a>
+      {% endif %}
+      <a class="nav-item nav-link
+         {% if 'search' in request.path %}
+         active
+         {% endif %}"
+         href="{% url 'articles:search' %}">
+         Search
+       </a>
+    </div>
+    <div id="nav-right" class="navbar-nav">
+      <form method="GET" action="{% url 'articles:search-results' %}" id="id-search-form" class="nav-item custom-validation" novalidate>
+        <div class="bmd-form-group">
+          <div class="form-row">
+            <span id="search" class="">
+              <input required type="text" value="{{request.GET.query}}" id="search" name="query" placeholder="Search">
+            </span>
+            <button 
+              class="btn bmd-btn-icon btn-search" 
+              for="search" 
+              >
+              <i class="material-icons">search</i>
+            </button>  
+          </div>
+        </div>
+      </form>
+      {% if user.is_authenticated %}
+      <a class="nav-item nav-link" href="{% url 'users:account-update' %}">{{ user.email | lower}}</a>
+      <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
+      {% else %}
+      <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+

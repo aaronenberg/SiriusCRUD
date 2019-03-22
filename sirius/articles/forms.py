@@ -90,6 +90,7 @@ class ArticleForm(ModelForm):
             'id': 'article_title',
             'class': 'form-control',
             'name': 'title',
+            'autocomplete': 'new-password'
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'article_description',

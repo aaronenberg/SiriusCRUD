@@ -1,7 +1,14 @@
 from django.conf import settings
-from django.contrib.auth import login, authenticate, get_user_model, update_session_auth_hash, views as auth_views
+from django.contrib.auth import (
+    login,
+    authenticate,
+    get_user_model,
+    update_session_auth_hash,
+    views as auth_views,
+)
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -12,7 +19,14 @@ from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from .forms import AccountUpdateForm, AccountUpdateFormPrivileged, UserCreateForm, PasswordChangeForm
+from .forms import (
+    AccountUpdateForm,
+    AccountUpdateFormPrivileged,
+    AuthenticationForm,
+    UserCreateForm,
+    PasswordChangeForm,
+    AuthenticationForm,
+)
 from .models import BaseUser
 from .tokens import account_activation_token
 
@@ -68,6 +82,11 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users_courses'] = self.request.user.courses.all().order_by('subject', 'number')
+        return context
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
@@ -82,7 +101,8 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         if not form.is_valid():
             return self.form_invalid(form)
         user = form.save()
-        return redirect("users:account-detail")
+        messages.success(request, 'Account changes saved!')
+        return redirect("users:account-update")
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -142,20 +162,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if request.user == self.object:
-            return redirect("users:account-detail")
+            return redirect("users:account-update")
         return super().get(request, *args, **kwargs)
 
-
-class AccountDetailView(LoginRequiredMixin, DetailView):
-    ''' Displays account details of the currently logged in user.'''
-
-    model = BaseUser
-    context_object_name = 'user_object'
-    template_name = 'users/account_detail.html'
-    
-    def get_object(self):
-        return self.request.user
-            
 
 User = get_user_model()
 
@@ -191,3 +200,7 @@ class UserActivateView(View):
 
 class PasswordChangeView(auth_views.PasswordChangeView):
     form_class = PasswordChangeForm
+
+
+class LoginView(auth_views.LoginView):
+    form_class = AuthenticationForm

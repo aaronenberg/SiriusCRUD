@@ -1,2 +1,37 @@
-{% extends "users/account_detail.html" %}
+{% extends "base.html" %}
+
+{% block title %}
+  {{ user_object }} Profile | SIRIUS
+{% endblock title %}
+
+{% block content %}
+
+<label>Name:</label> {{ user_object }}
+({{ user_object.get_user_type_display }})
+<div>
+  <label>Username:</label> {{ user_object.username }}
+</div>
+<div>
+  <label>Email:</label> {{ user_object.email }}
+</div>
+
+<div>
+{% block edit %}
+  <a 
+    class="btn btn-raised" 
+    href="{% if user_object == user %}
+            {% url 'users:account-update' %}
+          {% else %}
+            {% url 'users:user-update' user_object.pk %}
+          {% endif %}">
+    Edit
+  </a>
+  {% endblock edit %}
+
+  {% if user == user_object %}
+  <a class="btn btn-raised" href="{% url 'users:password_change' %}">Change Password</a>
+  {% endif %}
+</div>
+
+{% endblock content %}
 

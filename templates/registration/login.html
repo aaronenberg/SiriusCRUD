@@ -1,40 +1,54 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'login/styles.css' %}" />
+{% endblock custom_css %}
 
 {% block content %}
 
+<!--  TODO: move alert to top of page -->
 {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
+    <div class="alert alert-danger fade show">
+  <p>Invalid username and/or password. Please try again.</p>
+  </div>
 {% endif %}
 
-{% if next %}
-  {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-  {% else %}
-    <p>Please login to see this page.</p>
+  {% if next %}
+    {% if user.is_authenticated %}
+    <div class="alert alert-danger fade show">
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    </div>
+    {% else %}
+    <div class="alert alert-danger fade show">
+      <p>Please login to see this page.</p>
+    </div>
+    {% endif %}
   {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'users:login' %}">
+
+<form id="login-form" class="center-login" method="post" action="{% url 'users:login' %}">
   {% csrf_token %}
-  <table>
-    <tr>
-      <td>Email or {{ form.username.label_tag }}</td>
-      <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-      <td>{{ form.password.label_tag }}</td>
-      <td>{{ form.password }}</td>
-    </tr>
-  </table>
-
-  <input type="submit" value="login">
+  <div class="form-row">
+    {{ form.username }}
+  </div>
+  <div class="form-row">
+    {{ form.password }}
+  </div>
+  <div class="form-row">
+    <input class="btn btn-raised" type="submit" value="login">
+  </div>
   <input type="hidden" name="next" value="{{ next }}">
+  <div class="form-row">
+    <small><a href="{% url 'users:register' %}">Create Account</a></small>
+  </div>
+  <div class="form-row">
+    <small><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
+  </div>
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'users:password_reset' %}">Forgot password?</a></p>
-<p><a href="{% url 'users:register' %}">Create Account</a></p>
 {% endblock %}
 
 {% block custom_js %}
@@ -42,5 +56,6 @@
   $(document).ready(function () {
       $('#id_username').trigger('focus')
   })
+  $('#id_username').disableAutoFill();
 </script>
 {% endblock %}

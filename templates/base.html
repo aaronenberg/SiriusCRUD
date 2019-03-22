@@ -15,114 +15,23 @@
     <link rel="stylesheet" type="text/css" href="{% static 'base/styles.css' %}">
     {% block custom_css %} {% endblock custom_css %}
 
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+
     <title>
-      {% block title %} Sirius {% endblock title %}
+      {% block title %} {% endblock title %}
     </title>
   </head>
 
   <body>
-    {% block navbar %}
-    <nav id="id-main-nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'index' %}">SIRIUS</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div id="nav-left" class="navbar-nav">
-          <a class="nav-item nav-link 
-                    {% if 'articles' in request.path or 'drafts' in request.path %}
-                    active
-                    {% endif %}"
-                    href="{% url 'articles:article-list' %}">
-                    Articles
-          </a>
-          <a class="nav-item nav-link 
-                    {% if 'courses' in request.path %}
-                    active
-                    {% endif %}" 
-                    href="{% url 'courses:course-list' %}">
-                    Courses
-          </a>
-          {% if user.user_type == 'FA' %}
-          <a class="nav-item nav-link 
-                    {% if 'user' in request.path or 'account' in request.path %}
-                    active
-                    {% endif %}" 
-                    href="{% url 'users:user-list' %}">
-                    Users
-          </a>
-          {% endif %}
-          <a class="nav-item nav-link
-	           {% if 'search' in request.path %}
-             active
-             {% endif %}"
-             href="{% url 'articles:search' %}">
-             Search
-           </a>
-        </div>
-        <div id="nav-right" class="navbar-nav">
-          <form method="GET" action="{% url 'articles:search-results' %}" id="id-search-form" class="custom-validation" novalidate>
-            <div class="bmd-form-group bmd-collapse-inline pull-xs-right">
-              <div class="form-row">
-                <span id="search" class="">
-                  <input class="form-control" required type="text" value="{{request.GET.query}}" id="search" name="query" placeholder="Search">
-                </span>
-                <button 
-                  class="btn bmd-btn-icon btn-search" 
-                  for="search" 
-                  >
-                  <i class="material-icons">search</i>
-                </button>  
-              </div>
-            </div>
-          </form>
-        {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="{% url 'users:account-detail' %}">{{ user.email | lower}}</a>
-          <a class="nav-item nav-link" href="{% url 'users:logout' %}">logout</a>
-        {% else %}
-          <a class="nav-item nav-link" href="{% url 'users:login' %}">login</a>
-        {% endif %}
-        </div>
-      </div>
-    </nav>
-    {% endblock navbar %}
+    {% include 'partials/header.html' %}
 
     <div id="container" class="container-fluid">
-        {% block content %} {% endblock content %}
+      {% include 'partials/messages.html' %}
+      {% block content %} {% endblock content %}
 
-        {% if is_paginated %}
-        <nav id="id_paginator" class="fixed-bottom" aria-label="articles list pages">
-          <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-              <a class="btn page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                <span aria-hidden="true">Previous</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
-            {% else %}
-            <li class="btn page-item disabled"><span>Previous</span></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-              {% if page_obj.number == i %}
-            <li class="btn page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-              {% else %}
-            <li class="page-item"><a class="btn" href="?page={{ i }}">{{ i }}</a></li>
-              {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-            <li class="page-item">
-              <a class="btn  btn-default page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                <span aria-hidden="true">Next</span>
-                <span class="sr-only">Next</span>
-              </a>
-            </li>
-            {% else %}
-            <li class="btn page-item disabled"><span>Next</span></li>
-            {% endif %}
-          </ul>
-        </nav>
-        {% endif %}
+      {% if is_paginated %}
+        {% include 'partials/paginator.html' %}
+      {% endif %}
     </div>
 
     <!-- Bootstrap JavaScript -->
@@ -141,7 +50,16 @@
         integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
         crossorigin="anonymous">
     </script>
-    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+    <script>
+      $(document).ready(function() {
+        $('body').bootstrapMaterialDesign(); 
+
+        $(':input').keypress(function() {
+            $('.alert').alert('close');
+        });
+    });
+    </script>
+    <script src="https://terrylinooo.github.io/jquery.disableAutoFill/assets/js/jquery.disableAutoFill.min.js"></script>
     {% block custom_js %} {% endblock custom_js %}
 
     <script>

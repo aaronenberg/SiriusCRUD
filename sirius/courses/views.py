@@ -13,7 +13,7 @@ class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses'
     queryset = Course.objects.all().order_by('subject', 'number')
-    paginate_by = 10
+    paginate_by = 7
 
 
 class CourseDetailView(DetailView):

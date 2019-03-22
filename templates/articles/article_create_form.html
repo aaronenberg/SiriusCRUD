@@ -6,6 +6,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'articles/styles.css' %}">
 {% endblock custom_css %}
 
+{% block title %}
+  Create Article | SIRIUS
+{% endblock title %}
 
 {% block content %}
 
@@ -44,7 +47,7 @@
   <div class="form-row col-12 justify-content-center">
     <div class="form-group col-12">
       <div class="form-row">
-        <label for="article_title" class="control-label bmd-label-floating">Title</label>
+        <label for="article_title" class="control-label bmd-label-static">Title</label>
         {{ form.title }}
         <div class="invalid-feedback">
           Enter a title
@@ -99,7 +102,7 @@
   {{ articlemedia_form.management_form }}
 
   {% for upload_form in articlemedia_form %}
-  <div class="form-row col-12 justify-content-center spacer">
+  <div id="article-media-forms">
     <div class="form-group col-12">
       <div class="form-row media-upload spacer">
         <div class="custom-file col-11">
@@ -189,6 +192,10 @@
   });
 </script>
 <script>
+  $(document).ready(function() {
+      if (!$('#article_course').val())
+        $('#article_course_section').prop('disabled', true);
+  })
   $("#article_course").change(function ()
   {
     var url = $("#article-form").attr("data-sections-url");
@@ -201,6 +208,7 @@
         data: {'course': course_id},
         success: function (data)
         {
+      $('#article_course_section').prop('disabled', false);
           $("#article_course_section").html(data);
         }
       });
@@ -208,5 +216,8 @@
     else
       $("#article_course_section").html("");
   });
+</script>
+<script>
+  $('#article_title').disableAutoFill();
 </script>
 {% endblock custom_js %}

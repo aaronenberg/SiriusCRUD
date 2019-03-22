@@ -15,12 +15,17 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
+from django.views.generic.base import RedirectView
 from articles.views import IndexView
 
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
+    path('favicon.ico',
+        RedirectView.as_view(url=staticfiles_storage.url('images/favicon.ico'), permanent=False),
+        name="favicon"),
     path('', include('users.urls', namespace='users')),
     path('', include('articles.urls', namespace='articles')),
     path('courses/', include('courses.urls', namespace='courses')),
