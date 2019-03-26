@@ -4,7 +4,7 @@
   {{ user_object }} Profile | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
 <label>Name:</label> {{ user_object }}
 ({{ user_object.get_user_type_display }})
@@ -33,5 +33,5 @@
   {% endif %}
 </div>
 
-{% endblock content %}
+{% endblock content-main %}
 

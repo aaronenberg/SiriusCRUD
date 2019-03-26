@@ -16,7 +16,7 @@ class BaseArticleMediaFormSet(BaseInlineFormSet):
             if article_type and not media:
                 raise ValidationError("File type was chosen without uploading a file.")
             if media and not article_type:
-                raise ValidationError("Select a file type for the file being uploaded.")
+                raise ValidationError("No file type selected for the chosen file(s). Please reupload the file(s) and select a file type.")
 
 
 ArticleMediaFormSet = inlineformset_factory(
@@ -110,6 +110,8 @@ class ArticleForm(ModelForm):
             course = self.instance.course
             for section in course.sections:
                 section_choices.append((section, "{:02d}".format(section)))
+        elif not all(('course' in self.data, self.instance.course)):
+            self.fields['section'].disabled = True
         self.fields['section'].choices = section_choices
 
     def clean_year(self):

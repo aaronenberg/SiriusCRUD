@@ -9,25 +9,19 @@
   Articles | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
-{% block header %}
-<div>
-  <h1>Articles</h1>
-</div>
-{% endblock %}
 
-<div id="content">
   {% if user.is_authenticated %}
-  <div>
+  <div id="article_actions">
     <a 
-      class="btn btn-raised" 
+      class="btn btn-raised btn-secondary" 
       href="{% url 'articles:article-create' %}">
       + New Article
     </a>
     {% block draft-nav %}
     <a 
-      class="btn btn-raised"
+      class="btn btn-raised btn-info"
       href="{% url 'articles:draft-list' %}">
       Saved Drafts
     </a>
@@ -36,9 +30,9 @@
   {% endif %}
 
   {% block article-list %}
-  <div class="list-group align-items-center">
+  <div id="article_list" class="list-group">
       {% for article in articles %}
-        <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+        <a class="list-group-item list-group-item-action flex-column align-items-start"
            href="{% get_absolute_url article %}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ article }}</h5>
@@ -50,7 +44,6 @@
       {% endfor %}
   </div>
   {% endblock article-list %}
-</div>
 
 {% endblock %}
 

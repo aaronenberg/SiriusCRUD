@@ -9,42 +9,42 @@
   Account Update | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
 <form id="user-form" method="post" action="" novalidate>
   {% csrf_token %}
 
   <div class="form-group">
-    <label for="user_email" class="bmd-label-static">Email Address</label>
+    <label for="user-email" class="bmd-label-static">Email Address</label>
     {{ form.email }}
     {{ form.email.errors }}
   </div>
 
   <div class="form-group">
-    <label for="user_username" class="bmd-label-static">Username</label>
+    <label for="user-username" class="bmd-label-static">Username</label>
     {{ form.username }}
   </div>
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-6">
-        <label for="user_first_name" class="bmd-label-static">First Name</label>
+    <div class="form-group col-12 col-lg-6">
+        <label for="user-first-name" class="bmd-label-static">First Name</label>
           {{ form.first_name }}
     </div>
-    <div class="form-group col-6">
-        <label for="user_last_name" class="bmd-label-static">Last Name</label>
+    <div class="form-group col-12 col-lg-6">
+        <label for="user-last-name" class="bmd-label-static">Last Name</label>
           {{ form.last_name }}
     </div>
   </div>
 
   {% if form.user_type and user.user_type == 'FA' %}
     <div class="form-group">
-      <label for="user_user_type" class="bmd-label-static">User Type</label>
+      <label for="user-user-type" class="bmd-label-static">User Type</label>
         {{ form.user_type }}
     </div>
   {% endif  %}
 
   {% if user.user_type == 'FA' and form.instance.pk == user.pk %}
-  <label for="mysirius_courses" class="bmd-label-static">MySIRIUS Courses</label>
+  <label for="mysirius-courses" class="bmd-label-static">MySIRIUS Courses</label>
   <div class="modal fade" id="add-courses-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -67,33 +67,35 @@
   <div id="mysirius-courses-row">
     <div id="mysirius-courses" class="list-group">
       {% for course in users_courses %}
-      <a class="justify-content-center list-group-item list-group-item-action align-items-center"
+      <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
          href="{{ course.get_absolute_url }}">
-          <span>{{ course }}</span>
+        <div class="d-flex w-100 justify-content-between">
+          <h6>{{ course }}</h6>
+        </div>
       </a>
       {% endfor %}
     </div>
   </div>
   <div class="form-row justify-content-end">
-    <button id="id-user-courses-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#add-courses-modal">
+    <button id="user-courses-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>
   </div>
   {% endif  %}
-  <div id="account-form-submit-row" class="form-row justify-content-between">
-  <input class="btn btn-raised btn-primary" type="Submit" value="Save">
-  <a class="btn btn-raised btn-info" href="{% url 'users:password_change' %}">Change Password</a>
+  <div class="submit-row">
+    <input class="btn btn-raised btn-primary" type="Submit" value="Save">
+    <a class="btn btn-raised btn-info" href="{% url 'users:password_change' %}">Change Password</a>
   </div>
 </form>
 
-{% endblock content %}
+{% endblock content-main %}
 
 {% block custom_js %}
 <script>
   function get_selected_courses() {
       var selected_courses = [];
 
-      $('#id-sirius-courses').find(':selected').each(function() {
+      $('#sirius-courses').find(':selected').each(function() {
             selected_courses.push($(this).text())
       })
       return selected_courses
@@ -103,7 +105,7 @@
   {
       var saved_courses = get_selected_courses();
 
-      $('#id-sirius-courses option').click(function(e)
+      $('#sirius-courses option').click(function(e)
       {
           var course_option = $(this);
           var course_option_is_selected = course_option.prop('selected');
@@ -112,12 +114,12 @@
           if (course_option_is_selected) {
             if (saved_courses.includes(course_id)) {
                 $('#mysirius-courses').append(
-                  '<a><span class="justify-content-center list-group-item list-group-item-action">'+ course_id +'</span></a>'
+                  '<a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h6>'+ course_id +'</h6></div></a>'
                 );
             }
             else {
                 $('#mysirius-courses').append(
-                  '<a><span class="unsaved-course justify-content-center list-group-item list-group-item-action">'+ course_id +'</span></a>'
+                  '<a class="unsaved-course justify-content-center list-group-item list-group-item-action flex-column align-items-start"><div class="d-flex w-100 justify-content-between"><h6>'+ course_id +'</h6></div></a>'
                 );
             }
           }
@@ -129,7 +131,7 @@
   });
 
   // prevents need for holding ctrl to select multiple elements in courses modal
-  $("#id-sirius-courses").mousedown(function(e){
+  $("#sirius-courses").mousedown(function(e){
       e.preventDefault();
 
       var select = this;
@@ -159,11 +161,16 @@
   });
   
 
-  $(document).on('click', '#id-user-courses-button', function() {
+  $(document).on('click', '#user-courses-button', function() {
       $('.alert').alert('close');
   });
   $('select').change(function() {
       $('.alert').alert('close');
   });
 </script>
+
+  <script type="text/javascript">
+    $('#user-form').disableAutoFill();
+  </script>
+
 {% endblock custom_js %}

@@ -12,10 +12,10 @@
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'base/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base/styles.css' %}">
     {% block custom_css %} {% endblock custom_css %}
 
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
 
     <title>
       {% block title %} {% endblock title %}
@@ -23,33 +23,49 @@
   </head>
 
   <body>
-    {% include 'partials/header.html' %}
-
-    <div id="container" class="container-fluid">
-      {% include 'partials/messages.html' %}
-      {% block content %} {% endblock content %}
-
-      {% if is_paginated %}
-        {% include 'partials/paginator.html' %}
-      {% endif %}
+    <div id="container">
+      {% include 'partials/header.html' %}
+      <div id="left">
+        {% block content-left %} {% endblock content-left %}
+      </div>
+      <div id="main">
+        {% include 'partials/messages.html' %}
+        {% block content-main %} {% endblock content-main %}
+        {% if is_paginated %}
+          {% include 'partials/paginator.html' %}
+        {% endif %}
+      </div>
+      <div id="right">
+        {% block content-right %} {% endblock content-right %}
+      </div>
+      <div id="footer">
+      </div>
     </div>
 
-    <!-- Bootstrap JavaScript -->
+    <!-- Bootstrap JavaScript w/ fallbacks from CDN to Local -->
     <script
 			  src="http://code.jquery.com/jquery-3.3.1.min.js"
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			  crossorigin="anonymous">
     </script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery-3.3.1.min.js' %}">\x3C/script>')</script>
+
     <script
         src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
         integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
         crossorigin="anonymous">
     </script>
+    <script>window.Popper || document.write('<script src="{% static 'js/popper.min.js' %}">\x3C/script>')</script>
+
     <script 
         src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
         integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
         crossorigin="anonymous">
     </script>
+    <script>
+      $('body').bootstrapMaterialDesign || document.write('<script src="{% static 'js/bootstrap-material-design.min.js' %}">\x3C/script>')
+    </script>
+
     <script>
       $(document).ready(function() {
         $('body').bootstrapMaterialDesign(); 
@@ -77,16 +93,18 @@
                 event.stopPropagation();
               }
               form.classList.add('was-validated');
+              $('#main').prepend()
             }, false);
           });
         }, false);
       })();
     </script>
-<script>
-  $('.list-group-item-action').hover(
-      function(){ $(this).addClass('active') },
-      function(){ $(this).removeClass('active') }
-  )
-</script>
+
+    <script>
+      $('.list-group-item-action').hover(
+          function(){ $(this).addClass('active') },
+          function(){ $(this).removeClass('active') }
+      )
+    </script>
   </body>
 </html>

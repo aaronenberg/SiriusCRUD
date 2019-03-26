@@ -50,9 +50,9 @@ class AccountUpdateFormPrivileged(ModelForm):
    
     user_type = ChoiceField(choices=USER_TYPE_CHOICES,
         widget = Select(attrs={
-            'id': 'user_user_type',
+            'id': 'user-user-type',
             'class': 'form-control custom-select select-fix-height',
-            'name': 'user_type',
+            'name': 'user-type',
         }),
     )
     class Meta:
@@ -62,22 +62,22 @@ class AccountUpdateFormPrivileged(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].widget = TextInput(attrs={
-            'id': 'user_email',
+            'id': 'user-email',
             'class': 'form-control',
             'name': 'email',
         })
         self.fields['first_name'].widget = TextInput(attrs={
-            'id': 'user_first_name',
+            'id': 'user-first-name',
             'class': 'form-control',
-            'name': 'first_name',
+            'name': 'first-name',
         })
         self.fields['last_name'].widget = TextInput(attrs={
-            'id': 'user_last_name',
+            'id': 'user-last-name',
             'class': 'form-control',
-            'name': 'last_name',
+            'name': 'last-name',
         })
         self.fields['username'].widget = TextInput(attrs={
-            'id': 'user_username',
+            'id': 'user-username',
             'class': 'form-control',
             'name': 'username',
             'autocomplete': 'new-password',
@@ -92,14 +92,14 @@ class AccountUpdateForm(ModelForm):
    
     user_type = ChoiceField(choices=USER_TYPE_CHOICES,
         widget = Select(attrs={
-            'id': 'user_user_type',
+            'id': 'user-user-type',
             'class': 'form-control custom-select select-fix-height',
-            'name': 'user_type',
+            'name': 'user-type',
         }),
     )
     courses = ModelMultipleChoiceField(queryset=Course.objects.all(),
         widget = SelectMultiple(attrs={
-            'id': 'id-sirius-courses',
+            'id': 'sirius-courses',
             'class': 'custom-select form-control',
             'name': 'courses',
         }),
@@ -117,28 +117,24 @@ class AccountUpdateForm(ModelForm):
             self.fields['user_type'].widget = HiddenInput()
         self.fields['username'].disabled = True
         self.fields['email'].widget = TextInput(attrs={
-            'id': 'user_email',
+            'id': 'user-email',
             'class': 'form-control',
             'name': 'email',
-            'autocomplete': 'new-password',
         })
         self.fields['first_name'].widget = TextInput(attrs={
-            'id': 'user_first_name',
+            'id': 'user-first-name',
             'class': 'form-control',
-            'name': 'first_name',
-            'autocomplete': 'new-password',
+            'name': 'first-name',
         })
         self.fields['last_name'].widget = TextInput(attrs={
-            'id': 'user_last_name',
+            'id': 'user-last-name',
             'class': 'form-control',
-            'name': 'last_name',
-            'autocomplete': 'new-password',
+            'name': 'last-name',
         })
         self.fields['username'].widget = TextInput(attrs={
-            'id': 'user_username',
+            'id': 'user-username',
             'class': 'form-control',
             'name': 'username',
-            'autocomplete': 'new-password',
         })
 
     def clean_email(self):

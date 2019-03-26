@@ -101,7 +101,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         if not form.is_valid():
             return self.form_invalid(form)
         user = form.save()
-        messages.success(request, 'Account changes saved!')
+        messages.success(request, 'Account changes saved')
         return redirect("users:account-update")
 
     def form_invalid(self, form):

@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block custom_css %}
-<link rel="stylesheet" href="{% static 'login/styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/login/styles.css' %}" />
 {% endblock custom_css %}
 
-{% block content %}
+{% block content-main %}
 
 <!--  TODO: move alert to top of page -->
 {% if form.errors %}
@@ -27,26 +27,27 @@
     {% endif %}
   {% endif %}
 
-
-<form id="login-form" class="center-login" method="post" action="{% url 'users:login' %}">
-  {% csrf_token %}
-  <div class="form-row">
-    {{ form.username }}
-  </div>
-  <div class="form-row">
-    {{ form.password }}
-  </div>
-  <div class="form-row">
-    <input class="btn btn-raised" type="submit" value="login">
-  </div>
-  <input type="hidden" name="next" value="{{ next }}">
-  <div class="form-row">
-    <small><a href="{% url 'users:register' %}">Create Account</a></small>
-  </div>
-  <div class="form-row">
-    <small><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
-  </div>
-</form>
+<div class="center">
+  <form id="login-form" class="center-login" method="post" action="{% url 'users:login' %}">
+    {% csrf_token %}
+    <div class="form-row">
+      {{ form.username }}
+    </div>
+    <div class="form-row">
+      {{ form.password }}
+    </div>
+    <div class="form-row">
+      <input class="btn btn-raised" type="submit" value="login">
+    </div>
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="form-row">
+      <small><a href="{% url 'users:register' %}">Create Account</a></small>
+    </div>
+    <div class="form-row">
+      <small><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
+    </div>
+  </form>
+</div>
 
 {# Assumes you setup the password_reset view in your URLconf #}
 {% endblock %}
@@ -55,7 +56,7 @@
 <script>
   $(document).ready(function () {
       $('#id_username').trigger('focus')
-  })
+  });
   $('#id_username').disableAutoFill();
 </script>
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content-main %}
 <form method="post" action="">
   {% csrf_token %}
   {{ form }}
   <input type="Submit" value="Register">
 </form>
-{% endblock content %}
+{% endblock content-main %}

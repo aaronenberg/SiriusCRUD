@@ -21,7 +21,6 @@ class ArticleListView(ListView):
     model = Article
     context_object_name = 'articles'
     queryset = Article.objects.exclude(is_public=False).order_by('-modified')
-    paginate_by = 10
 
 
 class ArticleDetailView(DetailView):

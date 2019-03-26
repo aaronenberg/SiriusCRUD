@@ -1,17 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'courses/styles.css' %}">
+{% endblock custom_css %}
 
 {% block title %}
   Courses | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
-<h1>Courses</h1>
 {% if user.is_superuser %}
-  <a class="btn btn-raised" href="{% url 'courses:course-create' %}">+ Add Course</a>
+<div id="course_actions">
+  <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-create' %}">+ Add Course</a>
+</div>
 {% endif %}
 
-  <div class="list-group align-items-center">
+  <div id="course_list" class="list-group align-items-center">
     {% for course in courses %}
     <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
        href="{{ course.get_absolute_url }}">

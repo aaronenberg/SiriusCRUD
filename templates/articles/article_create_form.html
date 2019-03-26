@@ -10,7 +10,7 @@
   Create Article | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
 {% if form.errors %}
     {% for field in form %}
@@ -44,95 +44,79 @@
   novalidate>
   {% csrf_token %}
 
-  <div class="form-row col-12 justify-content-center">
+  <div class="form-row">
     <div class="form-group col-12">
-      <div class="form-row">
-        <label for="article_title" class="control-label bmd-label-static">Title</label>
-        {{ form.title }}
-        <div class="invalid-feedback">
-          Enter a title
-        </div>
+      <label for="article_title" class="control-label bmd-label-static">Title</label>
+      {{ form.title }}
+      <div class="invalid-feedback">
+        Enter a title
       </div>
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
-    <div class="form-group col-10">
-      <div class="form-row">
-        <label for="article_course" class="bmd-label-static">Course</label>
-        <div class="form-row col-11">
-          {{ form.course }}
-        </div>
-      </div>
+  <div class="form-row justify-content-between">
+    <div class="form-group col-12 col-lg-9">
+      <label for="article_course" class="bmd-label-static">Course</label>
+        {{ form.course }}
     </div>
-    <div class="form-group col-2">
-      <div class="form-row">
-        <label for="article_course_section" class="bmd-label-static">Section</label>
-        {{ form.section }}
-      </div>
+    <div class="form-group col-12 col-lg-2">
+      <label for="article_course_section" class="bmd-label-static">Section</label>
+      {{ form.section }}
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
-    <div class="form-group col-10">
-      <div class="form-row">
-        <label for="article_semester" class="bmd-label-static">Semester</label>
-        <div class="form-row col-11">
-          {{ form.semester }}
-        </div>
-      </div>
+  <div class="form-row justify-content-between">
+    <div class="form-group col-12 col-lg-9">
+      <label for="article_semester" class="bmd-label-static">Semester</label>
+        {{ form.semester }}
     </div>
-    <div class="form-group col-2">
-      <div class="form-row">
-        <label for="article_year" class="bmd-label-static">Year</label>
-        {{ form.year }}
-      </div>
+    <div class="form-group col-12 col-lg-2">
+      <label for="article_year" class="bmd-label-static">Year</label>
+      {{ form.year }}
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
+  <div class="form-row">
     <div class="form-group col-12">
-      <div class="form-row">
       <label for="article_description" class="bmd-label-static">Description</label>
       {{ form.description }}
-      </div>
     </div>
   </div>
 
   {{ articlemedia_form.management_form }}
 
   {% for upload_form in articlemedia_form %}
-  <div id="article-media-forms">
-    <div class="form-group col-12">
-      <div class="form-row media-upload spacer">
-        <div class="custom-file col-11">
-          {{ upload_form.article_media }}
-        </div>
-        <div class="input-group row col-11 col-md-5">
-          <button class="btn btn-success add-media-upload">+</button>
-          {{ upload_form.article_type }}
+  <div id="article-media-forms-row">
+    <div id="article-media-forms">
+      <div class="form-group col-12">
+        <div class="media-upload spacer">
+          <div class="custom-file col-11">
+            {{ upload_form.article_media }}
+          </div>
+          <div class="input-group row col-11 col-md-5">
+            <button class="btn btn-success add-media-upload">+</button>
+            {{ upload_form.article_type }}
+          </div>
         </div>
       </div>
     </div>
   </div>
   {% endfor %}
 
-    <nav class="navbar navbar-default navbar-dark navbar-submit fixed-bottom">
-      <div class="navbar-nav">
-        <div class="submit-row">
-            {% block submit %}
-            <input type="Submit" class="btn btn-raised btn-primary" value="Post">
-            <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
-            {% endblock submit %}
+      <div class="submit-row">
+        <div class="mr-auto">
+          <input type="Submit" class="btn btn-raised btn-primary" value="Submit">
+          {% block save_draft%}
+          <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+          {% endblock save_draft %}
         </div>
-      </div>
         {% block back_navigate %}
         <a class="btn" href="{% url 'articles:article-list' %}">Cancel</a>
         {% endblock back_navigate %}
-    </nav>
+      </div>
 </form>
 
-{% endblock content %}
+{% endblock content-main %}
 
 {% block custom_js %}
 
@@ -192,10 +176,6 @@
   });
 </script>
 <script>
-  $(document).ready(function() {
-      if (!$('#article_course').val())
-        $('#article_course_section').prop('disabled', true);
-  })
   $("#article_course").change(function ()
   {
     var url = $("#article-form").attr("data-sections-url");
@@ -213,8 +193,10 @@
         }
       });
     }
-    else
+    else {
+      $('#article_course_section').prop('disabled', true);
       $("#article_course_section").html("");
+    }
   });
 </script>
 <script>

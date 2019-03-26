@@ -12,7 +12,7 @@
   Create Course | SIRIUS
 {% endblock title %}
 
-{% block content %}
+{% block content-main %}
 
 {% if form.errors %}
     {% for field in form %}
@@ -32,66 +32,53 @@
 <form id="course-form" action="" method="post" class="justify-content-center">
   {% csrf_token %}
 
-  <div class="form-row col-12 justify-content-center">
+  <div class="form-row">
     <div class="form-group col-12">
-      <div class="form-row">
-        <label for="course_title" class="control-label bmd-label-static">Title</label>
-        {{ form.title }}
-      </div>
+      <label for="course_title" class="control-label bmd-label-static">Title</label>
+      {{ form.title }}
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
-    <div class="form-group col-10">
-      <div class="form-row">
-        <label for="course_subject" class="bmd-label-static">Subject</label>
-        <div class="form-row col-11">
-          {{ form.subject }}
-        </div>
-      </div>
+  <div class="form-row">
+    <div class="form-group col-lg-10 sm-col-12">
+      <label for="course_subject" class="bmd-label-static">Subject</label>
+        {{ form.subject }}
     </div>
-    <div class="form-group col-2">
-      <div class="form-row">
-        <label for="course_number" class="bmd-label-static">Number</label>
-        {{ form.number }}
-      </div>
+
+    <div class="form-group col-lg-2 col-sm-12">
+      <label for="course_number" class="bmd-label-static">Number</label>
+      {{ form.number }}
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
+  <div class="form-row">
     <div class="form-group col-12">
-      <div class="form-row">
-        <label for="course_sections" class="bmd-label-static">Sections</label>
-        {{ form.sections }}
-      </div>
+      <label for="course_sections" class="bmd-label-static">Sections</label>
+      {{ form.sections }}
     </div>
   </div>
 
-  <div class="form-row col-12 justify-content-center">
+  <div class="form-row">
     <div class="form-group col-12">
-      <div class="form-row">
-      <label for="course_description" class="bmd-label-static">Description</label>
-      {{ form.description }}
-      </div>
+    <label for="course_description" class="bmd-label-static">Description</label>
+    {{ form.description }}
     </div>
   </div>
-    <nav class="navbar">
-      <div class="navbar-nav">
-        <div class="form-row submit-row">
-            {% block submit %}
-            <input type="Submit" class="btn btn-raised btn-primary" value="CREATE">
-            {% endblock submit %}
-        </div>
-      </div>
-      {% block cancel_navigate %}
-      <a class="btn" href="{% url 'courses:course-list' %}">
-      {% endblock %}
-        CANCEL
-      </a>
-    </nav>
+
+  <div class="submit-row">
+      {% block submit %}
+      <input type="Submit" class="btn btn-raised btn-primary" value="CREATE">
+      {% endblock submit %}
+    {% block cancel_navigate %}
+    <a class="btn" href="{% url 'courses:course-list' %}">
+    {% endblock %}
+      CANCEL
+    </a>
+  </div>
+  </nav>
 </form>
 
-{% endblock content %}
+{% endblock content-main %}
 
 {% block custom_js %}
 <script>

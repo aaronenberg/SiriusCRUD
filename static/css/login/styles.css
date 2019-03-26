@@ -1,23 +1,6 @@
-html,body {
-  height:100%;
-  width:100%;
-  margin:0;
-}
-
-#container {
-  display:flex;
-  justify-content:center;
-  height:100%;
-  width:100%;
-  margin:0;
-}
-
 #login-form {
-    flex:none;
-    margin:auto;
     border: 5px solid #026373;
     border-radius: 0.5rem;
-    padding: 3em 1em 1em 1em;
 }
 
 #login-form input[type="text"],
@@ -39,12 +22,6 @@ html,body {
     margin-top:1rem;
 }
 
-#id-search-form {
-    display: flex;
-    justify-content: flex-end;
-    margin-left: auto;
-    margin-right: auto;
-}
 #login-form .form-row {
     display: flex;
     justify-content: flex-end;
@@ -60,3 +37,4 @@ html,body {
 .need-authenticate {
     position:fixed;
 }
+
