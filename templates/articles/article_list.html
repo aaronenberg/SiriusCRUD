@@ -12,22 +12,25 @@
 {% block content-main %}
 
 
-  {% if user.is_authenticated %}
-  <div id="article_actions">
-    <a 
-      class="btn btn-raised btn-secondary" 
-      href="{% url 'articles:article-create' %}">
-      + New Article
-    </a>
-    {% block draft-nav %}
-    <a 
-      class="btn btn-raised btn-info"
-      href="{% url 'articles:draft-list' %}">
-      Saved Drafts
-    </a>
-    {% endblock %}
-  </div>
-  {% endif %}
+
+  {% block article_actions %}
+    {% if user.is_authenticated %}
+    <div id="article_actions">
+      <a 
+        class="btn btn-raised btn-secondary" 
+        href="{% url 'articles:article-create' %}">
+        + New Article
+      </a>
+      {% block draft_action %}
+      <a 
+        class="btn btn-raised btn-info"
+        href="{% url 'articles:draft-list' %}">
+        Saved Drafts
+      </a>
+      {% endblock %}
+    </div>
+    {% endif %}
+  {% endblock article_actions %}
 
   {% block article-list %}
   <div id="article_list" class="list-group">
@@ -36,7 +39,7 @@
            href="{% get_absolute_url article %}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ article }}</h5>
-            <small>{{ article.timesince_published }}</small>
+            <small>{% time_since article.modified %}</small>
           </div>
           <p class="mb-1">{{ article.course }}</p>
           <small>{{ article.author }}</small>

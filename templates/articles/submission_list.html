@@ -1,0 +1,13 @@
+{% extends "articles/article_list.html" %}
+{% load static article_tags %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'articles/styles.css' %}">
+{% endblock custom_css %}
+
+{% block title %}
+  Submissions | SIRIUS
+{% endblock title %}
+
+{% block article_actions %}{% endblock article_actions %}
+

@@ -1,0 +1,21 @@
+[
+{
+    "model": "users.baseuser",
+    "pk": "student",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "siriusstudent@csus.edu",
+        "user_type": "ST",
+        "first_name": "student",
+        "last_name": "",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": [],
+        "courses": []
+    }
+}
+]

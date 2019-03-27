@@ -10,10 +10,12 @@ from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
+from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
@@ -47,14 +49,17 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context)
 
-    def send_activation_email(self, request, user, form, token):
+    def send_activation_email(self, request, user, token):
         current_site = get_current_site(request)
         uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
         activation_link = "{0}/activate/?uid={1}&token={2}".format(current_site, uid, token)
         subject = 'Activate your account'
-        message = "Hello {0}, \n {1}".format(user.first_name, activation_link)
-        to_email = form.cleaned_data.get('email')
-        user.email_user(subject, message)
+        html_message = render_to_string(
+            'registration/activation_mail.html',
+            {'activation_link': activation_link, 'user': user}
+        )
+        message = strip_tags(html_message)
+        user.email_user(subject, message, html_message=html_message)
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -65,8 +70,8 @@ class UserCreateView(UserPassesTestMixin, CreateView):
             return self.form_invalid(form)
         user = form.save()
         token = account_activation_token.make_token(user)
-        self.send_activation_email(request, user, form, token)
-        return HttpResponse('Please Confirm your email address to complete the registration')
+        self.send_activation_email(request, user, token)
+        return HttpResponse('A confirmation email has been sent to your email address. Please confirm your email to activate your account.')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -175,12 +180,9 @@ class UserActivateView(View):
     def get(self, request):
         uidb64 = request.GET.get('uid')
         token = request.GET.get('token')
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=uid)
-        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        print(uid, user, token)
+        user = self.get_user(uidb64)
+        if not user or not token:
+            raise Http404()
         if not account_activation_token.check_token(user, token):
             return HttpResponse('Activation link is invalid!')
         user.is_active = True
@@ -195,7 +197,16 @@ class UserActivateView(View):
             pass
         user = form.save()
         update_session_auth_hash(request, user)
-        return redirect('articles:article-list')
+        return redirect('courses:course-list')
+
+    def get_user(self, uidb64):
+        try:
+            # urlsafe_base64_decode() decodes to bytestring
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        return user
             
 
 class PasswordChangeView(auth_views.PasswordChangeView):

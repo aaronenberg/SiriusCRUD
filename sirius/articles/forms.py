@@ -90,7 +90,6 @@ class ArticleForm(ModelForm):
             'id': 'article_title',
             'class': 'form-control',
             'name': 'title',
-            'autocomplete': 'new-password'
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'article_description',
@@ -99,20 +98,23 @@ class ArticleForm(ModelForm):
         })
 
         section_choices = []
-        if 'course' in self.data and self.data['course']:
-            section_choices += BLANK_CHOICE_DASH
+        course_id = None
+        if 'course' in self.initial:
+            course_id = self.initial.get('course')
+        elif 'course' in self.data and self.data['course']:
             course_id = self.data.get('course')
-            course = Course.objects.get(pk=course_id)
-            for section in course.sections:
-                section_choices.append((section, "{:02d}".format(section)))
         elif self.instance.pk and self.instance.course:
+            course_id = self.instance.course.pk
+
+        if course_id:
+            course = Course.objects.get(pk=course_id)
             section_choices += BLANK_CHOICE_DASH
-            course = self.instance.course
             for section in course.sections:
                 section_choices.append((section, "{:02d}".format(section)))
-        elif not all(('course' in self.data, self.instance.course)):
+            self.fields['section'].choices = section_choices
+        else:
             self.fields['section'].disabled = True
-        self.fields['section'].choices = section_choices
+
 
     def clean_year(self):
         year = self.cleaned_data.get('year')

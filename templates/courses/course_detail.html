@@ -6,18 +6,20 @@
 
 {% block content-main %}
 
-<div>
-  Course Title
-  {{ course.title }}
+<div id="course_detail_title">
+  <h6>{{ course }}</h6>
 </div>
-<div>
-  Description
-  {{ course.description }}
+<div id="course_detail_description">
+  <p>{{ course.description }}</p>
 </div>
-Sections
-{% for section in course.sections %}
-{{ section | stringformat:"02d" }}
-{% endfor %}
+<div id="course_detail_sections">
+  <label>Sections</label>
+  <p>
+  {% for section in course.sections %}
+    {{ section | stringformat:"02d" }}
+  {% endfor %}
+  </p>
+</div>
 <div>
   Related Articles
   <ul>
@@ -29,13 +31,11 @@ Sections
     </div>
     {% endfor %}
   </ul>
-{% if user.user_type == 'FA' %}
-<div>
-  <a class="btn btn-raised" href="{% url 'courses:course-update' course.slug %}">Edit</a>
-</div>
-{% endif %}
-<div>
-  <a class="btn btn-raised" href="{% url 'articles:article-create' %}">Create Article</a>
+<div class="submit-row">
+  <a class="btn btn-raised btn-primary" href="{% url 'articles:article-create' %}">Create Article</a>
+  {% if user.user_type == 'FA' %}
+  <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-update' course.slug %}">Edit</a>
+  {% endif %}
 </div>
 
 {% endblock content-main %}

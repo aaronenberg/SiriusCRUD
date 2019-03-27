@@ -8,61 +8,60 @@
 
 {% block content-main %}
 
-<div>
-  {{ article.title }}
-</div>
-<div>
-  {{ article.description }}
-</div>
-<div>
-  {{ article.get_subject_display }}
-</div>
-<div>
-  {{ article.get_article_type_display }}
-</div>
-{% if article.course %}
-<div>
-  <label>Course: </label>
-  <a href="{{ article.course.get_absolute_url }}">{{ article.course }}</a>
-</div>
-{% endif %}
-<div>
-  <label>Last updated by {{ article.author.get_full_name }} at: </label>
-  {{ article.modified }}
-</div>
-<div>
-  <label>Semester: </label>
-  
-  {% if article.semester %} {{ article.get_semester_display }} {% endif %}
-  {% if article.year %}{{ article.year }} {% endif %}
-  
-</div>
-<div>
-  <ul>
-  {% for type in ARTICLE_TYPES %}
-    {{ type }}
-    {% for media in articlemedia_list %}
-      {% if media.get_article_type_display == type %}
-      <li>
-        <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
-        {{ media.created }}
-      </li>
-      {% endif %}
+<div id="article_detail">
+  <div id="article_detail_title">
+    <h6>{{ article.title }}</h6>
+  </div>
+  <div id="article_detail_description">
+    <p>{{ article.description }}</p>
+  </div>
+  <div id="article_detail_subject">
+    {{ article.get_subject_display }}
+  </div>
+  <div id="article_detail_article_type">
+    {{ article.get_article_type_display }}
+  </div>
+  {% if article.course %}
+  <div id="article_detail_course_semester">
+    <p>
+      <a href="{{ article.course.get_absolute_url }}">{{ article.course }}</a>
+      {% if article.semester %} | {{ article.get_semester_display }} {% endif %}
+      {% if article.year %}{{ article.year }} {% endif %}
+    </p>
+  </div>
+  {% endif %}
+  <div id="article_detail_media">
+    <ul>
+    {% for type in ARTICLE_TYPES %}
+    <h6>{{ type }}</h6>
+      {% for media in articlemedia_list %}
+        {% if media.get_article_type_display == type %}
+        <li>
+          <a href="{{ media.article_media.url }}">{{ media.filename }}</a>
+          {{ media.created }}
+        </li>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
-  {% endfor %}
-  </ul>
+    </ul>
+  </div>
+  <div id="article_detail_author">
+    <small>Last updated by <b>{{ article.author.get_full_name }}</b> at: 
+    {{ article.modified }}
+    </small>
+  </div>
+  {% if user.pk == article.author.pk %}
+  <div class="submit-row">
+    <a class="btn btn-raised btn-primary" 
+       href="{% if article.is_public %}
+              {% url 'articles:article-update' article.slug %}
+             {% else %}
+              {% url 'articles:draft-update' article.slug %}
+             {% endif %}">
+       Edit
+    </a>
+  </div>
+  {% endif %}
 </div>
-{% if user.pk == article.author.pk %}
-<div>
-      <a class="btn btn-raised" 
-         href="{% if article.is_public %}
-                {% url 'articles:article-update' article.slug %}
-               {% else %}
-                {% url 'articles:draft-update' article.slug %}
-               {% endif %}">
-         Edit
-      </a>
-</div>
-{% endif %}
 
 {% endblock content-main %}

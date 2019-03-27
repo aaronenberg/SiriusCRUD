@@ -81,9 +81,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         self.object = None
         referer_page = self.request.META.get('HTTP_REFERER')
         if referer_page and reverse('courses:course-list') in referer_page:
-            import pdb; pdb.set_trace()
             course = get_course_from_url(referer_page)
-            self.initial = {'course': course}
+            self.initial = {'course': course.pk}
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         articlemedia_form = ArticleMediaFormSet()
@@ -101,11 +100,15 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
+        form.instance.author = self.request.user
+        form.instance.is_public = False
         if '_save_draft' in self.request.POST:
-            form.instance.is_public = False
+            form.instance.is_draft = True
+        elif form.instance.author.user_type == 'ST':
+            form.instance.is_draft = False
         else:
             form.instance.is_public = True
-        form.instance.author = self.request.user
+            form.instance.is_draft = False
         form.save()
         # for a file field to accept multiple files we save each file, creating a new ArticleMedia object
         articlemedia = flatten_formset_file_fields(articlemedia_form)
@@ -150,10 +153,12 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.form_valid(form, articlemedia_form)
 
     def form_valid(self, form, articlemedia_form):
-        if '_save_draft' in self.request.POST:
+        if '_save_draft' in self.request.POST or form.instance.author.user_type == 'ST':
             form.instance.is_public = False
+            form.instance.is_draft = True
         else:
             form.instance.is_public = True
+            form.instance.is_draft = False
         form.save()
         articlemedia = flatten_formset_file_fields(articlemedia_form)
         for media in articlemedia:
@@ -180,27 +185,50 @@ class SearchPageView(TemplateView):
 		context['courses'] = Course.objects.all()
 		return context
 
-class DraftListView(LoginRequiredMixin, ListView):
+class DraftListView(LoginRequiredMixin, ArticleListView):
     ''' Displays a list of the current user's unpublished drafts.
         The drafts in this list are only available to the currently logged in user. '''
 
-    model = Article
-    context_object_name = 'articles'
     template_name = 'articles/draft_list.html'
 
     def get_queryset(self):
-            return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
+            return Article.objects.filter(Q(is_draft=True), Q(author=self.request.user))
 
 
 class DraftDetailView(LoginRequiredMixin, ArticleDetailView):
     ''' Displays details of an article. Allows a user to hide their private articles from
         other users. Additionally, unauthenticated users may not view certain types of articles '''
 
+    def get_queryset(self):
+        return Article.objects.filter(Q(is_draft=True), Q(author=self.request.user))
+
+class SubmissionDetailView(LoginRequiredMixin, UserPassesTestMixin, ArticleDetailView):
+    ''' Displays details of an article. Allows a user to hide their private articles from
+        other users. Additionally, unauthenticated users may not view certain types of articles '''
+
     model = Article
     context_object_name = 'article'
 
+    def test_func(self):
+        article = self.get_object()
+        return self.request.user == article.author or (self.request.user.user_type != 'ST' and article.course in self.request.user.courses)
+
     def get_queryset(self):
-        return Article.objects.filter(Q(is_public=False), Q(author=self.request.user))
+        return Article.objects.filter(Q(is_draft=False), Q(is_public=False))
+
+
+class SubmissionListView(LoginRequiredMixin, UserPassesTestMixin, ArticleListView):
+    ''' Displays details of an article. Allows a user to hide their private articles from
+        other users. Additionally, unauthenticated users may not view certain types of articles '''
+
+    model = Article
+    template_name = 'articles/submission_list.html'
+
+    def test_func(self):
+        return self.request.user.user_type != 'ST'
+
+    def get_queryset(self):
+        return Article.objects.filter(Q(is_draft=False), Q(is_public=False))
            
 
 class IndexView(ListView):

@@ -64,6 +64,8 @@ class Article(models.Model):
 
     is_public = models.BooleanField(default=True)
 
+    is_draft = models.BooleanField(default=False)
+
     semester = models.CharField(
         _('semester'),
         max_length=2,
@@ -108,9 +110,9 @@ class Article(models.Model):
             return self.title[:72] + "..."
         return self.title
 
-    def timesince_published(self):
+    def time_since(self, time):
         now = timezone.now()
-        diff = now - self.modified
+        diff = now - time
         if diff.days == 0 and diff.seconds >= 0 and diff.seconds < 60:
             seconds = diff.seconds
             if seconds <= 1:
