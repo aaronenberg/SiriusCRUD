@@ -21,18 +21,18 @@
   </p>
 </div>
 <div>
-  Related Articles
+  Related Outcomes
   <ul>
-    {% for article in articles %}
+    {% for outcome in outcomes %}
     <div>
-      <a href="{{ article.get_absolute_url }}">
-        {{ article.title }}
+      <a href="{{ outcome.get_absolute_url }}">
+        {{ outcome.title }}
       </a>
     </div>
     {% endfor %}
   </ul>
 <div class="submit-row">
-  <a class="btn btn-raised btn-primary" href="{% url 'articles:article-create' %}">Create Article</a>
+  <a class="btn btn-raised btn-primary" href="{% url 'outcomes:outcome-create' %}">Create Outcome</a>
   {% if user.user_type == 'FA' %}
   <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-update' course.slug %}">Edit</a>
   {% endif %}

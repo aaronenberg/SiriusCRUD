@@ -1,6 +1,6 @@
 [
 {
-    "model": "articles.article",
+    "model": "outcomes.outcome",
     "pk": 1,
     "fields": {
         "author": "admin",
@@ -18,33 +18,36 @@
     }
 },
 {
-    "model": "articles.articlemedia",
+    "model": "outcomes.outcomemedia",
     "pk": 1,
     "fields": {
-        "article_media": "uploads/20190327/da5f9045-8fd1-423a-bc67-5409fafd9f8c/River_Experiment_Part_1.docx",
-        "article_type": "RD",
+        "author": "admin",
+        "media": "uploads/20190327/da5f9045-8fd1-423a-bc67-5409fafd9f8c/River_Experiment_Part_1.docx",
+        "outcome_type": "RD",
         "created": "2019-03-27T16:54:54.274Z",
-        "article": 1
+        "outcome": 1
     }
 },
 {
-    "model": "articles.articlemedia",
+    "model": "outcomes.outcomemedia",
     "pk": 2,
     "fields": {
-        "article_media": "uploads/20190327/0fbb9b81-c465-47c7-b804-73b6846f4eb5/River_Experiment_Part_1.docx",
-        "article_type": "RE",
+        "author": "admin",
+        "media": "uploads/20190327/0fbb9b81-c465-47c7-b804-73b6846f4eb5/River_Experiment_Part_1.docx",
+        "outcome_type": "RE",
         "created": "2019-03-27T16:54:54.279Z",
-        "article": 1
+        "outcome": 1
     }
 },
 {
-    "model": "articles.articlemedia",
+    "model": "outcomes.outcomemedia",
     "pk": 3,
     "fields": {
-        "article_media": "uploads/20190327/8caec95c-376f-41a3-94f4-1fb059b45f6b/Bacterial_Sequencing_Data_Sample.seq",
-        "article_type": "RE",
+        "author": "admin",
+        "media": "uploads/20190327/8caec95c-376f-41a3-94f4-1fb059b45f6b/Bacterial_Sequencing_Data_Sample.seq",
+        "outcome_type": "RE",
         "created": "2019-03-27T16:54:54.290Z",
-        "article": 1
+        "outcome": 1
     }
 }
 ]

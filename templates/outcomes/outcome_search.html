@@ -42,7 +42,7 @@ td, th {
 </div>
 
 
-<table id="articleTable">
+<table id="outcomeTable">
   <thead>
   <tr>
     <th>Title</th>
@@ -50,12 +50,12 @@ td, th {
 	<th>Subject</th>
 	<th>Date</th>
   </tr>
-  {% for article in articles %}
+  {% for outcome in outcomes %}
   <tr>
-	<td class="filter" data-input="title"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
-	<td class="filter" data-input="course">{{ article.course }}</td>
-	<td class="filter" data-input="subject">{{ article.course.get_subject_display }}</td>
-	<td> {{ article.created }} </td>
+	<td class="filter" data-input="title"><a href="{{ outcome.get_absolute_url }}">{{ outcome.title }}</a></td>
+	<td class="filter" data-input="course">{{ outcome.course }}</td>
+	<td class="filter" data-input="subject">{{ outcome.course.get_subject_display }}</td>
+	<td> {{ outcome.created }} </td>
   </tr>
   {% endfor %}
 </table>
@@ -66,7 +66,7 @@ td, th {
 
 {% block custom_js %}
 <script>
-var $filterableRows = $('#articleTable').find('tr').not(':first'),
+var $filterableRows = $('#outcomeTable').find('tr').not(':first'),
 		$inputs = $('.search-key');	
 var itemsNotFiltered = 1;
 $inputs.on('input', function() {

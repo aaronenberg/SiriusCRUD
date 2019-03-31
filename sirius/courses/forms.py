@@ -110,7 +110,7 @@ class CourseForm(ModelForm):
             'name': 'sections',
         })
         self.fields['description'].widget = Textarea(attrs={
-            'id': 'article_description',
+            'id': 'outcome_description',
             'class': 'form-control',
             'name': 'description',
         })

@@ -28,7 +28,7 @@ body, html {
     #id-main-nav {
         justify-content:center;
     }
-    #article_list, #course_list {
+    #outcome_list, #course_list {
         padding-right:0.5rem;
         padding-left:0.5rem;
     }
@@ -350,13 +350,13 @@ input[type="password"] {
     justify-content:center;
 }
 
-#article_actions,
+#outcome_actions,
 #course_actions {
     margin-top: 2rem;
     margin-right:auto;
 }
 
-#article-form,
+#outcome-form,
 #course-form,
 #user-form
 {
@@ -369,4 +369,9 @@ input[type="password"] {
 .submit-row {
     display: flex;
     justify-content:space-between;
+}
+
+div.invalid-feedback {
+    position: absolute;
+    margin-left: .8rem;
 }

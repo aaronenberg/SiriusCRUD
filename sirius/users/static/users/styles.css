@@ -62,13 +62,7 @@ select:-internal-list-box option:checked {
     border-radius: 1.1rem;
 }
 
-div.invalid-feedback {
-    position: absolute;
-    margin-left: .8rem;
-}
 
-ul.errorlist li {
-}
 .errorlist {
     margin:0;
 }

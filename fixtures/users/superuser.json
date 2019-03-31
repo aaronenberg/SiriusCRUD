@@ -6,7 +6,7 @@
         "password": "pbkdf2_sha256$120000$FGDnRaYgFWwv$ViJOZbN2Ii4X9cQLNcs+jB5UdVjHFMepDj6yWfutbf8=",
         "last_login": null,
         "is_superuser": true,
-        "email": "siriusadmin@gmail.com",
+        "email": "siriusadmin@csus.edu",
         "user_type": "FA",
         "first_name": "superuser",
         "last_name": "",

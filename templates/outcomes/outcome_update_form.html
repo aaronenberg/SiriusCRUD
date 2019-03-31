@@ -1,15 +1,15 @@
-{% extends "articles/article_create_form.html" %}
-{% load article_tags %}
+{% extends "outcomes/outcome_create_form.html" %}
+{% load outcome_tags %}
 
 {% block save_draft %}
 <input type="Submit"
        class="btn btn-danger" 
        name="_save_draft"
-       value="{% if article.is_public %}
+       value="{% if outcome.is_public %}
               Make Private{% else %}Save Draft
               {% endif %}"> 
 {% endblock save_draft %}
 
 {% block back_navigate %}
-<a class="btn" name="cancel" href="{% get_absolute_url article %}">Cancel</a>
+<a class="btn" name="cancel" href="{% get_absolute_url outcome %}">Cancel</a>
 {% endblock back_navigate %}

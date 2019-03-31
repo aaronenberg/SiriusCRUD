@@ -17,7 +17,7 @@ class CourseListView(LoginRequiredMixin, ListView):
 
 
 class CourseDetailView(DetailView):
-    ''' Displays a specific course and its related, public articles '''
+    ''' Displays a specific course and its related, public outcomes '''
 
     model = Course
     context_object_name = 'course'
@@ -27,7 +27,7 @@ class CourseDetailView(DetailView):
                                 ).filter(number=self.object.number)
         context = super().get_context_data(**kwargs)
         context['courses'] = queryset
-        context['articles'] = self.object.articles.filter(is_public=True)
+        context['outcomes'] = self.object.outcomes.filter(is_public=True)
         context['referer_page'] = self.request.META.get('HTTP_REFERER')
         return context
 

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load outcome_tags %}
+
+
+{% block title %}
+  {{ outcome.title }} | SIRIUS
+{% endblock title %}
+
+{% block content-main %}
+
+<div id="outcome_detail">
+  <div id="outcome_detail_title">
+    <h6>{{ outcome.title }}</h6>
+  </div>
+  <div id="outcome_detail_description">
+    <p>{{ outcome.description }}</p>
+  </div>
+  <div id="outcome_detail_subject">
+    {{ outcome.get_subject_display }}
+  </div>
+  <div id="outcome_detail_outcome_type">
+    {{ outcome.get_outcome_type_display }}
+  </div>
+  {% if outcome.course %}
+  <div id="outcome_detail_course_semester">
+    <p>
+      <a href="{{ outcome.course.get_absolute_url }}">{{ outcome.course }}</a>
+      {% if outcome.semester %} | {{ outcome.get_semester_display }} {% endif %}
+      {% if outcome.year %}{{ outcome.year }} {% endif %}
+    </p>
+  </div>
+  {% endif %}
+  <div id="outcome_detail_media">
+    <ul>
+    {% for type in OUTCOME_TYPES %}
+    <h6>{{ type }}</h6>
+      {% for media in outcomemedia_list %}
+        {% if media.get_outcome_type_display == type %}
+        <li>
+          <a href="{{ media.media.url }}">{{ media.filename }}</a>
+          {{ media.created }}
+        </li>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    </ul>
+  </div>
+  <div id="outcome_detail_author">
+    <small>Last updated by <b>{{ outcome.author.get_full_name }}</b> at: 
+    {{ outcome.modified }}
+    </small>
+  </div>
+  {% if user.pk == outcome.author.pk %}
+  <div class="submit-row">
+    <a class="btn btn-raised btn-primary" 
+       href="{% if outcome.is_public %}
+              {% url 'outcomes:outcome-update' outcome.slug %}
+             {% else %}
+              {% url 'outcomes:draft-update' outcome.slug %}
+             {% endif %}">
+       Edit
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+{% block extra-content %}
+{% endblock extra-content %}
+
+{% endblock content-main %}
+

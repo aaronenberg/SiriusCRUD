@@ -3,60 +3,65 @@ from django.forms import inlineformset_factory, ModelForm, FileInput, Validation
 from django.forms.widgets import TextInput, Select, NumberInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
-from .models import Article, ArticleMedia
+from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES 
 from courses.models import Course
+from .utils import current_year
 
 
-class BaseArticleMediaFormSet(BaseInlineFormSet):
+class BaseOutcomeMediaFormSet(BaseInlineFormSet):
     def clean(self):
         super().clean()
         for form in self.forms:
-            article_type = form.cleaned_data.get('article_type')
-            media = form.cleaned_data.get('article_media')
-            if article_type and not media:
+            outcome_type = form.cleaned_data.get('outcome_type')
+            media = form.cleaned_data.get('media')
+            if outcome_type and not media:
                 raise ValidationError("File type was chosen without uploading a file.")
-            if media and not article_type:
+            if media and not outcome_type:
                 raise ValidationError("No file type selected for the chosen file(s). Please reupload the file(s) and select a file type.")
 
 
-ArticleMediaFormSet = inlineformset_factory(
-    Article,
-    ArticleMedia,
-    formset=BaseArticleMediaFormSet,
-    fields=('article_media', 'article_type'),
+OutcomeMediaFormSet = inlineformset_factory(
+    Outcome,
+    OutcomeMedia,
+    formset=BaseOutcomeMediaFormSet,
+    fields=('media', 'outcome_type'),
     extra=1,
-    widgets={'article_media': FileInput(attrs={
+    widgets={'media': FileInput(attrs={
                 'class': 'custom-file',
                 'multiple': True
             }),
-            'article_type': Select(attrs={
+            'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
             })
     }
 )
 
-class ArticleForm(ModelForm):
+YEAR_CHOICES = [] + BLANK_CHOICE_DASH
+for y in reversed(range(2000, (current_year()+1))):
+        YEAR_CHOICES.append((y,y))
 
-    semester = ChoiceField(choices=Article.SEMESTER_CHOICES,
+class OutcomeForm(ModelForm):
+
+    semester = ChoiceField(choices=SEMESTER_CHOICES,
         widget = Select(attrs={
-            'id': 'article_semester',
+            'id': 'outcome_semester',
             'class': 'form-control custom-select select-fix-height',
             'name': 'semester',
         }),
         required=False,
     )
-    year = ChoiceField(choices=Article.YEAR_CHOICES,
+    year = ChoiceField(choices=YEAR_CHOICES,
         widget = Select(attrs={
-            'id': 'article_year',
+            'id': 'outcome_year',
             'class': 'form-control custom-select select-fix-height',
             'name': 'year',
         }),
         required=False,
-        initial=Article.current_year
+        initial=current_year
     )
     section = ChoiceField(
         widget = Select(attrs={
-            'id': 'article_course_section',
+            'id': 'outcome_course_section',
             'class': 'form-control custom-select select-fix-height',
             'name': 'section',
         }),
@@ -64,7 +69,7 @@ class ArticleForm(ModelForm):
     )
     course = ModelChoiceField(queryset=Course.objects.all(),
         widget = Select(attrs={
-            'id': 'article_course',
+            'id': 'outcome_course',
             'class': 'form-control select-fix-height',
             'name': 'course',
         }),
@@ -72,7 +77,7 @@ class ArticleForm(ModelForm):
         empty_label="Select a course"
     )
     class Meta:
-        model = Article
+        model = Outcome
         fields = (
             'course',
             'section',
@@ -84,15 +89,16 @@ class ArticleForm(ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        super(ArticleForm, self).__init__(*args, **kwargs)
+        super(OutcomeForm, self).__init__(*args, **kwargs)
 
         self.fields['title'].widget = TextInput(attrs={
-            'id': 'article_title',
+            'id': 'outcome_title',
             'class': 'form-control',
             'name': 'title',
         })
+        self.fields['title'].label = 'Title*'
         self.fields['description'].widget = Textarea(attrs={
-            'id': 'article_description',
+            'id': 'outcome_description',
             'class': 'form-control',
             'name': 'description',
         })

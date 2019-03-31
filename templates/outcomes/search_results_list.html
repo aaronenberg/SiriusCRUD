@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static article_tags %}
+{% load static outcome_tags %}
 
 {% block title %}
   '{{ request.GET.query }}' Search Results | SIRIUS
@@ -14,15 +14,15 @@
 {% endblock %}
 
 <div class="list-group align-items-center">
-  {% for article in articles %}
+  {% for outcome in outcomes %}
   <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
-     href="{% get_absolute_url article %}">
+     href="{% get_absolute_url outcome %}">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ article }}</h5>
-      <small>{{ article.timesince_published }}</small>
+      <h5 class="mb-1">{{ outcome }}</h5>
+      <small>{{ outcome.timesince_published }}</small>
     </div>
-    <p class="mb-1">{{ article.course }}</p>
-    <small>{{ article.author }}</small>
+    <p class="mb-1">{{ outcome.course }}</p>
+    <small>{{ outcome.author }}</small>
   </a>
   {% endfor %}
 </div>

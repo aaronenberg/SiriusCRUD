@@ -1,0 +1,24 @@
+{% extends "outcomes/outcome_list.html" %}
+{% load outcome_tags %}
+
+{% block title %}
+  Saved Drafts | SIRIUS
+{% endblock title %}
+
+{% block outcome-list %}
+<div id="outcome_list" class="list-group">
+{% for outcome in outcomes %}
+  <a class="list-group-item list-group-item-action flex-column align-items-start"
+     href="{% url 'outcomes:draft-detail' outcome.slug %}">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ outcome }}</h5>
+      <small>{% time_since outcome.modified %}</small>
+    </div>
+    <p class="mb-1">{{ outcome.course }}</p>
+    <small>{{ outcome.author }}</small>
+  </a>
+{% endfor %}
+</div>
+{% endblock outcome-list %}
+
+{%block draft_action %}{%endblock%}
