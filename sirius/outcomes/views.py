@@ -186,7 +186,6 @@ class OutcomeMediaUpdateView(UpdateView):
         context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context) 
 
-    @login_required()
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = OutcomeMediaFormSet(request.POST, request.FILES, instance=self.object)

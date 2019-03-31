@@ -3,7 +3,7 @@
     "model": "users.baseuser",
     "pk": "admin",
     "fields": {
-        "password": "pbkdf2_sha256$120000$FGDnRaYgFWwv$ViJOZbN2Ii4X9cQLNcs+jB5UdVjHFMepDj6yWfutbf8=",
+        "password": "pbkdf2_sha256$120000$ILwrWPQ4FgZH$TVGptiZVNeG4swYJpdEVEFSQ/DNdUdKrM2ZMkmWLXYY=",
         "last_login": null,
         "is_superuser": true,
         "email": "siriusadmin@csus.edu",
@@ -12,9 +12,15 @@
         "last_name": "",
         "is_active": true,
         "is_staff": true,
-        "date_joined": "2019-03-27T18:07:24.170Z",
+        "date_joined": "2019-03-31T19:23:06.708Z",
         "groups": [],
-        "user_permissions": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.staffprofile",
+    "pk": "admin",
+    "fields": {
         "courses": []
     }
 }

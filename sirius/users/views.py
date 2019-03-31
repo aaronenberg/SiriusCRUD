@@ -28,8 +28,9 @@ from .forms import (
     UserCreateForm,
     PasswordChangeForm,
     AuthenticationForm,
+    StaffProfileForm,
 )
-from .models import BaseUser
+from .models import BaseUser, StaffProfile, FACULTY, STUDENT, TEACHING_ASSISTANT
 from .tokens import account_activation_token
 
 
@@ -88,29 +89,44 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def get_context_data(self, **kwargs):
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        context['users_courses'] = self.request.user.courses.all().order_by('subject', 'number')
+        if self.object.user_type in [FACULTY, TEACHING_ASSISTANT]:
+            context['users_courses'] = self.object.staffprofile.courses.all().order_by('subject','number')
         return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        context = self.get_context_data(form=form)
+        try:
+            staffprofile_form = StaffProfileForm(instance=self.object.staffprofile)
+            context = self.get_context_data(form=form, staffprofile_form=staffprofile_form)
+        except StaffProfile.DoesNotExist:
+            context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        if not form.is_valid():
-            return self.form_invalid(form)
-        user = form.save()
+        try:
+            staffprofile_form = StaffProfileForm(request.POST, instance=self.object.staffprofile)
+            if not all([form.is_valid(), staffprofile_form.is_valid()]):
+                return self.form_invalid(form, staffprofile_form=staffprofile_form)
+            staffprofile = staffprofile_form.save()
+        except StaffProfile.DoesNotExist:
+            if not form.is_valid():
+                return self.form_invalid(form)
+        form.save()
         messages.success(request, 'Account changes saved')
         return redirect("users:account-update")
 
-    def form_invalid(self, form):
-        context = self.get_context_data(form=form)
+    def form_invalid(self, form, staffprofile_form=None):
+        if staffprofile_form:
+            context = self.get_context_data(form=form, staffprofile_form=staffprofile_form)
+        else:
+            context = self.get_context_data(form=form)
         return render(self.request, self.get_template_names(), context)
 
 
@@ -121,7 +137,16 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'users/account_update_form.html'
 
     def test_func(self):
-        return self.request.user.user_type == 'FA'
+        return self.request.user.user_type == FACULTY
+
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        try:
+            context['users_courses'] = self.object.staffprofile.courses.all().order_by('subject','number')
+        except StaffProfile.DoesNotExist:
+            pass
+        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -129,20 +154,33 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return redirect("users:account-update")
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        context = self.get_context_data(form=form)
+        try:
+            staffprofile_form = StaffProfileForm(instance=self.object.staffprofile)
+            context = self.get_context_data(form=form, staffprofile_form=staffprofile_form)
+        except StaffProfile.DoesNotExist:
+            context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        if not form.is_valid():
-            return self.form_invalid(form)
+        try:
+            staffprofile_form = StaffProfileForm(request.POST, instance=self.object.staffprofile)
+            if not all([form.is_valid(), staffprofile_form.is_valid()]):
+                return self.form_invalid(form, staffprofile_form=staffprofile_form)
+            staffprofile = staffprofile_form.save()
+        except StaffProfile.DoesNotExist:
+            if not form.is_valid():
+                return self.form_invalid(form)
         user = form.save()
         return redirect("users:user-detail", pk=user.pk)
 
-    def form_invalid(self, form):
-        context = self.get_context_data(form=form)
+    def form_invalid(self, form, staffprofile_form=None):
+        if staffprofile_form:
+            context = self.get_context_data(form=form, staffprofile_form=staffprofile_form)
+        else:
+            context = self.get_context_data(form=form)
         return render(self.request, self.get_template_names(), context)
 
 

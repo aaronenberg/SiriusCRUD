@@ -28,3 +28,5 @@ urlpatterns = [
     path('users/<pk>/edit/', views.UserUpdateView.as_view(), name='user-update'),
     path('account/edit/', views.AccountUpdateView.as_view(), name='account-update'),
 ]
+
+

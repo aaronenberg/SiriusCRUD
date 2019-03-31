@@ -14,8 +14,7 @@
         "is_staff": false,
         "date_joined": "2019-03-27T18:01:56.259Z",
         "groups": [],
-        "user_permissions": [],
-        "courses": []
+        "user_permissions": []
     }
 }
 ]

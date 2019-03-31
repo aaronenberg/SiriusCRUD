@@ -101,7 +101,6 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name='Last Name'
     )
-    courses = models.ManyToManyField(Course, related_name='courses')
 
     is_active = models.BooleanField(
         _('active'),
@@ -151,3 +150,8 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
+class StaffProfile(models.Model):
+
+    user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, primary_key=True)
+    courses = models.ManyToManyField(Course, related_name='courses')

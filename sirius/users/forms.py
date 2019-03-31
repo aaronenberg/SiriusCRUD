@@ -13,7 +13,7 @@ from django.forms import (
     PasswordInput
 )
 from django.utils.translation import gettext_lazy as _
-from .models import BaseUser, USER_TYPE_CHOICES
+from .models import BaseUser, StaffProfile, USER_TYPE_CHOICES
 from courses.models import Course
 
 
@@ -97,17 +97,9 @@ class AccountUpdateForm(ModelForm):
             'name': 'user-type',
         }),
     )
-    courses = ModelMultipleChoiceField(queryset=Course.objects.all(),
-        widget = SelectMultiple(attrs={
-            'id': 'sirius-courses',
-            'class': 'custom-select form-control',
-            'name': 'courses',
-        }),
-        required=False,
-    )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type", "username", "courses")
+        fields = ("email", "first_name", "last_name", "user_type", "username",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,6 +137,21 @@ class AccountUpdateForm(ModelForm):
             raise ValidationError("Email must be a valid school email that ends with .edu")
         return email
 
+
+class StaffProfileForm(ModelForm):
+
+    class Meta:
+        model = StaffProfile
+        fields = ("courses",)
+
+    courses = ModelMultipleChoiceField(queryset=Course.objects.all(),
+        widget = SelectMultiple(attrs={
+            'id': 'sirius-courses',
+            'class': 'custom-select form-control',
+            'name': 'courses',
+        }),
+        required=False,
+    )
 
 class PasswordChangeForm(auth_forms.PasswordChangeForm):
 

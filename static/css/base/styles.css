@@ -69,7 +69,8 @@ div.alert {
     position:absolute;
     border-radius: 2rem;
     text-align:center;
-    width: 100%;
+    width: fit-content;
+    align-self: center;
 }
 
 ul.errorlist li {

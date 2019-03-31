@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'outcomes.apps.OutcomesConfig',
     'courses.apps.CoursesConfig',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -115,8 +114,6 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/courses/'
 LOGOUT_REDIRECT_URL = '/login/'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTHENTICATION_BACKENDS = (
     'users.auth.EmailBackend',
