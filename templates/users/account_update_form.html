@@ -14,15 +14,17 @@
 <form id="user-form" method="post" action="" novalidate>
   {% csrf_token %}
 
-  <div class="form-group">
-    <label for="user-email" class="bmd-label-static">Email Address</label>
-    {{ form.email }}
-    {{ form.email.errors }}
-  </div>
+  <div class="form-row justify-content-between">
+    <div class="form-group col-12 col-lg-6">
+      <label for="user-email" class="bmd-label-static">Email Address</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
 
-  <div class="form-group">
-    <label for="user-username" class="bmd-label-static">Username</label>
-    {{ form.username }}
+    <div class="form-group col-12 col-lg-6">
+      <label for="user-username" class="bmd-label-static">Username</label>
+      {{ form.username }}
+    </div>
   </div>
 
   <div class="form-row justify-content-between">
@@ -30,6 +32,7 @@
         <label for="user-first-name" class="bmd-label-static">First Name</label>
           {{ form.first_name }}
     </div>
+
     <div class="form-group col-12 col-lg-6">
         <label for="user-last-name" class="bmd-label-static">Last Name</label>
           {{ form.last_name }}
@@ -37,10 +40,10 @@
   </div>
 
   {% if form.user_type and user.user_type == 'FA' %}
-    <div class="form-group">
-      <label for="user-user-type" class="bmd-label-static">User Type</label>
-        {{ form.user_type }}
-    </div>
+  <div class="form-group">
+    <label for="user-user-type" class="bmd-label-static">User Type</label>
+      {{ form.user_type }}
+  </div>
   {% endif  %}
 
   {% if form.instance.staffprofile %}
