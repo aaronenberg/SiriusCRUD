@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static outcome_tags %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'outcomes/styles.css' %}">
+{% endblock custom_css %}
+
+{% block title %}
+  {{ outcome.title }} Submissions | SIRIUS
+{% endblock title %}
+
+{% block content-main %}
+
+<form method="post">
+  {% csrf_token %}
+
+  {{ form.management_form }}
+
+  {% for media in form %}
+    {{ media.id }}
+    <a href="{{ media.instance.media.url }}">{{ media.instance.filename }}</a>
+    <small>uploaded by: {{ media.instance.author }}</small>
+    <div class="col-11 col-lg-4">
+      {{ media.outcome_type }}
+    </div>
+    <div>
+      <p>publish {{ media.is_public }}</p>
+    </div>
+  {% endfor %}
+
+  <div class="submit-row">
+    <div class="mr-auto">
+      <input type="Submit" class="btn btn-raised btn-primary" value="Save">
+    </div>
+  </div>
+</form>
+
+
+{% endblock content-main %}
+

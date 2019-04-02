@@ -36,16 +36,24 @@ body, html {
         margin-top: 1rem;
     }
 }
+#left {
+    grid-area: left;
+    background-color: whitesmoke;
+}
+#right {
+    grid-area: right;
+    background: whitesmoke;
+}
 
 @media (min-width: 768px) {
     #container {
         display:grid;
-        grid-template-columns: 25% auto 25%;
-        grid-template-rows: max-content minmax(70vh, auto) minmax(10vh, auto);
+        grid-template-columns: 20% auto 20%;
+        grid-template-rows: max-content minmax(70vh, auto) minmax(5vh, auto);
         grid-template-areas:
             "header header header"
             "left main right"
-            "footer footer footer";
+            "left footer right";
     }
 }
 
@@ -58,13 +66,16 @@ body, html {
 .nav-link {
     text-transform: initial;
 }
+.nav-item.nav-link {
+    font-weight:500;
+}
 
 li {
     list-style: none;
 }
 
 div.alert {
-    margin-top:1rem;
+    margin-top:0.5rem;
     top: 0;
     position:absolute;
     border-radius: 2rem;
@@ -81,7 +92,6 @@ ul.errorlist li {
     color: #f44336;<div id="course_list" class="list-group align-items-center">
 
 }
-
 
 #id_paginator {
     bottom: 0;
@@ -183,7 +193,7 @@ input[type="text"], input[type="password"], select.form-control
     border-width: 1px;
     border-color: rgb(180,180,180);
     border-radius: 1rem;
-    padding-left: .5em;
+    padding-left: .8em;
     padding-right: .5em;
 }
 input:focus, select:focus{
@@ -195,6 +205,7 @@ input:focus, select:focus{
 select.form-control {
     -moz-appearance: menulist-button;
     -webkit-appearance: menulist-button;
+    padding-right: 1em;
 }
 
 form {
@@ -202,6 +213,8 @@ form {
     padding: 1rem;
     border-radius: 1rem;
     margin-bottom: 0;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 #id-search-form,
@@ -332,22 +345,30 @@ input[type="password"] {
     justify-content: space-evenly;
     padding: 1.2rem;
     background-repeat: no-repeat;
+    background-color: whitesmoke;
 }
 #menubar_mobile_right {
     display: flex;
     align-items: center;
 }
-#menubar_desktop {
+#menubar_desktop .navbar {
+    background-color: #0f5e7f;
 }
 #menubar {
     grid-area: header;
 }
 #main {
-    padding: 1rem;
+    padding: 2rem;
     grid-area: main;
     position: relative;
     display: flex;
     flex-direction: column;
+    border: 1px solid #d6d9dc;
+    border-radius: 3px;
+}
+#footer {
+    grid-area: footer;
+    background-color: whitesmoke;
 }
 
 #outcome_actions,
@@ -360,8 +381,8 @@ input[type="password"] {
 #course-form,
 #user-form
 {
-    margin-top: 4rem;
     width:100%;
+    border: 0.3rem solid #0f5e7f;
 }
 .center {
     align-self:center;
@@ -374,6 +395,7 @@ input[type="password"] {
 div.invalid-feedback {
     position: absolute;
     margin-left: .8rem;
+    width: 80%;
 }
 
 ::-webkit-scrollbar {
@@ -396,3 +418,4 @@ body::-webkit-scrollbar-track {
 ::-webkit-scrollbar-thumb:hover {
     background-color: slategrey;
 }
+

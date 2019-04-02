@@ -92,9 +92,12 @@
           <div class="custom-file col-11">
             {{ upload_form.media }}
           </div>
-          <div class="input-group row col-11 col-md-5">
+          <div class="input-group row col-11 col-xl-6 col-lg-8">
             <button class="btn btn-success add-media-upload">+</button>
             {{ upload_form.outcome_type }}
+            <div class="invalid-feedback">
+              Select a file type
+            </div>
           </div>
         </div>
       </div>
@@ -102,103 +105,23 @@
   </div>
   {% endfor %}
 
-      <div class="submit-row">
-        <div class="mr-auto">
-          <input type="Submit" class="btn btn-raised btn-primary" value="Submit">
-          {% block save_draft%}
-          <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
-          {% endblock save_draft %}
-        </div>
-        {% block back_navigate %}
-        <a class="btn" href="{% url 'outcomes:outcome-list' %}">Cancel</a>
-        {% endblock back_navigate %}
-      </div>
+  <div class="submit-row">
+    <div class="mr-auto">
+      <input type="Submit" class="btn btn-raised btn-primary" value="Post">
+      {% block save_draft%}
+      <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+      {% endblock save_draft %}
+    </div>
+    {% block back_navigate %}
+    <a class="btn" href="{% url 'outcomes:outcome-list' %}">Cancel</a>
+    {% endblock back_navigate %}
+  </div>
 </form>
 
 {% endblock content-main %}
 
 {% block custom_js %}
-
-<script type='text/javascript'>
-  function updateElementIndex(el, prefix, ndx) {
-      var id_regex = new RegExp('(' + prefix + '-\\d+)');
-      var replacement = prefix + '-' + ndx;
-      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
-      if (el.id) el.id = el.id.replace(id_regex, replacement);
-      if (el.name) el.name = el.name.replace(id_regex, replacement);
-  }
-  function cloneMore(selector, prefix) {
-      var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
-      var newElement = $(selector).clone(true);
-      newElement.find(':input').each(function() {
-          if (typeof($(this).attr('name')) != 'undefined') {
-              var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
-              var id = 'id_' + name;
-              $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
-          }
-      });
-      total++;
-      $('#id_' + prefix + '-TOTAL_FORMS').val(total);
-      $(selector).after(newElement);
-      var conditionRow = $('.media-upload:not(:last)');
-      conditionRow.find('.btn.add-media-upload')
-      .removeClass('btn-success').addClass('btn-danger')
-      .removeClass('add-media-upload').addClass('remove-media-upload')
-      .html('&#120273;');
-      return false;
-  }
-  function deleteForm(prefix, btn) {
-      var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      if (total > 1){
-          btn.closest('.media-upload').remove();
-          var forms = $('.media-upload');
-          $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-          for (var i=0, formCount=forms.length; i<formCount; i++) {
-              if (typeof($(this).attr('name')) != 'undefined') {
-                  $(forms.get(i)).find(':input').each(function() {
-                      updateElementIndex(this, prefix, i);
-                  });
-              }
-          }
-      }
-      return false;
-  }
-  $(document).on('click', '.add-media-upload', function(e){
-      e.preventDefault();
-      cloneMore('.media-upload:last', 'media');
-      return false;
-  });
-  $(document).on('click', '.remove-media-upload', function(e){
-      e.preventDefault();
-      deleteForm('media', $(this));
-      return false;
-  });
-</script>
-<script>
-  $("#outcome_course").change(function ()
-  {
-    var url = $("#outcome-form").attr("data-sections-url");
-    var course_id = $(this).val();
-
-    if (course_id)
-    {
-      $.ajax({
-        url: url,
-        data: {'course': course_id},
-        success: function (data)
-        {
-      $('#outcome_course_section').prop('disabled', false);
-          $("#outcome_course_section").html(data);
-        }
-      });
-    }
-    else {
-      $('#outcome_course_section').prop('disabled', true);
-      $("#outcome_course_section").html("");
-    }
-  });
-</script>
-<script>
-  $('#outcome_title').disableAutoFill();
-</script>
+<script src="{% static 'js/media-formset-management.js'%}" type='text/javascript'></script>
+<script src="{% static 'js/get-course-sections.js'%}" type='text/javascript'></script>
+<script>$('#outcome_title').disableAutoFill();</script>
 {% endblock custom_js %}

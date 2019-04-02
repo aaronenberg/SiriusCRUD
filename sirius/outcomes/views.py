@@ -8,10 +8,11 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from django.urls import NoReverseMatch, reverse
-from .models import Outcome, OutcomeMedia
-from .forms import OutcomeForm, OutcomeMediaFormSet
+from django.urls import reverse
 from courses.models import Course
+from .utils import get_course_from_url, flatten_formset_file_fields
+from .models import Outcome, OutcomeMedia
+from .forms import OutcomeForm, OutcomeMediaFormSet, OutcomeMediaUpdateFormSet
 
 
 class OutcomeListView(ListView):
@@ -24,37 +25,6 @@ class OutcomeListView(ListView):
     queryset = Outcome.objects.exclude(is_public=False).order_by('-modified')
 
 
-class OutcomeDetailView(DetailView):
-
-
-    def get_queryset(self):
-        return Outcome.objects.exclude(Q(is_public=False))
-            
-
-
-def flatten_formset_file_fields(formset):
-    media = []
-    for i, file_field in enumerate(formset.files.keys()):
-        for fp in formset.files.getlist(file_field):
-            outcome_type = formset.forms[i].cleaned_data['outcome_type']
-            outcome = formset.forms[i].cleaned_data['outcome']
-            media.append(OutcomeMedia(media=fp, outcome_type=outcome_type, outcome=outcome))
-    return media
-
-
-def get_course_from_url(url):
-    course_slug_pattern = re.compile('[A-Z]{2,4}\d{1,3}[A-Z]?')
-    match = course_slug_pattern.search(url) 
-    if match:
-        slug = match.group()
-        try:
-            path = reverse('courses:course-detail', kwargs={'slug': slug})
-        except NoReverseMatch:
-            return None
-        return Course.objects.get(slug=slug)
-    else: return None
-
-
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ''' Displays a form to create a new outcome and a separate form for uploaded attachments
         only for authenticated users '''
@@ -64,7 +34,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = OutcomeForm
 
     def test_func(self):
-        return self.request.user.user_type != 'ST'
+        return self.request.user.is_privileged
 
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -108,9 +78,9 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     ''' Displays a form to update an existing outcome only for the original author '''
 
-    template_name_suffix = '_update_form'
     model = Outcome
     form_class = OutcomeForm
+    template_name_suffix = '_update_form'
     
     def get_queryset(self):
         return Outcome.objects.exclude(Q(is_public=False))
@@ -158,9 +128,8 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class OutcomeMediaUpdateView(UpdateView):
-    ''' Displays details of an outcome. Logged in  to hide their private outcomes from
-        other users. Additionally, unauthenticated users may not view certain types of outcomes '''
-    ''' Displays a form to update an existing outcome only for the original author '''
+    ''' Displays user-submitted posts for an outcome. Template hides form to 
+        submit a post and certain types of outcomes from unauthenticated users.'''
 
     template_name = 'outcomes/outcomemedia_update_form.html'
     context_object_name = 'outcome'
@@ -171,10 +140,11 @@ class OutcomeMediaUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        queryset = OutcomeMedia.objects.filter(Q(outcome__pk=self.object.pk), Q(is_public=True))
         if self.request.user.is_authenticated:
-            media = OutcomeMedia.objects.filter(outcome__pk=self.object.pk)
+            media = queryset
         else:
-            media = OutcomeMedia.objects.filter(Q(outcome__pk=self.object.pk), ~Q(outcome_type='RD'))
+            media = queryset.filter(~Q(outcome_type=OutcomeMedia.RAW_DATA))
         context['outcomemedia_list'] = media
         types = [t['outcome_type'] for t in media.values('outcome_type')]
         context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
@@ -205,19 +175,52 @@ class OutcomeMediaUpdateView(UpdateView):
         context = self.get_context_data(form=form)
         return render(self.request, self.get_template_names(), context)
 
-class SearchPageView(TemplateView):
-	# Code that the html file was based on:
-	# https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table
-	# http://api.jquery.com/toggle/ uses the toggle function to hide
-	# the matched search keys
-	template_name = 'outcomes/outcome_search.html'
 
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context['outcomes'] = Outcome.objects.exclude(Q(is_public=False)).order_by('-created')
-		context['subjects'] = Course.objects.order_by('subject').distinct('subject')
-		context['courses'] = Course.objects.all()
-		return context
+class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+    template_name = 'outcomes/outcome_submission_update_form.html'
+    context_object_name = 'outcome'
+    model = Outcome
+
+    def test_func(self):
+        return self.request.user == self.get_object().author or self.request.user.user_type == FACULTY
+
+    def get_queryset(self):
+        return Outcome.objects.filter(author=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        media = OutcomeMedia.objects.filter(outcome__pk=self.object.pk)
+        context['outcomemedia_list'] = media
+        types = [t['outcome_type'] for t in media.values('outcome_type')]
+        context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = OutcomeMediaUpdateFormSet(
+                instance=self.object,
+                queryset=OutcomeMedia.objects.filter(is_public=False)
+        )
+        context = self.get_context_data(form=form)
+        return render(request, self.get_template_names(), context) 
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = OutcomeMediaUpdateFormSet(request.POST, instance=self.object)
+        context = self.get_context_data(form=form)
+        if not form.is_valid():
+            return self.form_invalid(form) 
+        return self.form_valid(form)
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.object.get_absolute_url())
+
+    def form_invalid(self, form):
+        context = self.get_context_data(form=form)
+        return render(self.request, self.get_template_names(), context)
+
 
 class DraftListView(LoginRequiredMixin, OutcomeListView):
     ''' Displays a list of the current user's unpublished drafts.
@@ -255,35 +258,6 @@ class DraftUpdateView(OutcomeUpdateView):
         return Outcome.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
-#class SubmissionDetailView(LoginRequiredMixin, UserPassesTestMixin, OutcomeDetailView):
-#    ''' Displays details of an outcome. Allows a user to hide their private outcomes from
-#        other users. Additionally, unauthenticated users may not view certain types of outcomes '''
-#
-#    model = OutcomeMedia
-#    context_object_name = 'outcome'
-#
-#    def test_func(self):
-#        outcome = self.get_object()
-#        return self.request.user == outcome.author or (self.request.user.user_type != 'ST' and outcome.course in self.request.user.courses)
-#
-#    def get_queryset(self):
-#        return OutcomeMedia.objects.filter(Q(is_public=False), Q(media_outcome=self.get_object()))
-
-
-#class SubmissionListView(LoginRequiredMixin, UserPassesTestMixin, OutcomeListView):
-#    ''' Displays details of an outcome. Allows a user to hide their private outcomes from
-#        other users. Additionally, unauthenticated users may not view certain types of outcomes '''
-#
-#    model = OutcomeMedia
-#    template_name = 'outcomes/submission_list.html'
-#
-#    def test_func(self):
-#        return self.request.user.user_type != 'ST'
-#
-#    def get_queryset(self):
-#        return OutcomeMedia.objects.filter(Q(is_public=False))
-           
-
 class IndexView(ListView):
     model = Outcome
     context_object_name = 'outcomes'
@@ -298,6 +272,21 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
         return Outcome.objects.annotate(search=SearchVector('description', 'title')).filter(search=query, is_public=True)
+
+
+class SearchPageView(TemplateView):
+	# Code that the html file was based on:
+	# https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table
+	# http://api.jquery.com/toggle/ uses the toggle function to hide
+	# the matched search keys
+	template_name = 'outcomes/outcome_search.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['outcomes'] = Outcome.objects.exclude(Q(is_public=False)).order_by('-created')
+		context['subjects'] = Course.objects.order_by('subject').distinct('subject')
+		context['courses'] = Course.objects.all()
+		return context
 
 
 def get_course_sections(request):

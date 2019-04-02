@@ -30,7 +30,7 @@ from .forms import (
     AuthenticationForm,
     StaffProfileForm,
 )
-from .models import BaseUser, StaffProfile, FACULTY, STUDENT, TEACHING_ASSISTANT
+from .models import BaseUser, StaffProfile, FACULTY
 from .tokens import account_activation_token
 
 
@@ -91,7 +91,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        if self.object.user_type in [FACULTY, TEACHING_ASSISTANT]:
+        if self.object.is_privileged:
             context['users_courses'] = self.object.staffprofile.courses.all().order_by('subject','number')
         return context
 

@@ -38,3 +38,6 @@
     position:fixed;
 }
 
+#main {
+    justify-content: center;
+}

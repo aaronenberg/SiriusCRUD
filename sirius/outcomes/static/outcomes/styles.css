@@ -21,14 +21,13 @@
 }
 
 #outcome-media-forms-row {
-    border-color: rgb(100,180,180);
-    border-width: .15rem;
+    border: 0.2rem solid gainsboro; 
     border-radius: 1rem;
     background-color: rgba(18,85,74, 0.1);
     height:20vh;
     margin-bottom: 0.3rem;
+    padding: 0.8rem;
     align-items:center;
-    padding:1rem;
 }
 #outcome-media-forms {
     overflow-y: auto;
@@ -38,11 +37,13 @@
     padding-top: 0;
 }
 
-input-group>.custom-file-control:not(:first-child),
+.input-group>.custom-file-control:not(:first-child),
+.input-group>.custom-file-control:not(:last-child),
 .input-group>.custom-select:not(:first-child),
-.input-group>.form-control:not(:first-child) {
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
+.input-group>.custom-select:not(:last-child),
+.input-group>.form-control:not(:first-child),
+.input-group>.form-control:not(:last-child) {
+    border-radius: 1rem;
 }
 
 @media (max-width: 767.98px) {
@@ -57,4 +58,9 @@ input-group>.custom-file-control:not(:first-child),
 
 .submit-row {
     margin-top:1rem;
+}
+
+#outcome-media-forms .invalid-feedback {
+    position: relative;
+    margin-left: 3rem;
 }

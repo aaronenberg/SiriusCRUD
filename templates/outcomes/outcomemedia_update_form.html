@@ -1,4 +1,9 @@
 {% extends 'outcomes/outcome_detail.html' %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'outcomes/styles.css' %}">
+{% endblock custom_css %}
 
 {% block extra-content %}
 
@@ -27,10 +32,16 @@
         <div class="media-upload spacer">
           <div class="custom-file col-11">
             {{ upload_form.media }}
+            <div class="invalid-feedback">
+              Select a file
+            </div>
           </div>
           <div class="input-group row col-11 col-md-5">
             <button class="btn btn-success add-media-upload">+</button>
             {{ upload_form.outcome_type }}
+            <div class="invalid-feedback">
+              Select a file type
+            </div>
           </div>
         </div>
       </div>
@@ -51,61 +62,5 @@
 {% endblock extra-content %}
 
 {% block custom_js %}
-
-<script type='text/javascript'>
-  function updateElementIndex(el, prefix, ndx) {
-      var id_regex = new RegExp('(' + prefix + '-\\d+)');
-      var replacement = prefix + '-' + ndx;
-      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
-      if (el.id) el.id = el.id.replace(id_regex, replacement);
-      if (el.name) el.name = el.name.replace(id_regex, replacement);
-  }
-  function cloneMore(selector, prefix) {
-      var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
-      var newElement = $(selector).clone(true);
-      newElement.find(':input').each(function() {
-          if (typeof($(this).attr('name')) != 'undefined') {
-              var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
-              var id = 'id_' + name;
-              $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
-          }
-      });
-      total++;
-      $('#id_' + prefix + '-TOTAL_FORMS').val(total);
-      $(selector).after(newElement);
-      var conditionRow = $('.media-upload:not(:last)');
-      conditionRow.find('.btn.add-media-upload')
-      .removeClass('btn-success').addClass('btn-danger')
-      .removeClass('add-media-upload').addClass('remove-media-upload')
-      .html('&#120273;');
-      return false;
-  }
-  function deleteForm(prefix, btn) {
-      var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      if (total > 1){
-          btn.closest('.media-upload').remove();
-          var forms = $('.media-upload');
-          $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
-          for (var i=0, formCount=forms.length; i<formCount; i++) {
-              if (typeof($(this).attr('name')) != 'undefined') {
-                  $(forms.get(i)).find(':input').each(function() {
-                      updateElementIndex(this, prefix, i);
-                  });
-              }
-          }
-      }
-      return false;
-  }
-  $(document).on('click', '.add-media-upload', function(e){
-      e.preventDefault();
-      cloneMore('.media-upload:last', 'media');
-      return false;
-  });
-  $(document).on('click', '.remove-media-upload', function(e){
-      e.preventDefault();
-      deleteForm('media', $(this));
-      return false;
-  });
-</script>
-
+<script src="{% static 'js/media-formset-management.js'%}" type='text/javascript'></script>
 {% endblock custom_js %}

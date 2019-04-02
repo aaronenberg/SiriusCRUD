@@ -60,6 +60,10 @@
              {% endif %}">
        Edit
     </a>
+    <a class="btn btn-raised btn-secondary"
+       href="{% url 'outcomes:outcome-submissions-update' outcome.slug %}">
+      Review Submissions
+    </a>
   </div>
   {% endif %}
 </div>

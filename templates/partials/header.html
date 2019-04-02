@@ -2,6 +2,58 @@
 
 
 <div id="menubar">
+  <div id="menubar_desktop">
+    <nav id="id-main-nav" class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'img/sirius-logo-white-16x16.ico' %}">
+      </a>
+      <button class="navbar-toggler" 
+              type="button" 
+              data-toggle="collapse"
+              data-target="#navbarNavAltMarkup" 
+              aria-controls="navbarNavAltMarkup"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div id="nav-left" class="navbar-nav">
+          <a class="nav-item nav-link
+                    {% if 'outcomes' in request.path or 'drafts' in request.path %}
+                    active
+                    {% endif %}"
+             href="{% url 'outcomes:outcome-list' %}">
+            Outcomes
+          </a>
+          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
+             href="{% url 'courses:course-list' %}">
+            Courses
+          </a>
+          {% if user.user_type == 'FA' %}
+          <a class="nav-item nav-link {% if 'user' in request.path %}active{% endif %}" 
+             href="{% url 'users:user-list' %}">
+            Users
+          </a>
+          {% endif %}
+          <a class="nav-item nav-link {% if 'search' in request.path %}active{% endif %}"
+             href="{% url 'outcomes:search' %}">
+            Search
+          </a>
+        </div>
+        <div id="nav-right" class="navbar-nav">
+          {% if user.is_authenticated %}
+          <a class="nav-item nav-link {% if 'account' in request.path %}active{% endif %}"
+             href="{% url 'users:account-update' %}">
+            {{ user.email | lower}}
+          </a>
+          <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
+          {% else %}
+          <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </div>
   <div id="menubar_mobile">
     <div id="menubar_mobile_left">
       <a href="{% url 'index'%}">
@@ -21,55 +73,5 @@
     </div>
   </div>
 
-  <div id="menubar_desktop">
-    <nav id="id-main-nav" class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'img/sirius-logo-32x32.ico' %}"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div id="nav-left" class="navbar-nav">
-          <a class="nav-item nav-link 
-                    {% if 'outcomes' in request.path or 'drafts' in request.path %}
-                    active
-                    {% endif %}"
-                    href="{% url 'outcomes:outcome-list' %}">
-                    Outcomes
-          </a>
-          <a class="nav-item nav-link 
-                    {% if 'courses' in request.path %}
-                    active
-                    {% endif %}" 
-                    href="{% url 'courses:course-list' %}">
-                    Courses
-          </a>
-          {% if user.user_type == 'FA' %}
-          <a class="nav-item nav-link 
-                    {% if 'user' in request.path or 'account' in request.path %}
-                    active
-                    {% endif %}" 
-                    href="{% url 'users:user-list' %}">
-                    Users
-          </a>
-          {% endif %}
-          <a class="nav-item nav-link
-             {% if 'search' in request.path %}
-             active
-             {% endif %}"
-             href="{% url 'outcomes:search' %}">
-             Search
-           </a>
-        </div>
-        <div id="nav-right" class="navbar-nav">
-          {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="{% url 'users:account-update' %}">{{ user.email | lower}}</a>
-          <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
-          {% else %}
-          <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
-  </div>
 </div>
 

@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .forms import CourseForm
 from .models import Course
+from users.models import FACULTY
 
 
 class CourseListView(LoginRequiredMixin, ListView):
@@ -75,7 +76,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = CourseForm
     
     def test_func(self):
-        return self.request.user.user_type == 'FA'
+        return self.request.user.user_type == FACULTY
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -95,8 +96,6 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        if 'number' or 'subject' in form.changed_data:
-            return redirect(self.object, permanent=True)
         return redirect(self.object)
 
     def form_invalid(self, form):

@@ -36,6 +36,18 @@ OutcomeMediaFormSet = inlineformset_factory(
     }
 )
 
+OutcomeMediaUpdateFormSet = inlineformset_factory(
+    Outcome,
+    OutcomeMedia,
+    formset=BaseInlineFormSet,
+    exclude = ('media', 'author'),
+    extra=0,
+    widgets={'outcome_type': Select(attrs={
+                'class': 'form-control select-fix-height'
+            })
+    }
+)
+
 YEAR_CHOICES = [] + BLANK_CHOICE_DASH
 for y in reversed(range(2000, (current_year()+1))):
         YEAR_CHOICES.append((y,y))
