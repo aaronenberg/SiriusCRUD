@@ -1,7 +1,9 @@
-import math
-import re
 import datetime
+import math
+import os
+import re
 from django.core.validators import MaxValueValidator
+from django.core.files.uploadedfile import UploadedFile
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from courses.models import Course
@@ -73,9 +75,42 @@ def get_course_from_url(url):
 def flatten_formset_file_fields(formset):
     from .models import OutcomeMedia
     media = []
-    for i, file_field in enumerate(formset.files.keys()):
+    id_match = re.compile('-([0-9]+)-')
+    import pdb; pdb.set_trace()
+    for file_field in formset.files.keys():
+        form_id = int(id_match.search(file_field).groups()[0])
         for fp in formset.files.getlist(file_field):
-            outcome_type = formset.forms[i].cleaned_data['outcome_type']
-            outcome = formset.forms[i].cleaned_data['outcome']
-            media.append(OutcomeMedia(media=fp, outcome_type=outcome_type, outcome=outcome))
+            if isinstance(fp, UploadedFile):
+                outcome_type = formset.forms[form_id].cleaned_data['outcome_type']
+                outcome = formset.forms[form_id].cleaned_data['outcome']
+                media.append(OutcomeMedia(media=fp, outcome_type=outcome_type, outcome=outcome))
     return media
+
+
+def update_files_formset(formset):
+    for form in formset:
+        if form.instance.id:
+            form.save()
+
+    uploaded_file_fields = list(formset.files.keys())
+    id_match = re.compile('-([0-9]+)-')
+
+    for file_field in uploaded_file_fields:
+        form_id = int(id_match.search(file_field).groups()[0])
+        form = formset.forms[form_id]
+        outcomemedia = form.cleaned_data['id']
+        if outcomemedia:
+            try:
+                import pdb; pdb.set_trace()
+                files = formset.files.getlist(file_field)
+                media = files.pop()
+                formset.files.setlist(file_field, files)
+                if isinstance(media, UploadedFile):
+                    outcomemedia = form.save(commit=False)
+                    outcomemedia.media.save(media.name, media)
+            except KeyError:
+                continue
+
+
+def filename(media):
+    return os.path.basename(media.name)

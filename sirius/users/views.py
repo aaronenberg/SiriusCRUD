@@ -92,7 +92,8 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         if self.object.is_privileged:
-            context['users_courses'] = self.object.staffprofile.courses.all().order_by('subject','number')
+            context['users_courses'] = self.object.staffprofile.courses.extra(select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+        ).order_by('subject','course_number')
         return context
 
     def get(self, request, *args, **kwargs):
@@ -143,10 +144,11 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         try:
-            context['users_courses'] = self.object.staffprofile.courses.all().order_by('subject','number')
+            context['users_courses'] = self.object.staffprofile.courses.extra(
+                select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+                ).order_by('subject','course_number')
         except StaffProfile.DoesNotExist:
-            pass
-        return context
+            return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

@@ -60,7 +60,7 @@
         </div>
         <div class="modal-body">
           <small>Select the courses you are currently teaching:</small>
-          {{ staffprofile_form }}
+          {{ staffprofile_form.courses }}
         </div>
         <div class="modal-footer">
           <button id="user-courses-submit" type="Submit" class="btn btn-primary">Save changes</button>
@@ -72,7 +72,17 @@
   <div id="mysirius-courses-row">
     <div id="mysirius-courses" class="list-group">
       {% for course in users_courses %}
-      <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+      <a class="justify-content-center
+                list-group-item
+                list-group-item-action
+                flex-column 
+                align-items-start
+              {% if course.subject == 'GEOL' %} subject-geol
+              {% elif course.subject == 'CHEM' %} subject-chem
+              {% elif course.subject == 'ENVS' %} subject-envs
+              {% elif course.subject == 'BIO' %} subject-bio
+              {% elif course.subject == 'CE' %} subject-ce
+              {% endif %}"
          href="{{ course.get_absolute_url }}">
         <div class="d-flex w-100 justify-content-between">
           <h6>{{ course }}</h6>
@@ -82,7 +92,7 @@
     </div>
   </div>
   {% if staffprofile_form %}
-  <div class="form-row justify-content-end">
+  <div class="form-row justify-content-end mb-auto">
     <button id="user-courses-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>

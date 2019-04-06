@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
 from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES 
 from courses.models import Course
-from .utils import current_year
+from .utils import current_year, filename
 
 
 class BaseOutcomeMediaFormSet(BaseInlineFormSet):
@@ -17,7 +17,7 @@ class BaseOutcomeMediaFormSet(BaseInlineFormSet):
             if outcome_type and not media:
                 raise ValidationError("File type was chosen without uploading a file.")
             if media and not outcome_type:
-                raise ValidationError("No file type selected for the chosen file(s). Please reupload the file(s) and select a file type.")
+                raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
 
 
 OutcomeMediaFormSet = inlineformset_factory(

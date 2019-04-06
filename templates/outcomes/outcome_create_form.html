@@ -84,16 +84,24 @@
 
   {{ outcomemedia_form.management_form }}
 
-  {% for upload_form in outcomemedia_form %}
   <div id="outcome-media-forms-row">
     <div id="outcome-media-forms">
+      {% for upload_form in outcomemedia_form %}
       <div class="form-group col-12">
         <div class="media-upload spacer">
           <div class="custom-file col-11">
+            {% if upload_form.instance.media %}
+              {{ upload_form.id }}
+              <a href="{{ upload_form.instance.media.url }}">
+                {{ upload_form.instance.filename }}
+              </a>
+            {% endif %}
             {{ upload_form.media }}
           </div>
           <div class="input-group row col-11 col-xl-6 col-lg-8">
+            {% if not upload_form.instance.id %}
             <button class="btn btn-success add-media-upload">+</button>
+            {% endif %}
             {{ upload_form.outcome_type }}
             <div class="invalid-feedback">
               Select a file type
@@ -101,9 +109,9 @@
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
-  {% endfor %}
 
   <div class="submit-row">
     <div class="mr-auto">

@@ -35,7 +35,16 @@
   {% block outcome-list %}
   <div id="outcome_list" class="list-group">
       {% for outcome in outcomes %}
-        <a class="list-group-item list-group-item-action flex-column align-items-start"
+        <a class="list-group-item
+                  list-group-item-action
+                  flex-column
+                  align-items-start
+              {% if outcome.course.subject == 'GEOL' %} subject-geol
+              {% elif outcome.course.subject == 'CHEM' %} subject-chem
+              {% elif outcome.course.subject == 'ENVS' %} subject-envs
+              {% elif outcome.course.subject == 'BIO' %} subject-bio
+              {% elif outcome.course.subject == 'CE' %} subject-ce
+              {% endif %}"
            href="{% url 'outcomes:outcome-media-update' outcome.slug %}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ outcome }}</h5>

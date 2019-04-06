@@ -144,7 +144,9 @@ class StaffProfileForm(ModelForm):
         model = StaffProfile
         fields = ("courses",)
 
-    courses = ModelMultipleChoiceField(queryset=Course.objects.all(),
+    courses = ModelMultipleChoiceField(queryset=Course.objects.extra(
+        select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+        ).order_by('subject','course_number'),
         widget = SelectMultiple(attrs={
             'id': 'sirius-courses',
             'class': 'custom-select form-control',

@@ -13,7 +13,10 @@ class CourseListView(LoginRequiredMixin, ListView):
 
     model = Course
     context_object_name = 'courses'
-    queryset = Course.objects.all().order_by('subject', 'number')
+    # cast course number, avoiding any possible letter, to an integer
+    queryset = Course.objects.extra(
+        select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+        ).order_by('subject','course_number')
     paginate_by = 7
 
 

@@ -19,7 +19,16 @@
 
   <div id="course_list" class="list-group align-items-center">
     {% for course in courses %}
-    <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
+    <a class="justify-content-center
+              list-group-item
+              list-group-item-action
+              flex-column align-items-start 
+              {% if course.subject == 'GEOL' %} subject-geol
+              {% elif course.subject == 'CHEM' %} subject-chem
+              {% elif course.subject == 'ENVS' %} subject-envs
+              {% elif course.subject == 'BIO' %} subject-bio
+              {% elif course.subject == 'CE' %} subject-ce
+              {% endif %}"
        href="{{ course.get_absolute_url }}">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{ course }}</h5>

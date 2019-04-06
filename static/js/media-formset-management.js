@@ -71,9 +71,11 @@ $(document).on('click', '.remove-media-upload', function(e){
 
 $('#outcome-media-forms select').click(function() {
     var file_input_id = $(this).attr('id').replace( '-outcome_type','-media');
+    var existing_media_id = $(this).attr('id').replace( '-outcome_type','-id');
     var file_input = document.getElementById(file_input_id)
+    var existing_media = document.getElementById(existing_media_id)
 
-    if ($(this).val())
+    if ($(this).val() && !existing_media)
         file_input.required = true;
     else
         file_input.required = false;

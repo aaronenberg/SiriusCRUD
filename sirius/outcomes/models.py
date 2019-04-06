@@ -132,6 +132,8 @@ class OutcomeMedia(models.Model):
         _('outcome type'),
         max_length=2,
         choices=OUTCOME_TYPES,
+        default="",
+        blank=True,
         help_text=_("Select the file type")
     )
     author = models.ForeignKey(
@@ -141,6 +143,8 @@ class OutcomeMedia(models.Model):
         verbose_name=_('author')
     )
     created = models.DateTimeField(auto_now_add=True)
+
+    modified = models.DateTimeField(auto_now=True)
 
     is_public = models.BooleanField(default=False)
 

@@ -43,6 +43,6 @@ class Course(models.Model):
         super(Course, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.slug + " - " + self.title
+        return "{0} {1} - {2}".format(self.subject, self.number, self.title)
     
 

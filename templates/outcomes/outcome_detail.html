@@ -38,7 +38,7 @@
         {% if media.get_outcome_type_display == type %}
         <li>
           <a href="{{ media.media.url }}">{{ media.filename }}</a>
-          {{ media.created }}
+          {{ media.modified }}
         </li>
         {% endif %}
       {% endfor %}

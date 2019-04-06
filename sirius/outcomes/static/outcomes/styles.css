@@ -56,10 +56,6 @@
     width:100%;
 }
 
-.submit-row {
-    margin-top:1rem;
-}
-
 #outcome-media-forms .invalid-feedback {
     position: relative;
     margin-left: 3rem;

@@ -2,6 +2,7 @@ import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
+from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
@@ -10,7 +11,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.urls import reverse
 from courses.models import Course
-from .utils import get_course_from_url, flatten_formset_file_fields
+from .utils import get_course_from_url, flatten_formset_file_fields, update_files_formset
 from .models import Outcome, OutcomeMedia
 from .forms import OutcomeForm, OutcomeMediaFormSet, OutcomeMediaUpdateFormSet
 
@@ -68,6 +69,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         outcomemedia = flatten_formset_file_fields(outcomemedia_form)
         for media in outcomemedia:
             media.author = self.request.user
+            media.is_public = True
             media.save()
         return redirect('outcomes:outcome-list')
 
@@ -76,7 +78,10 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
 class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    ''' Displays a form to update an existing outcome only for the original author '''
+    ''' Displays a form to update an existing outcome for the user that is
+        the original author of the outcome. Form also contains files that were uploaded
+        by the author. The post and any uploaded files are publicly visible unless the
+        author saves the outcome as a draft.'''
 
     model = Outcome
     form_class = OutcomeForm
@@ -92,15 +97,18 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        outcomemedia_form = OutcomeMediaFormSet()
+        outcomemedia_form = OutcomeMediaFormSet(
+            instance=form.instance,
+            queryset=OutcomeMedia.objects.filter(author=form.instance.author))
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
         return render(request, self.get_template_names(), context) 
+
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        outcomemedia_form = OutcomeMediaFormSet(request.POST, request.FILES, instance=self.object)
+        outcomemedia_form = OutcomeMediaFormSet(request.POST, request.FILES, instance=form.instance)
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
         actual_is_public = form.instance.is_public
         if not all([form.is_valid(), outcomemedia_form.is_valid()]):
@@ -116,10 +124,13 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             form.instance.is_public = True
         form.save()
-        outcomemedia = flatten_formset_file_fields(outcomemedia_form)
-        for media in outcomemedia:
-            media.author = self.request.user
-            media.save()
+        update_files_formset(outcomemedia_form)
+        if self.request.FILES:
+            outcomemedia = flatten_formset_file_fields(outcomemedia_form)
+            for media in outcomemedia:
+                media.author = self.request.user
+                media.is_public = True
+                media.save()
         return redirect('outcomes:outcome-list')
 
     def form_invalid(self, form, outcomemedia_form):

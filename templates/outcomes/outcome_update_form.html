@@ -1,6 +1,10 @@
 {% extends "outcomes/outcome_create_form.html" %}
 {% load outcome_tags %}
 
+{% if upload_form.instance.id %}
+{% block add_media_form %}{% endblock add_media_form %}
+{% endif %}
+
 {% block save_draft %}
 <input type="Submit"
        class="btn btn-danger" 
