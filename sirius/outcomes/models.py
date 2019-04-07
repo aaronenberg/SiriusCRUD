@@ -9,7 +9,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from .utils import max_value_current_year
+from .utils import max_value_current_year, current_year, current_semester
 
 
 FALL = 'FA'
@@ -168,4 +168,9 @@ class OutcomeMedia(models.Model):
     @property
     def filename(self):
         return os.path.basename(self.media.name)
+
+    def save(self, *args, **kwargs):
+        self.year = current_year()
+        self.semester = current_semester()
+        super(OutcomeMedia, self).save(*args, **kwargs)
 

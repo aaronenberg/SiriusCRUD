@@ -176,6 +176,7 @@ class OutcomeMediaUpdateView(UpdateView):
         return self.form_valid(form)
 
     def form_valid(self, form):
+        import pdb; pdb.set_trace()
         outcomemedia = flatten_formset_file_fields(form)
         for media in outcomemedia:
             media.author = self.request.user

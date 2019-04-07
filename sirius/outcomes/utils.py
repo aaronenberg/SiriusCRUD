@@ -54,6 +54,31 @@ def current_year():
     return datetime.date.today().year
 
 
+def current_semester():
+    FALL = 'FA'
+    WINTER = 'WI'
+    SPRING = 'SP'
+    SUMMER = 'SU'
+
+    today = datetime.date.today()
+
+    if today.month >= 1 and today.month <= 5:
+        if today.month == 1 and today.day <= 14:
+            return WINTER
+        if today.month == 5 and today.day >= 23:
+                return SUMMER
+        return SPRING
+
+    if today.month >= 8 and today.month <= 12:
+        if today.month == 8 and today.day <= 21:
+            return SUMMER
+        if today.month == 12 and today.day >= 13:
+                return WINTER
+        return FALL
+    return SUMMER
+
+
+
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
