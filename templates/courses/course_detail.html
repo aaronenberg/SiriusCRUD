@@ -1,36 +1,41 @@
 {% extends "base.html" %}
-{% block content %}
 
-<div>
-  Course Title
-  {{ course.title }}
+{% block title %}
+  {{ course }}
+{% endblock title %}
+
+{% block content-main %}
+
+<div id="course_detail_title">
+  <h6>{{ course }}</h6>
+</div>
+<div id="course_detail_description">
+  <p>{{ course.description }}</p>
+</div>
+<div id="course_detail_sections">
+  <label>Sections</label>
+  <p>
+  {% for section in course.sections %}
+    {{ section | stringformat:"02d" }}
+  {% endfor %}
+  </p>
 </div>
 <div>
-  Description
-  {{ course.description }}
-</div>
-Sections
-{% for section in course.sections %}
-{{ section | stringformat:"02d" }}
-{% endfor %}
-<div>
-  Related Articles
+  Related Outcomes
   <ul>
-    {% for article in articles %}
+    {% for outcome in outcomes %}
     <div>
-      <a href="{{ article.get_absolute_url }}">
-        {{ article.title }}
+      <a href="{{ outcome.get_absolute_url }}">
+        {{ outcome.title }}
       </a>
     </div>
     {% endfor %}
   </ul>
-{% if user.user_type == 'FA' %}
-<div>
-  <a class="btn btn-raised" href="{% url 'courses:course-update' course.slug %}">Edit</a>
-</div>
-{% endif %}
-<div>
-  <a class="btn btn-raised" href="{% url 'articles:article-create' %}">Create Article</a>
+<div class="submit-row">
+  <a class="btn btn-raised btn-primary" href="{% url 'outcomes:outcome-create' %}">Create Outcome</a>
+  {% if user.user_type == 'FA' %}
+  <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-update' course.slug %}">Edit</a>
+  {% endif %}
 </div>
 
-{% endblock content %}
+{% endblock content-main %}

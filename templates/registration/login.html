@@ -1,46 +1,68 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block content %}
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'css/registration/styles.css' %}" />
+{% endblock custom_css %}
+
+{% block content-main %}
 
 {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
+    <div class="alert alert-danger fade show">
+  <p>Invalid username and/or password.</p>
+  </div>
 {% endif %}
 
-{% if next %}
-  {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-  {% else %}
-    <p>Please login to see this page.</p>
+  {% if next %}
+    {% if user.is_authenticated %}
+    <div class="alert alert-danger fade show">
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    </div>
+    {% else %}
+    <div class="alert alert-danger fade show">
+      <p>Please login to see this page.</p>
+    </div>
+    {% endif %}
   {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'users:login' %}">
-  {% csrf_token %}
-  <table>
-    <tr>
-      <td>Email or {{ form.username.label_tag }}</td>
-      <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-      <td>{{ form.password.label_tag }}</td>
-      <td>{{ form.password }}</td>
-    </tr>
-  </table>
+<div class="center">
+  <form id="login-form" class="custom-validation" method="post" action="{% url 'users:login' %}" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
 
-  <input type="submit" value="login">
-  <input type="hidden" name="next" value="{{ next }}">
-</form>
+    <div class="form-row">
+      {{ form.username }}
+      <div class="invalid-feedback">
+        Enter a valid Username or Email.
+      </div>
+    </div>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'users:password_reset' %}">Forgot password?</a></p>
-<p><a href="{% url 'users:register' %}">Create Account</a></p>
+    <div class="form-row">
+      {{ form.password }}
+    </div>
+
+    <div class="form-row">
+      <input class="btn btn-raised btn-primary col-12" type="submit" value="login">
+    </div>
+
+    <div class="form-row">
+      <a class="btn btn-raised btn-secondary col-12" href="{% url 'users:register' %}">Create Account</a>
+    </div>
+
+    <div class="form-row">
+      <small class="mr-auto"><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
+    </div>
+  </form>
+</div>
+
 {% endblock %}
 
 {% block custom_js %}
 <script>
   $(document).ready(function () {
       $('#id_username').trigger('focus')
-  })
+  });
+  $('#id_username').disableAutoFill();
 </script>
 {% endblock %}

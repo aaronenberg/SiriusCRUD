@@ -5,7 +5,7 @@
     "fields": {
         "description": "BIO 1 is the first course taken by freshmen who come to Sac State wanting to study biology. It is an introduction to the properties of life that lead to genetic and biological diversity. The course focuses on biological diversity, variation in organisms that leads to natural selection, an introduction to ecological concepts, and the study of ecosystems, from local to global. The SIRIUS Module in BIO 1 is a study of the impact of fertilizer use on the organisms in the American River, with a focus on invertebrates such as insects, crustaceans and worms. River water and soil are collected into classroom aquaria at the beginning of the semester, the organisms in the aquaria are collected and sampled, varying quantities of fertilizer are placed into the aquaria, and the organisms are collected and sampled a second time after treatment. Students then compare the changes in the samples that result from the treatments. BIO 1 provides an introduction to many skills that will be required in later SIRIUS courses and is the first course in the Toxicology Thread that runs through the SIRIUS Project.",
         "number": "1",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\", \"3\", \"7\", \"8\", \"100\"]",
         "title": "Biodiversity, Ecology and Evolution"
     }
@@ -16,7 +16,7 @@
     "fields": {
         "description": "BIO 100 is also required of all native and transfer students at Sac State and introduces students to the anatomy of the scientific literature, reading and writing of scientific papers, proper citation formats, basic interpretation of tables and figures, graphical analysis, basic statistical analysis, the concepts of experimental design needed to effectively test a hypothesis, and the effective presentation of a scientific experiment. The SIRIUS Module in BIO 100 is designed to use concepts and data acquired in other SIRIUS courses for the activities listed above. It is a central course that extends all of the SIRIUS Threads through data analysis. Course teams from BIO 1, BIO 2, BIO 127, BIO 139 and BIO 160 are preparing data sets from for the BIO 100 students to use for final projects. Other SIRIUS courses will provide data to the students of BIO 100 as it becomes available.",
         "number": "100",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\"]",
         "title": "Introduction to Scientific Analysis"
     }
@@ -27,7 +27,7 @@
     "fields": {
         "description": "BIO 127 is an elective for all majors at Sacramento State and satisfies the \u201cStructure-Function\u201d requirement for graduation. The course examines the progression of fertilized eggs of vertebrate organisms through embryonic development. This progression is studied at biochemical, molecular, genetic, morphological and physiological levels, with an emphasis on the progressive changes that occur within cells, tissues and organs in the embryo. It uses a comparative approach between a variety of model organisms to understand similarities and differences among vertebrate and selected invertebrate species. The SIRIUS Module in BIO 127 builds on the Toxicology Thread begun in BIO 1, and is focused on the impacts of human-derived toxins on the population dynamics of C. elegans nematodes. C. elegans is an extremely well-studied, soil-dwelling worm that can be found in the river environment. Students learn to quantify all stages of worm development, statistically evaluate the impact of the toxin on all stages relative to controls, and to form hypotheses and experimental designs based on their data.",
         "number": "127",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\", \"3\", \"8\", \"12\", \"17\", \"18\", \"19\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"27\", \"28\", \"29\", \"30\", \"31\", \"32\", \"33\", \"34\"]",
         "title": "Developmental Biology"
     }
@@ -38,7 +38,7 @@
     "fields": {
         "description": "BIO 128 is an elective for all majors at Sacramento State and satisfies the \u201cStructure-Function\u201d requirement for graduation. The course is an integrative examination of our current understanding of plant structure and function. Students apply fundamental principles of cell and molecular biology, evolution, and ecology to understand the relationships between plant anatomy and plant physiology that have enabled plants to achieve such a high level of success as primary producers on our planet. The SIRIUS Module in BIO 128 involves student investigations of the changes in mycorrhizal fungi diversity at a site on the American River that is undergoing restoration of a stream that feeds into the American. These investigations are part of the Mycorrhizal Fungi Ecology Thread shared by BIO 160 and BIO 180. In Bio 128 students examine plant roots collected at each stage of restoration and stain these to identify the types of mycorrhizal fungi present. These data combined with the species diversity information from Bio 180 will enable students to develop hypotheses regarding the physiological roles of fungi in plant establishment and growth.",
         "number": "128",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\", \"3\", \"7\", \"8\"]",
         "title": "Plant Physiology"
     }
@@ -49,7 +49,7 @@
     "fields": {
         "description": "BIO 139 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is an introduction to microorganisms, particularly bacteria and viruses, their physiology and metabolism. Laboratory work includes aseptic techniques, methods of cultivating and identifying bacteria, and demonstration of microbial properties. The SIRIUS Module in BIO 139 is part of the Bacterial Diversity Thread shared by BIO 2, BIO 184 and the Diversity of Microorganisms (BIO 145). It is focused on classical and molecular approaches to examine fecal coliform bacteria and identify the presence of associated disease-causing factors. Water and soil samples gathered from the American River are: (1) plated on selective and differential media to isolate colony forming units and; (2) added to Colilert broth and Petrifilms for biochemical analysis of metabolic pathways used by fecal coliform bacteria. Genomic DNA is extracted from confirmed fecal coliform species and control bacteria, and subsequently assayed for disease-causing genes including those mediating toxin production, antibiotic resistance, and detoxification of organic and inorganic antimicrobial compounds.",
         "number": "139",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\", \"3\", \"8\", \"12\", \"17\", \"18\", \"19\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"27\", \"28\", \"29\", \"30\", \"31\", \"32\", \"33\", \"34\"]",
         "title": "General Microbiology"
     }
@@ -60,7 +60,7 @@
     "fields": {
         "description": "BIO 145 is a required course in the Microbiology concentration in Biological Sciences and is an elective for several others. It is an introduction to the isolation, cultivation and characterization of a wide variety of soil and water microbes from natural habitats using the elective enrichment technique; natural habitats also are examined directly for the numbers and varieties of microbes which are present. The SIRIUS Module in BIO 145 is part of the Bacterial Diversity Thread shared by BIO 2, BIO 184 and the BIO 139. It is focused on the analysis of local bacterial communities in association with genetic sequence analysis of the bacterial DNA library begun in BIO 2 and completed in BIO 184.",
         "number": "145",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"2\", \"3\", \"4\", \"5\"]",
         "title": "Diversity of Microorganisms"
     }
@@ -71,9 +71,42 @@
     "fields": {
         "description": "BIO 160 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is an examination of the interrelationships among organisms and their environments. Designed for the major in Biological Sciences or related fields. Topics include the structure and function of terrestrial and aquatic ecosystems, population and community dynamics and human effects on ecosystems. The SIRIUS Module in BIO 160 is part of the Mycorrhizal Fungi Ecology Thread shared by BIO 128 and BIO 180. The study in BIO 160 is focused on the ecology of the fungi that live among the roots of live oak and valley oak trees along the American River. Students collect root samples from pristine, urban, agriculture, dams and mining locales, and perform sample processing, ECM identification, quantification and data entry, and ECM community analysis. Individual root samples are collected and frozen for subsequent molecular identification in other SIRIUS courses.",
         "number": "160",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"1\"]",
         "title": "General Ecology"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "BIO180",
+    "fields": {
+        "description": "BIO 180 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is an examination of the structure of genes and genomes, the mechanisms by which they change, and the use of evolutionary relationships to understand function. This includes the mechanisms of the regulation of gene expression from gene to phenotype and the tools used to study these processes. It also includes a study of applications of molecular tools in medicine and biotechnology and the ethics around these approaches.\r\n\r\nThe SIRIUS Module in BIO 180 utilizes soil samples from BIO 128 for analysis of endomycorrhizal fungi, and root samples collected in BIO 160 for analysis of ectomycorrhizal fungi. Students isolate DNA from soil and plant samples taken before, during and after restoration, conduct PCR to amplify 18S ribosomal RNA genes, and subject them to DNA sequence analysis to obtain a profile of the species diversity at each stage of restoration.  Students PCR amplify the 18S ribosomal subunit of the fungi and develop a library, similar to BIO 184, through cloning and transformation of E. coli.",
+        "number": "180",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\"]",
+        "title": "Advanced Molecular Biology"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "BIO184",
+    "fields": {
+        "description": "BIO 184 is required of all native and transfer students at Sac State and emphasizes the principles of inheritance as they relate to microorganisms, plants, and animals, including humans. Genetic mechanisms are analyzed according to evidence derived from both classical and current research. The nature, structure, and function of the genome are considered at the molecular level.\r\n\r\nThe SIRIUS Module in BIO 184 is an important extension of the Bacterial Diversity Thread begun in BIO 2 and completed in the Bacterial Diversity (BIO 145) Module. PCR products produced in BIO 2 are cloned into plasmids and the plasmids analyzed in BIO 184, with the goal of producing a high quality library that can be stored for full analysis at a later time. That library is made available to students in BIO 145 for sequencing and analysis of the species types and relationships.",
+        "number": "184",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\"]",
+        "title": "General Genetics"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "BIO187",
+    "fields": {
+        "description": "BIO 187 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is focused on the advanced cellular and molecular biology of eukaryotic cells. It includes a comparison to prokaryotic organism as needed to illustrate key concepts. Emphasis is placed on cellular functions and utilize two or more cellular systems; including cell to cell communication, regulation of gene expression, uptake and secretion, regulation of cytoskeletal configuration, cell migration and cellular reproduction.\r\n\r\nThe SIRIUS Module in BIO 187 is a continuation of the river toxicology studies of BIO 1 and BIO 127. In BIO 187 students analyze the effects of toxins on the survival, death and programmed cell death of mammalian cell cultures. They use a high-throughput analysis that allows rapid determination of dose effects of river-borne toxins identified through review of the scientific literature.",
+        "number": "187",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\"]",
+        "title": "Advanced Cell Biology"
     }
 },
 {
@@ -82,20 +115,20 @@
     "fields": {
         "description": "BIO 2 is the second course in our introductory sequence and is an introduction to molecular and cellular biology and genetics. Topics include the molecules that make up biological organisms, cell structure and function, cellular energetics, molecular flow of information, cell division, and genetic inheritance. The SIRIUS Module in BIO 2 is a cellular and molecular analysis of the impacts of urban run-off on bacterial communities in the soil of the American River ecosystem. The main focus is on soil samples collected from a side channel of the river that receives unfiltered city street run-off. To fully assess the effects of run-off on bacterial abundance and diversity, a site in the main flow downstream of the city outlet and multiple upstream controls are also sampled. Students analyze cell and colony morphology of soil bacteria on agar and prepare DNA samples for further analysis in subsequent SIRIUS courses. BIO 2 also provides an introduction to many skills that will be required in later SIRIUS courses and is the first course in the Bacterial Diversity Thread that runs through the SIRIUS Project. The skills learned in BIO 2 are also directly applicable to the Mycorrhizal Fungi Ecology Thread that runs through Plant Physiology (BIO 128), General Ecology (BIO160) and Advanced Molecular Biology (BIO 180).",
         "number": "2",
-        "subject": "BI",
+        "subject": "BIO",
         "sections": "[\"2\", \"3\", \"4\", \"5\"]",
         "title": "Cells, Molecules and Genes"
     }
 },
 {
     "model": "courses.course",
-    "pk": "CE1A",
+    "pk": "CHEM1A",
     "fields": {
-        "description": "",
+        "description": "CHEM 1A is a required course in all concentrations in Biological Sciences, as well as other programs throughout the Sacramento State campus. It reviews the fundamental principles and concepts of chemistry, including stoichiometry; thermochemistry; atomic and molecular structure; solution chemistry, including acid-base chemistry; quantum theory; bonding and intermolecular forces; and chemical kinetics.\r\n\r\nThe SIRIUS Module in CHEM 1A is focused on a new water chemistry lab where students can link the identity, concentrations and nature of ions and compounds in water to measurable quantities such as solubility, pH, and conductivity. Detection of water impurities is also utilized to monitor the rate of aqueous chemical reactions. This will allow students to formulate questions about how man-made changes in river chemistry might impact capacity for carrying dangerous chemicals in the stream.",
         "number": "1A",
-        "subject": "CE",
-        "sections": "[\"1\", \"3\", \"8\", \"12\", \"17\", \"18\", \"19\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"27\", \"28\", \"29\", \"30\", \"31\", \"32\", \"33\", \"34\"]",
-        "title": "test1"
+        "subject": "CHEM",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\", \"16\", \"17\", \"18\", \"19\", \"20\"]",
+        "title": "General Chemistry"
     }
 },
 {
@@ -104,7 +137,7 @@
     "fields": {
         "description": "CHEM 31 is a required course in many concentrations in Biological Sciences, as well as several other programs throughout the Sacramento State campus. It focuses on chemical measurements including associated statistics, chemical equilibrium in aqueous solutions, volumetric analysis, and an introduction to spectrophotometry and chromatography. The SIRIUS Module in CHEM 31 is focused on human impacts on river water quality. Students collect water and soil samples from ecologically relevant locations along the river and use the concentrations of nutrients (such as nitrate and phosphate) to assess the impact of human inputs to the river ecosystem, such as agricultural runoff or storm water (urban runoff). Investigations focus on the combination of this nutrient data with trace level organic molecules that serve as tracers of specific inputs (i.e., caffeine for human wastewater). Other SIRIUS courses will also benefit from these data sets. For example, General Ecology (BIO160) students characterize the fungal diversity of soil samples that vary by ecological location. Chemical data on the soil will improve their analysis by providing greater insight into the conditions that determine the ecological variability.",
         "number": "31",
-        "subject": "CH",
+        "subject": "CHEM",
         "sections": "[\"1\", \"3\", \"7\", \"8\"]",
         "title": "Quantitative Analysis"
     }
@@ -115,7 +148,7 @@
     "fields": {
         "description": "ENVS 130 focuses on the aspects of toxicology which enable us to study and explore environmental issues concerning human and ecosystem health. Students explore the impact of human activity since World War II in contributing to human disease and ecosystem disruption. Risk perception and communication as it concerns environmental toxicology is also be discussed. It emphasizes the scientific basis for predicting adverse effects of human exposure to toxic substances in the environment. The SIRIUS Module in ENVS 130 involves student risk assessment for mercury and organic contaminant (e.g., PCBs, PAHs, pesticides, etc.) toxicity in fish from the American River. Students use existing data to determine the risk of human exposure relative to published concentrations of contaminants in fish caught locally. ENVS 130 is a Lecture/Discussion-based course without a laboratory section, and it is exciting for us to develop a meta-analysis-based CURE to reach students outside of the traditional laboratory classroom, yet in a setting where real-world and real-time data are used to assess environmental and health impacts.",
         "number": "130",
-        "subject": "ES",
+        "subject": "ENVS",
         "sections": "[\"2\", \"3\", \"4\", \"5\"]",
         "title": "Environmental Toxicology"
     }
@@ -126,7 +159,7 @@
     "fields": {
         "description": "GEOL 10L is a laboratory supplement to GEOL 10 and offers an exciting opportunity to reach students outside of the sciences with SIRIUS CURE experiences. Students learn about rocks and their mineral constituents, geological processes such as weathering, erosion, glaciation, mountain building, volcanoes, earthquakes, folds, faults, the earth's interior, plate tectonics and earth resources. The Physical Geology Lab emphasizes the identification of common minerals and rocks, and introduces students to the use of topographic and geologic maps. \r\n\r\nThe SIRIUS Module in GEOL 10L focuses on water quality, habitat suitability and sources and types of pollution in local rivers. Students make predictions about types and locations of water pollution, collect water samples from the river, and analyze them for nutrients metals, temperature and pH. Results are then related to local sources of contaminants in surface water.",
         "number": "10L",
-        "subject": "GE",
+        "subject": "GEOL",
         "sections": "[\"1\", \"3\", \"7\", \"8\"]",
         "title": "Physical Geology Lab"
     }
@@ -137,7 +170,7 @@
     "fields": {
         "description": "GEOL 127 is focused on fundamentals of groundwater flow, as influenced by topography and geology; geological aspects of groundwater supply, contamination, remediation, and protection of hydrogeological regions of the U.S. and their critical groundwater issues. Funding from the WM Keck Foundation has made it possible to add a laboratory section and extend the CURE throughout the semester. The SIRIUS Module in GEOL 127 investigates the extent of hydrologic connection between the American River and the campus aquifers. Students collect and analyze data on water quality and groundwater level, which are similar to data they would handle as professional hydrogeologists. California\u2019s recent, historic drought led to the designation of the Sacramento area as a High Priority Groundwater Basin under the Sustainable Groundwater Management Act of 2014.",
         "number": "127",
-        "subject": "GE",
+        "subject": "GEOL",
         "sections": "[\"2\"]",
         "title": "Hydrogeology"
     }

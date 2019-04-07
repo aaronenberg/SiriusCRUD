@@ -1,0 +1,69 @@
+#login-form {
+    border: 5px solid #026373;
+    border-radius: 0.5rem;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"]
+{
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(180,180,180);
+    border-radius: 1rem;
+    padding-left: .5em;
+}
+#login-form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px skyblue;
+    transition: box-shadow 0.08s linear;
+}
+
+#login-form input.btn {
+    margin-top:1rem;
+}
+
+#login-form .form-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .5em;
+}
+
+#login-form .bmd-form-group {
+    padding-top: 0;
+}
+
+.need-authenticate {
+    position:fixed;
+}
+
+#main {
+    justify-content: center;
+}
+
+#user_registration_form,
+#set_password_form,
+#password_reset_form,
+#password_change_form {
+    display:flex;
+    flex-direction:column;
+    width:75%;
+    border: 0.3rem solid #0f5e7f;
+    align-self: center;
+}
+#reset_password_header,
+#reset_password_confirm_header {
+    position: absolute;
+    top: 2rem;
+}
+
+div.alert li {
+    list-style:disc;
+    text-align:left;
+}
+
+div.alert {
+    width: 75%;
+    border-radius: 0.5rem;
+}

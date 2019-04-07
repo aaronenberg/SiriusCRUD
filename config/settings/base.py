@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 ALLOWED_HOSTS = []
@@ -28,9 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
-    'articles.apps.ArticlesConfig',
     'courses.apps.CoursesConfig',
-    'crispy_forms',
+    'outcomes.apps.OutcomesConfig',
 ]
 
 MIDDLEWARE = [
@@ -102,9 +102,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_ROOT = 'static/'
+STATIC_ROOT = '/var/www/sirius.com/static/'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ['templates/static']
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 MEDIA_URL = '/media/'
 
@@ -113,9 +115,15 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/courses/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 AUTHENTICATION_BACKENDS = (
     'users.auth.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

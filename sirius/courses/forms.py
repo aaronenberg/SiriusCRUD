@@ -79,7 +79,6 @@ class CourseForm(ModelForm):
             'class': 'form-control custom-select select-fix-height',
             'name': 'subject',
         }),
-        required=False,
     )
     class Meta:
         model = Course
@@ -109,9 +108,10 @@ class CourseForm(ModelForm):
             'id': 'course_sections',
             'class': 'form-control',
             'name': 'sections',
+            'placeholder': '1-20, 25, 42' 
         })
         self.fields['description'].widget = Textarea(attrs={
-            'id': 'article_description',
+            'id': 'outcome_description',
             'class': 'form-control',
             'name': 'description',
         })

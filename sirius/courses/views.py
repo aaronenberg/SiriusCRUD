@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .forms import CourseForm
 from .models import Course
+from users.models import FACULTY
 
 
 class CourseListView(LoginRequiredMixin, ListView):
@@ -12,12 +13,15 @@ class CourseListView(LoginRequiredMixin, ListView):
 
     model = Course
     context_object_name = 'courses'
-    queryset = Course.objects.all().order_by('subject', 'number')
-    paginate_by = 10
+    # cast course number, avoiding any possible letter, to an integer
+    queryset = Course.objects.extra(
+        select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+        ).order_by('subject','course_number')
+    paginate_by = 7
 
 
 class CourseDetailView(DetailView):
-    ''' Displays a specific course and its related, public articles '''
+    ''' Displays a specific course and its related, public outcomes '''
 
     model = Course
     context_object_name = 'course'
@@ -27,7 +31,7 @@ class CourseDetailView(DetailView):
                                 ).filter(number=self.object.number)
         context = super().get_context_data(**kwargs)
         context['courses'] = queryset
-        context['articles'] = self.object.articles.filter(is_public=True)
+        context['outcomes'] = self.object.outcomes.filter(is_public=True)
         context['referer_page'] = self.request.META.get('HTTP_REFERER')
         return context
 
@@ -75,7 +79,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = CourseForm
     
     def test_func(self):
-        return self.request.user.user_type == 'FA'
+        return self.request.user.user_type == FACULTY
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -95,8 +99,6 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        if 'number' or 'subject' in form.changed_data:
-            return redirect(self.object, permanent=True)
         return redirect(self.object)
 
     def form_invalid(self, form):

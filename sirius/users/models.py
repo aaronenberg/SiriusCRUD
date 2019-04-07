@@ -7,6 +7,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from courses.models import Course
 
 
 STUDENT = 'ST'
@@ -79,7 +80,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=255,
         unique=True,
-        verbose_name='School Email',
+        verbose_name='School Email Address',
         error_messages={
             'unique': _("A user with that email already exists."),
         },
@@ -100,6 +101,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         blank=True,
         verbose_name='Last Name'
     )
+
     is_active = models.BooleanField(
         _('active'),
         default=True,
@@ -122,14 +124,16 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email']
 
     def get_full_name(self):
-        return "{0} {1}".format(self.first_name, self.last_name)
+        if all((self.first_name, self.last_name)) and not all((self.first_name.isspace(), self.last_name.isspace())):
+            return "{0} {1}".format(self.first_name, self.last_name)
+        return self.username
 
     def get_short_name(self):
-        return self.email
+        if self.first_name and not self.first_name.isspace():
+            return self.first_name
+        return self.username
 
     def __str__(self):
-        if not self.get_full_name().isspace():
-            return self.get_full_name()
         return self.username
 
     def get_absolute_url(self):
@@ -146,3 +150,8 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
+class StaffProfile(models.Model):
+
+    user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, primary_key=True)
+    courses = models.ManyToManyField(Course, related_name='courses')
