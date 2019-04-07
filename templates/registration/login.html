@@ -2,15 +2,14 @@
 {% load static %}
 
 {% block custom_css %}
-<link rel="stylesheet" href="{% static 'css/login/styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/registration/styles.css' %}" />
 {% endblock custom_css %}
 
 {% block content-main %}
 
-<!--  TODO: move alert to top of page -->
 {% if form.errors %}
     <div class="alert alert-danger fade show">
-  <p>Invalid username and/or password. Please try again.</p>
+  <p>Invalid username and/or password.</p>
   </div>
 {% endif %}
 
@@ -28,28 +27,35 @@
   {% endif %}
 
 <div class="center">
-  <form id="login-form" class="center-login" method="post" action="{% url 'users:login' %}">
+  <form id="login-form" class="custom-validation" method="post" action="{% url 'users:login' %}" novalidate>
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+
     <div class="form-row">
       {{ form.username }}
+      <div class="invalid-feedback">
+        Enter a valid Username or Email.
+      </div>
     </div>
+
     <div class="form-row">
       {{ form.password }}
     </div>
+
     <div class="form-row">
-      <input class="col-12 btn btn-raised btn-primary" type="submit" value="login">
+      <input class="btn btn-raised btn-primary col-12" type="submit" value="login">
     </div>
-    <input type="hidden" name="next" value="{{ next }}">
+
     <div class="form-row">
-      <small><a href="{% url 'users:register' %}">Create Account</a></small>
+      <a class="btn btn-raised btn-secondary col-12" href="{% url 'users:register' %}">Create Account</a>
     </div>
+
     <div class="form-row">
-      <small><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
+      <small class="mr-auto"><a href="{% url 'users:password_reset' %}">Forgot password?</a></small>
     </div>
   </form>
 </div>
 
-{# Assumes you setup the password_reset view in your URLconf #}
 {% endblock %}
 
 {% block custom_js %}

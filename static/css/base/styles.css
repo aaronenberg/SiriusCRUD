@@ -84,12 +84,12 @@ div.alert {
     align-self: center;
 }
 
-ul.errorlist li {
+ul.errorlist {
     position:absolute;
-    width: 100%;
+    width: calc(95% - 2rem);
     margin-top: .25rem;
     font-size: 80%;
-    color: #f44336;<div id="course_list" class="list-group align-items-center">
+    color: #f44336;
 
 }
 
@@ -143,13 +143,14 @@ ul.pagination {
 }
 
 .btn.btn-raised.btn-secondary,
-.btn.btn-raised.btn-secondary:hover
-{
+.btn.btn-raised.btn-secondary:hover {
     background-color: slategrey;
 }
-.btn.btn-raised.btn-primary,
-.btn.btn-raised.btn-primary:hover,
 
+.btn.btn-raised.btn-primary,
+.btn.btn-raised.btn-primary:hover {
+    background-color: darkslategrey;
+}
 #id-search-form,
 #search_bar,
 #search_input {
@@ -214,7 +215,10 @@ ul.pagination {
     border-radius: 1rem; 
 }
 
-input[type="text"], input[type="password"], select.form-control
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select.form-control
 {
     border: solid;
     border-width: 1px;
@@ -222,8 +226,11 @@ input[type="text"], input[type="password"], select.form-control
     border-radius: 1rem;
     padding-left: .8em;
     padding-right: .5em;
+    text-indent: 0.15rem;
 }
-input:focus, select:focus{
+
+input:focus,
+select:focus{
     outline: none;
     box-shadow: 0 0 0 1px skyblue;
     transition: all 0.5s ease;
@@ -352,11 +359,6 @@ label.bmd-label-static {
     background-color:whitesmoke;
 }
 
-input[type="text"],
-input[type="password"] {
-    text-indent: 0.4rem;
-}
-
 @media (max-width: 767.98px) {
     .form-group {
         margin-bottom: 0;
@@ -400,7 +402,6 @@ input[type="password"] {
 
 #outcome_actions,
 #course_actions {
-    margin-top: 2rem;
     margin-right:auto;
 }
 

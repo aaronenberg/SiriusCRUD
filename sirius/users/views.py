@@ -27,6 +27,8 @@ from .forms import (
     AuthenticationForm,
     UserCreateForm,
     PasswordChangeForm,
+    PasswordResetForm,
+    SetPasswordForm,
     AuthenticationForm,
     StaffProfileForm,
 )
@@ -54,7 +56,7 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         current_site = get_current_site(request)
         uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
         activation_link = "{0}/activate/?uid={1}&token={2}".format(current_site, uid, token)
-        subject = 'Activate your account'
+        subject = 'SIRIUS Project Email Confirmation'
         html_message = render_to_string(
             'registration/activation_mail.html',
             {'activation_link': activation_link, 'user': user}
@@ -143,12 +145,11 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        try:
+        if context['staffprofile_form']:
             context['users_courses'] = self.object.staffprofile.courses.extra(
                 select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
                 ).order_by('subject','course_number')
-        except StaffProfile.DoesNotExist:
-            return context
+        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -160,7 +161,7 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             staffprofile_form = StaffProfileForm(instance=self.object.staffprofile)
             context = self.get_context_data(form=form, staffprofile_form=staffprofile_form)
         except StaffProfile.DoesNotExist:
-            context = self.get_context_data(form=form)
+            context = self.get_context_data(form=form, staffprofile_form=None)
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
@@ -215,8 +216,6 @@ User = get_user_model()
 
 class UserActivateView(View):
 
-    template_name = 'users/user_activate_form.html'
-
     def get(self, request):
         uidb64 = request.GET.get('uid')
         token = request.GET.get('token')
@@ -228,16 +227,7 @@ class UserActivateView(View):
         user.is_active = True
         user.save()
         login(request, user, backend='users.auth.EmailBackend')
-        form = SetPasswordForm(request.user)
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = SetPasswordForm(request.user, request.POST)
-        if not form.is_valid():
-            pass
-        user = form.save()
-        update_session_auth_hash(request, user)
-        return redirect('courses:course-list')
+        return redirect(settings.LOGIN_REDIRECT_URL)
 
     def get_user(self, uidb64):
         try:
@@ -252,6 +242,13 @@ class UserActivateView(View):
 class PasswordChangeView(auth_views.PasswordChangeView):
     form_class = PasswordChangeForm
 
+
+class PasswordResetView(auth_views.PasswordResetView):
+    form_class = PasswordResetForm
+
+
+class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    form_class = SetPasswordForm
 
 class LoginView(auth_views.LoginView):
     form_class = AuthenticationForm

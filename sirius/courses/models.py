@@ -27,7 +27,11 @@ class Course(models.Model):
     
     subject = models.CharField(max_length=4, choices=SUBJECT_CHOICES)
 
-    sections = ArrayField(models.PositiveSmallIntegerField(blank=True, null=True), blank=True, null=True)
+    sections = ArrayField(
+        models.PositiveSmallIntegerField(blank=True, null=True),
+        blank=True,
+        null=True
+    )
 
     title = models.CharField(max_length=99)
 

@@ -8,9 +8,10 @@
 
   <body>
     <p>
-      Hello {% if user.first_name %}{{ user.first_name | capfirst }}{% else %}{{ user.username }}{% endif %}, </p>
+      Hello {{ user.username }}, </p>
     <p>
-      Activate your account by clicking the button.
+      Welcome to the SIRIUS Project at Sacramento State, 
+      Confirm your email address and activate your account by clicking the link below.
     </p>
     <div>
       <a href="http://{{ activation_link }}">Activate your account</a>

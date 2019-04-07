@@ -1,4 +1,7 @@
-from django.contrib.auth import forms as auth_forms
+from django.contrib.auth import (
+    forms as auth_forms,
+    password_validation
+)
 from django.forms import (
     CharField,
     ValidationError,
@@ -18,29 +21,67 @@ from courses.models import Course
 
 
 class UserCreateForm(ModelForm):
-   
+    """
+    A form that creates a user, with no privileges, from the given username and
+    password.
+    """
+    error_messages = {
+        'password_mismatch': _("The two password fields didn't match."),
+    }
+
+    password1 = CharField(label=_("Password"),
+        widget=PasswordInput
+    )
+    password2 = CharField(label=_("Confirm Password"),
+        widget=PasswordInput,
+        help_text=_("Enter the same password as above, for verification.")
+    )
+
     class Meta:
         model = BaseUser
-        fields = ("username", "email", "first_name", "last_name",)
+        fields = ("username", "email",)
         field_classes = {'email': EmailField}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self._meta.model.USERNAME_FIELD in self.fields:
-            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update({'autofocus': True})
+            self.fields[self._meta.model.EMAIL_FIELD].widget.attrs.update({'autofocus': True})
+        for field in self.visible_fields():
+            field.field.widget.attrs['class'] = 'form-control'
 
     def clean_email(self):
         whitelist = ['edu']
         email = self.cleaned_data['email']
         top_level_domain = email.rsplit('.').pop()
         if top_level_domain not in whitelist:
-            raise ValidationError("Email must be a valid school email that ends with .edu")
+            raise ValidationError("Please enter a valid school email that ends with .edu")
         return email
 
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+        return password2
+
+    def _post_clean(self):
+        super(UserCreateForm, self)._post_clean()
+        # Validate the password after self.instance is updated with form data
+        # by super().
+        password = self.cleaned_data.get('password2')
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except ValidationError as error:
+                self.add_error('password2', error)
+
     def save(self, commit=True):
-        user = super().save(commit=False)
+        user = super(UserCreateForm, self).save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
         user.is_active = False
-        user.set_unusable_password()
         if commit:
             user.save()
         return user
@@ -162,6 +203,22 @@ class PasswordChangeForm(auth_forms.PasswordChangeForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+
+class PasswordResetForm(auth_forms.PasswordResetForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
+class SetPasswordForm(auth_forms.SetPasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super(SetPasswordForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+    
 
 class AuthenticationForm(auth_forms.AuthenticationForm):
 

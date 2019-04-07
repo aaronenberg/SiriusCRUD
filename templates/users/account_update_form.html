@@ -29,13 +29,13 @@
 
   <div class="form-row justify-content-between">
     <div class="form-group col-12 col-lg-6">
-        <label for="user-first-name" class="bmd-label-static">First Name</label>
-          {{ form.first_name }}
+      <label for="user-first-name" class="bmd-label-static">First Name</label>
+        {{ form.first_name }}
     </div>
 
     <div class="form-group col-12 col-lg-6">
-        <label for="user-last-name" class="bmd-label-static">Last Name</label>
-          {{ form.last_name }}
+      <label for="user-last-name" class="bmd-label-static">Last Name</label>
+        {{ form.last_name }}
     </div>
   </div>
 
@@ -93,15 +93,19 @@
   </div>
   {% if staffprofile_form %}
   <div class="form-row justify-content-end mb-auto">
-    <button id="user-courses-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#add-courses-modal">
+    {% if user.user_type == 'FA' %}
+    <button id="user-courses-button" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>
+    {% endif %}
   </div>
   {% endif %}
   {% endif  %}
   <div class="submit-row">
     <input class="btn btn-raised btn-primary" type="Submit" value="Save">
-    <a class="btn btn-raised btn-info" href="{% url 'users:password_change' %}">Change Password</a>
+    {% if form.instance == user %}
+    <a class="btn btn-raised btn-secondary" href="{% url 'users:password_change' %}">Change Password</a>
+    {% endif %}
   </div>
 </form>
 

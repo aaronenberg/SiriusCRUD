@@ -108,7 +108,7 @@ class OutcomeForm(ModelForm):
             'class': 'form-control',
             'name': 'title',
         })
-        self.fields['title'].label = 'Title*'
+        self.fields['title'].label = 'Title'
         self.fields['description'].widget = Textarea(attrs={
             'id': 'outcome_description',
             'class': 'form-control',

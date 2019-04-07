@@ -80,7 +80,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=255,
         unique=True,
-        verbose_name='School Email',
+        verbose_name='School Email Address',
         error_messages={
             'unique': _("A user with that email already exists."),
         },

@@ -17,13 +17,13 @@
     {% if user.is_authenticated and user.user_type != 'ST' %}
     <div id="outcome_actions">
       <a 
-        class="btn btn-raised btn-secondary" 
+        class="btn btn-raised btn-primary" 
         href="{% url 'outcomes:outcome-create' %}">
         + New Outcome
       </a>
       {% block draft_action %}
       <a 
-        class="btn btn-raised btn-info"
+        class="btn btn-raised btn-secondary"
         href="{% url 'outcomes:draft-list' %}">
         Saved Drafts
       </a>

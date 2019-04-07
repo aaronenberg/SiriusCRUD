@@ -47,7 +47,7 @@
             {{ user.email | lower}}
           </a>
           <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
-          {% else %}
+          {% elif 'login' not in request.path %}
           <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
           {% endif %}
         </div>
