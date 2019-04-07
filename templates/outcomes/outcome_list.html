@@ -32,6 +32,22 @@
     {% endif %}
   {% endblock outcome_actions %}
 
+  <div class="container">
+  <div class="row">
+    <div class="col-sm">
+		Title:
+		<input type="text" id="title" class="search-key" placeholder="Title...">
+    </div>
+	<div class="col-sm">
+		Course:
+		<input type="text" id="course" class="search-key" placeholder="Course...">
+  </div>
+  <div class="col-sm">
+		Author:
+		<input type="text" id="author" class="search-key" placeholder="Author...">
+  </div>
+</div>
+
   {% block outcome-list %}
   <div id="outcome_list" class="list-group">
       {% for outcome in outcomes %}
@@ -47,11 +63,11 @@
               {% endif %}"
            href="{% url 'outcomes:outcome-media-update' outcome.slug %}">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ outcome }}</h5>
+            <h5 data-input="title" class="filter mb-1">{{ outcome }}</h5>
             <small>{% time_since outcome.modified %}</small>
           </div>
-          <p class="mb-1">{{ outcome.course }}</p>
-          <small>{{ outcome.author }}</small>
+          <p data-input="course" class="filter mb-1">{{ outcome.course }}</p>
+          <small data-input="author" class="filter">{{ outcome.author }}</small>
         </a>
       {% endfor %}
   </div>
@@ -60,5 +76,18 @@
 {% endblock %}
 
 {% block custom_js %}
-
+<script>
+var $filterableRows = $('#outcome_list').find("a"),
+		$inputs = $('.search-key');	
+$inputs.on('input', function() {
+	$filterableRows.hide().filter(function() {
+  	return $(this).find('.filter').filter(function() {
+		var tdText = $(this).text().toLowerCase(), 
+			inputValue = $('#' + $(this).data('input')).val().toLowerCase();
+		return tdText.indexOf(inputValue) != -1;
+    
+    }).length == $(this).find('.filter').length;
+  }).show();
+});
+</script>
 {% endblock custom_js %}
