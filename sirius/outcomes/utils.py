@@ -76,7 +76,6 @@ def flatten_formset_file_fields(formset):
     from .models import OutcomeMedia
     media = []
     id_match = re.compile('-([0-9]+)-')
-    import pdb; pdb.set_trace()
     for file_field in formset.files.keys():
         form_id = int(id_match.search(file_field).groups()[0])
         for fp in formset.files.getlist(file_field):

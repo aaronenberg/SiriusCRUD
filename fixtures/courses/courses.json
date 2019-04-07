@@ -78,6 +78,39 @@
 },
 {
     "model": "courses.course",
+    "pk": "BIO180",
+    "fields": {
+        "description": "BIO 180 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is an examination of the structure of genes and genomes, the mechanisms by which they change, and the use of evolutionary relationships to understand function. This includes the mechanisms of the regulation of gene expression from gene to phenotype and the tools used to study these processes. It also includes a study of applications of molecular tools in medicine and biotechnology and the ethics around these approaches.\r\n\r\nThe SIRIUS Module in BIO 180 utilizes soil samples from BIO 128 for analysis of endomycorrhizal fungi, and root samples collected in BIO 160 for analysis of ectomycorrhizal fungi. Students isolate DNA from soil and plant samples taken before, during and after restoration, conduct PCR to amplify 18S ribosomal RNA genes, and subject them to DNA sequence analysis to obtain a profile of the species diversity at each stage of restoration.  Students PCR amplify the 18S ribosomal subunit of the fungi and develop a library, similar to BIO 184, through cloning and transformation of E. coli.",
+        "number": "180",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\"]",
+        "title": "Advanced Molecular Biology"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "BIO184",
+    "fields": {
+        "description": "BIO 184 is required of all native and transfer students at Sac State and emphasizes the principles of inheritance as they relate to microorganisms, plants, and animals, including humans. Genetic mechanisms are analyzed according to evidence derived from both classical and current research. The nature, structure, and function of the genome are considered at the molecular level.\r\n\r\nThe SIRIUS Module in BIO 184 is an important extension of the Bacterial Diversity Thread begun in BIO 2 and completed in the Bacterial Diversity (BIO 145) Module. PCR products produced in BIO 2 are cloned into plasmids and the plasmids analyzed in BIO 184, with the goal of producing a high quality library that can be stored for full analysis at a later time. That library is made available to students in BIO 145 for sequencing and analysis of the species types and relationships.",
+        "number": "184",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\"]",
+        "title": "General Genetics"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "BIO187",
+    "fields": {
+        "description": "BIO 187 is a required course in several concentrations in Biological Sciences and is an elective for the remainder. It is focused on the advanced cellular and molecular biology of eukaryotic cells. It includes a comparison to prokaryotic organism as needed to illustrate key concepts. Emphasis is placed on cellular functions and utilize two or more cellular systems; including cell to cell communication, regulation of gene expression, uptake and secretion, regulation of cytoskeletal configuration, cell migration and cellular reproduction.\r\n\r\nThe SIRIUS Module in BIO 187 is a continuation of the river toxicology studies of BIO 1 and BIO 127. In BIO 187 students analyze the effects of toxins on the survival, death and programmed cell death of mammalian cell cultures. They use a high-throughput analysis that allows rapid determination of dose effects of river-borne toxins identified through review of the scientific literature.",
+        "number": "187",
+        "subject": "BIO",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\"]",
+        "title": "Advanced Cell Biology"
+    }
+},
+{
+    "model": "courses.course",
     "pk": "BIO2",
     "fields": {
         "description": "BIO 2 is the second course in our introductory sequence and is an introduction to molecular and cellular biology and genetics. Topics include the molecules that make up biological organisms, cell structure and function, cellular energetics, molecular flow of information, cell division, and genetic inheritance. The SIRIUS Module in BIO 2 is a cellular and molecular analysis of the impacts of urban run-off on bacterial communities in the soil of the American River ecosystem. The main focus is on soil samples collected from a side channel of the river that receives unfiltered city street run-off. To fully assess the effects of run-off on bacterial abundance and diversity, a site in the main flow downstream of the city outlet and multiple upstream controls are also sampled. Students analyze cell and colony morphology of soil bacteria on agar and prepare DNA samples for further analysis in subsequent SIRIUS courses. BIO 2 also provides an introduction to many skills that will be required in later SIRIUS courses and is the first course in the Bacterial Diversity Thread that runs through the SIRIUS Project. The skills learned in BIO 2 are also directly applicable to the Mycorrhizal Fungi Ecology Thread that runs through Plant Physiology (BIO 128), General Ecology (BIO160) and Advanced Molecular Biology (BIO 180).",
@@ -85,6 +118,17 @@
         "subject": "BIO",
         "sections": "[\"2\", \"3\", \"4\", \"5\"]",
         "title": "Cells, Molecules and Genes"
+    }
+},
+{
+    "model": "courses.course",
+    "pk": "CHEM1A",
+    "fields": {
+        "description": "CHEM 1A is a required course in all concentrations in Biological Sciences, as well as other programs throughout the Sacramento State campus. It reviews the fundamental principles and concepts of chemistry, including stoichiometry; thermochemistry; atomic and molecular structure; solution chemistry, including acid-base chemistry; quantum theory; bonding and intermolecular forces; and chemical kinetics.\r\n\r\nThe SIRIUS Module in CHEM 1A is focused on a new water chemistry lab where students can link the identity, concentrations and nature of ions and compounds in water to measurable quantities such as solubility, pH, and conductivity. Detection of water impurities is also utilized to monitor the rate of aqueous chemical reactions. This will allow students to formulate questions about how man-made changes in river chemistry might impact capacity for carrying dangerous chemicals in the stream.",
+        "number": "1A",
+        "subject": "CHEM",
+        "sections": "[\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\", \"16\", \"17\", \"18\", \"19\", \"20\"]",
+        "title": "General Chemistry"
     }
 },
 {
