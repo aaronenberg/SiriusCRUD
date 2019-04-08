@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  {% if form.user_type and user.user_type == 'FA' %}
+  {% if form.user_type and user.is_privileged %}
   <div class="form-group">
     <label for="user-user-type" class="bmd-label-static">User Type</label>
       {{ form.user_type }}

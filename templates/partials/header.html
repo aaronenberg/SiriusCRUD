@@ -47,8 +47,13 @@
             {{ user.email | lower}}
           </a>
           <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
-          {% elif 'login' not in request.path %}
+          {% else %}
+            {% if 'login' not in request.path %}
           <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
+            {% endif %}
+            {% if 'register' not in request.path %}
+          <a class="nav-item nav-link" href="{% url 'users:register' %}">Create Account</a>
+            {% endif %}
           {% endif %}
         </div>
       </div>

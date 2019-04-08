@@ -147,7 +147,6 @@ class AccountUpdateForm(ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.user_type != 'FA':
             self.fields['user_type'].disabled = True
-            self.fields['user_type'].widget = HiddenInput()
         self.fields['username'].disabled = True
         self.fields['email'].widget = TextInput(attrs={
             'id': 'user-email',

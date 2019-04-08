@@ -24,15 +24,18 @@
   Related Outcomes
   <ul>
     {% for outcome in outcomes %}
-    <div>
+    <li>
       <a href="{{ outcome.get_absolute_url }}">
         {{ outcome.title }}
       </a>
-    </div>
+    </li>
     {% endfor %}
   </ul>
+</div>
 <div class="submit-row">
+  {% if user.is_privileged %}
   <a class="btn btn-raised btn-primary" href="{% url 'outcomes:outcome-create' %}">Create Outcome</a>
+  {% endif %}
   {% if user.user_type == 'FA' %}
   <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-update' course.slug %}">Edit</a>
   {% endif %}
