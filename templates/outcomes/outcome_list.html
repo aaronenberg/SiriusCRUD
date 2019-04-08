@@ -33,20 +33,58 @@
   {% endblock outcome_actions %}
 
   <div class="container">
-  <div class="row">
-    <div class="col-sm">
-		Title:
-		<input type="text" id="title" class="search-key" placeholder="Title...">
-    </div>
-	<div class="col-sm">
-		Course:
-		<input type="text" id="course" class="search-key" placeholder="Course...">
-  </div>
-  <div class="col-sm">
-		Author:
-		<input type="text" id="author" class="search-key" placeholder="Author...">
-  </div>
+	<div class="form-group row">
+		<div class="col">
+			<label for="title"> Title: </label>
+			<input type="text" id="title" class="search-key border border-primary" placeholder="Title...">
+		</div>
+		<div class="col">
+			<label for="author"> Author: </label>
+			<input type="text" id="author" class="search-key border border-primary" placeholder="Author...">
+		</div>
+		<div class="col">
+			<label for="course"> Course: </label>
+			<input type="text" id="course" class="search-key border border-primary" placeholder="Course...">
+		</div>
+
+	</div>
+	<div class="form-group row">
+		<div class="col">
+			<label for "descirption"> Description: </label>
+			<input type="text" id="description" class="search-key border border-primary" placeholder="Description...">
+		</div>
+		<div class="col">
+			<label for "semester"> Semester: </label>
+			<select id="semester" class="search-key border border-primary" style="width: 150px;">
+				<option value="" selected></option>
+				<option value="Fall">Fall</option>
+				<option value="Winter">Winter</option>
+				<option value="Spring">Spring</option>
+				<option value="Summer">Summer</option>
+			</select>
+		</div>
+		<div class="col">
+			<label for "year"> Year: <label>
+			<select id="year" class="search-key border border-primary" style="width: 150px; height: 30px;">
+				<option value="" selected></option>
+				<option value="2019">2019</option>
+				<option value="2018">2018</option>
+				<option value="2017">2017</option>
+				<option value="2016">2016</option>
+				<option value="2015">2015</option>
+				<option value="2014">2014</option>
+				<option value="2013">2013</option>
+				<option value="2012">2012</option>
+				<option value="2011">2011</option>
+				<option value="2010">2010</option>
+				<option value="2009">2009</option>
+				<option value="2008">2008</option>
+				<option value="2007">2007</option>
+			</select>
+	</div>
 </div>
+
+ 
 
   {% block outcome-list %}
   <div id="outcome_list" class="list-group">
@@ -68,6 +106,9 @@
           </div>
           <p data-input="course" class="filter mb-1">{{ outcome.course }}</p>
           <small data-input="author" class="filter">{{ outcome.author }}</small>
+		  <small hidden data-input="description" class="filter">{{ outcome.description }}</small>
+		  <small hidden data-input="semester" class="filter">{{ outcome.get_semester_display }}</small>
+		  <small hidden data-input="year" class="filter">{{ outcome.year }}</small>
         </a>
       {% endfor %}
   </div>
