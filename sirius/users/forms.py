@@ -89,7 +89,7 @@ class UserCreateForm(ModelForm):
 
 class AccountUpdateFormPrivileged(ModelForm):
    
-    user_type = ChoiceField(choices=USER_TYPE_CHOICES,
+    user_role = ChoiceField(choices=USER_TYPE_CHOICES,
         widget = Select(attrs={
             'id': 'user-user-type',
             'class': 'form-control custom-select select-fix-height',
@@ -98,7 +98,7 @@ class AccountUpdateFormPrivileged(ModelForm):
     )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type", "username")
+        fields = ("email", "first_name", "last_name", "user_role", "username")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -131,7 +131,7 @@ class AccountUpdateFormPrivileged(ModelForm):
 
 class AccountUpdateForm(ModelForm):
    
-    user_type = ChoiceField(choices=USER_TYPE_CHOICES,
+    user_role = ChoiceField(choices=USER_TYPE_CHOICES,
         widget = Select(attrs={
             'id': 'user-user-type',
             'class': 'form-control custom-select select-fix-height',
@@ -140,13 +140,13 @@ class AccountUpdateForm(ModelForm):
     )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_type", "username",)
+        fields = ("email", "first_name", "last_name", "user_role", "username",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
-        if instance and instance.user_type != 'FA':
-            self.fields['user_type'].disabled = True
+        if instance and instance.user_role != 'FA':
+            self.fields['user_role'].disabled = True
         self.fields['username'].disabled = True
         self.fields['email'].widget = TextInput(attrs={
             'id': 'user-email',

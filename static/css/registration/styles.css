@@ -42,13 +42,28 @@
     justify-content: center;
 }
 
+@media (max-width: 768px) {
+    #user_registration_form,
+    #set_password_form,
+    #password_reset_form,
+    #password_change_form {
+        width:100%;
+    }
+}
+@media (min-width: 768px) {
+    #user_registration_form,
+    #set_password_form,
+    #password_reset_form,
+    #password_change_form {
+        width:75%;
+    }
+}
 #user_registration_form,
 #set_password_form,
 #password_reset_form,
 #password_change_form {
     display:flex;
     flex-direction:column;
-    width:75%;
     border: 0.3rem solid #0f5e7f;
     align-self: center;
 }

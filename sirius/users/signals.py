@@ -4,7 +4,7 @@ from .models import StaffProfile, BaseUser, TEACHING_ASSISTANT, FACULTY, STUDENT
 
 @receiver(post_save, sender=BaseUser)
 def manage_staff_profile(sender, instance, **kwargs):
-    if instance.user_type in [TEACHING_ASSISTANT, FACULTY]:
+    if instance.user_role in [TEACHING_ASSISTANT, FACULTY]:
         try:
             instance.staffprofile.save()
         except StaffProfile.DoesNotExist:
@@ -17,6 +17,6 @@ def manage_staff_profile(sender, instance, **kwargs):
 
 
 def delete_staff_profile(instance):
-    if instance.staffprofile and instance.user_type == STUDENT:
+    if instance.staffprofile and instance.user_role == STUDENT:
         instance.staffprofile.delete()
      

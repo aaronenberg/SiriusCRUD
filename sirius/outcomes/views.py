@@ -195,7 +195,7 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
     model = Outcome
 
     def test_func(self):
-        return self.request.user == self.get_object().author or self.request.user.user_type == FACULTY
+        return self.request.user == self.get_object().author or self.request.user.user_role == FACULTY
 
     def get_queryset(self):
         return Outcome.objects.filter(author=self.request.user)
@@ -284,21 +284,6 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
         return Outcome.objects.annotate(search=SearchVector('description', 'title')).filter(search=query, is_public=True)
-
-
-class SearchPageView(TemplateView):
-	# Code that the html file was based on:
-	# https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_filters_table
-	# http://api.jquery.com/toggle/ uses the toggle function to hide
-	# the matched search keys
-	template_name = 'outcomes/outcome_search.html'
-
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context['outcomes'] = Outcome.objects.exclude(Q(is_public=False)).order_by('-created')
-		context['subjects'] = Course.objects.order_by('subject').distinct('subject')
-		context['courses'] = Course.objects.all()
-		return context
 
 
 def get_course_sections(request):

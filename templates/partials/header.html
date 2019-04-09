@@ -29,16 +29,12 @@
              href="{% url 'courses:course-list' %}">
             Courses
           </a>
-          {% if user.user_type == 'FA' %}
+          {% if user.user_role == 'FA' %}
           <a class="nav-item nav-link {% if 'user' in request.path %}active{% endif %}" 
              href="{% url 'users:user-list' %}">
             Users
           </a>
           {% endif %}
-          <a class="nav-item nav-link {% if 'search' in request.path %}active{% endif %}"
-             href="{% url 'outcomes:search' %}">
-            Search
-          </a>
         </div>
         <div id="nav-right" class="navbar-nav">
           {% if user.is_authenticated %}

@@ -37,20 +37,20 @@ class UserManager(BaseUserManager):
     def create_user(self, username, email,  password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        extra_fields.setdefault('user_type', STUDENT)
+        extra_fields.setdefault('user_role', STUDENT)
         return self._create_user(username, email, password, **extra_fields)
 
     def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('user_type', FACULTY)
+        extra_fields.setdefault('user_role', FACULTY)
         extra_fields.setdefault('first_name', 'superuser')
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        if extra_fields.get('user_type') is not FACULTY:
+        if extra_fields.get('user_role') is not FACULTY:
             raise ValueError('Superuser must have user type="FA"')
         return self._create_user(username, email, password, **extra_fields)
 
@@ -85,11 +85,11 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that email already exists."),
         },
     )
-    user_type = models.CharField(
+    user_role = models.CharField(
         max_length=2,
         default=STUDENT,
         choices=USER_TYPE_CHOICES,
-        verbose_name='User Type'
+        verbose_name='User Role'
     )
     first_name = models.CharField(
         max_length=30,
@@ -141,7 +141,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_privileged(self):
-        return self.is_staff or self.user_type in [TEACHING_ASSISTANT, FACULTY]
+        return self.is_staff or self.user_role in [TEACHING_ASSISTANT, FACULTY]
 
     class Meta:
         verbose_name_plural = "Users"

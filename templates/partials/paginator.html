@@ -1,31 +1,43 @@
-        <nav id="id_paginator" aria-label="outcomes list pages">
-          <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-              <a class="btn page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                <span aria-hidden="true">Previous</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
-            {% else %}
-            <li class="btn page-item disabled"><span>Previous</span></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-              {% if page_obj.number == i %}
-            <li class="btn page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-              {% else %}
-            <li class="page-item"><a class="btn" href="?page={{ i }}">{{ i }}</a></li>
-              {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-            <li class="page-item">
-              <a class="btn  btn-default page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                <span aria-hidden="true">Next</span>
-                <span class="sr-only">Next</span>
-              </a>
-            </li>
-            {% else %}
-            <li class="btn page-item disabled"><span>Next</span></li>
-            {% endif %}
-          </ul>
-        </nav>
+<nav id="id_paginator" aria-label="outcomes list pages">
+  <table class="pagination justify-content-center">
+    <thead>
+      <tr>
+
+        {% if page_obj.has_previous %}
+        <th class="page-item">
+          <a class="btn page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+            <span class="sr-only">Previous</span>
+          </a>
+        </th>
+        {% else %}
+        <th class="btn page-item disabled">
+          <i class="fas fa-chevron-left"></i>
+        </th>
+        {% endif %}
+
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+        <th class="btn page-item active"><span>{{ i }}<span class="sr-only">(current)</span></span></th>
+          {% else %}
+        <th class="page-item"><a class="btn" href="?page={{ i }}">{{ i }}</a></th>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <th class="page-item">
+          <a class="btn page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+            <span class="sr-only">Next</span>
+          </a>
+        </th>
+        {% else %}
+        <th class="btn page-item disabled">
+          <i class="fas fa-chevron-right"></i>
+        </th>
+        {% endif %}
+
+      </tr>
+    </thead>
+  </table>
+</nav>

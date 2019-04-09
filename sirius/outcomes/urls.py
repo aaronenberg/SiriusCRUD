@@ -23,7 +23,6 @@ urlpatterns = [
     ),
     path('outcomes/create/new/', views.OutcomeCreateView.as_view(), name='outcome-create'),
     path('drafts/', views.DraftListView.as_view(), name='draft-list'),
-    path('search/', views.SearchPageView.as_view(), name='search'),
     path('search/results/', views.SearchResultsView.as_view(), name='search-results'),
     path('drafts/<slug:slug>/', views.DraftDetailView.as_view(), name='draft-detail'),
     path('drafts/<slug:slug>/edit/', views.DraftUpdateView.as_view(), name='draft-update'),

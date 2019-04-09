@@ -81,3 +81,64 @@ a.unsaved-course.list-group-item-action {
     border-style:dotted;
 }
 
+#users_table {
+    border: 2px solid whitesmoke;
+    border-radius: 1rem;
+    width: 100%;
+    table-layout: fixed;
+}
+#users_table td {
+    padding: 0.8rem;
+}
+#users_table thead tr {
+    background-color: whitesmoke;
+}
+#users_table thead th {
+    text-align: center;
+    padding: 1rem;
+}
+#users_table thead th:nth-child(1) {
+    width: 25%;
+}
+#users_table thead th:nth-child(2) {
+    width: 25%;
+}
+#users_table thead th:nth-child(3) {
+    width: 25%;
+}
+#users_table thead th:nth-child(4) {
+    width: 25%;
+}
+#users table tbody tr:nth-child(odd) {
+    background-color: white;
+}
+
+tbody tr:nth-child(even) {
+    background-color: whitesmoke;
+}
+tbody td {
+    text-align: center;
+    cursor: pointer;
+}
+tbody tr:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+    transition:background-color 0.1s;
+}
+tbody td a {
+    color: unset;
+}
+#user_search_form .bmd-form-group {
+    padding-top: 0;
+    height:fit-content;
+}
+#user_search_form {
+    display:flex;
+    border-radius: 0;
+    background-color:lightgrey;
+}
+#user_search_form .form-group {
+    margin-bottom: 0;
+}
+#user_search_form .btn {
+    margin-bottom: 0;
+}

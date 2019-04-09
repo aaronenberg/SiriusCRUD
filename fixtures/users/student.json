@@ -1,15 +1,159 @@
 [
 {
     "model": "users.baseuser",
-    "pk": "student",
+    "pk": "terrygross",
     "fields": {
         "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
         "last_login": "2019-03-27T18:03:28.423Z",
         "is_superuser": false,
-        "email": "siriusstudent@csus.edu",
-        "user_type": "ST",
-        "first_name": "student",
-        "last_name": "",
+        "email": "terrygross@csus.edu",
+        "user_role": "TA",
+        "first_name": "Terry",
+        "last_name": "Gross",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "bobmiller",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "bobmiller@csus.edu",
+        "user_role": "ST",
+        "first_name": "Bob",
+        "last_name": "Miller",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "gabrieljaquez",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "gabrieljaquez@csus.edu",
+        "user_role": "ST",
+        "first_name": "Gabriel",
+        "last_name": "Jaquez",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "joesuliven",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "joesuliven@csus.edu",
+        "user_role": "ST",
+        "first_name": "Joe",
+        "last_name": "Suliven",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "tracelopez",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "tracelopez@csus.edu",
+        "user_role": "ST",
+        "first_name": "Trace",
+        "last_name": "Lopez",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "courtneydietz",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "courtneydietz@csus.edu",
+        "user_role": "ST",
+        "first_name": "Courtney",
+        "last_name": "Dietz",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "alicesmith",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "alicesmith@csus.edu",
+        "user_role": "ST",
+        "first_name": "Alice",
+        "last_name": "Smith",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "johndoe",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "johndoe@csus.edu",
+        "user_role": "ST",
+        "first_name": "John",
+        "last_name": "Doe",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2019-03-27T18:01:56.259Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.baseuser",
+    "pk": "jesseball",
+    "fields": {
+        "password": "pbkdf2_sha256$120000$ZS8HHtOKGHPE$yS4xhzCYVzreXfEKltQeny+VeoEdSseGdvz0wdwednI=",
+        "last_login": "2019-03-27T18:03:28.423Z",
+        "is_superuser": false,
+        "email": "jesseball@csus.edu",
+        "user_role": "ST",
+        "first_name": "Jesse",
+        "last_name": "Ball",
         "is_active": true,
         "is_staff": false,
         "date_joined": "2019-03-27T18:01:56.259Z",

@@ -36,7 +36,7 @@
   {% if user.is_privileged %}
   <a class="btn btn-raised btn-primary" href="{% url 'outcomes:outcome-create' %}">Create Outcome</a>
   {% endif %}
-  {% if user.user_type == 'FA' %}
+  {% if user.user_role == 'FA' %}
   <a class="btn btn-raised btn-secondary" href="{% url 'courses:course-update' course.slug %}">Edit</a>
   {% endif %}
 </div>

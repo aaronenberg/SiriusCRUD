@@ -11,7 +11,10 @@
 
 {% block content-main %}
 
-<form id="user-form" method="post" action="" novalidate>
+<form id="user-form"
+      class="{% if not user.is_privileged %}student-form{% endif %}"
+      method="post" 
+      novalidate>
   {% csrf_token %}
 
   <div class="form-row justify-content-between">
@@ -39,10 +42,10 @@
     </div>
   </div>
 
-  {% if form.user_type and user.is_privileged %}
+  {% if form.user_role and user.is_privileged %}
   <div class="form-group">
-    <label for="user-user-type" class="bmd-label-static">User Type</label>
-      {{ form.user_type }}
+    <label for="user-user-type" class="bmd-label-static">User Role</label>
+      {{ form.user_role }}
   </div>
   {% endif  %}
 
@@ -93,7 +96,7 @@
   </div>
   {% if staffprofile_form %}
   <div class="form-row justify-content-end mb-auto">
-    {% if user.user_type == 'FA' %}
+    {% if user.user_role == 'FA' %}
     <button id="user-courses-button" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>
@@ -101,7 +104,7 @@
   </div>
   {% endif %}
   {% endif  %}
-  <div class="submit-row">
+  <div class="submit-row mt-auto">
     <input class="btn btn-raised btn-primary" type="Submit" value="Save">
     {% if form.instance == user %}
     <a class="btn btn-raised btn-secondary" href="{% url 'users:password_change' %}">Change Password</a>

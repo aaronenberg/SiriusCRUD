@@ -7,7 +7,7 @@
         "last_login": null,
         "is_superuser": true,
         "email": "siriusadmin@csus.edu",
-        "user_type": "FA",
+        "user_role": "FA",
         "first_name": "superuser",
         "last_name": "",
         "is_active": true,

@@ -35,6 +35,9 @@ body, html {
     .submit-row {
         margin-top: 1rem;
     }
+    #footer {
+        height:10vh;
+    }
 }
 #left {
     grid-area: left;
@@ -55,6 +58,13 @@ body, html {
             "left main right"
             "left footer right";
     }
+
+    #main {
+        padding: 2rem;
+    }
+    div.alert {
+        position: absolute;
+    }
 }
 
 .navbar-submit {
@@ -74,10 +84,10 @@ li {
     list-style: none;
 }
 
+
 div.alert {
     margin-top:0.5rem;
     top: 0;
-    position:absolute;
     border-radius: 2rem;
     text-align:center;
     width: fit-content;
@@ -94,15 +104,33 @@ ul.errorlist {
 }
 
 #id_paginator {
-    bottom: 0;
     display:flex;
     align-self: center;
-    position:absolute;
-    margin: auto;
-
+    margin-top: auto;
+}
+#id_paginator table {
+    table-layout:fixed;
+    border-collapse:separate;
+}
+#id_paginator .btn {
+    display:table-cell;
+    color: grey;
+}
+#id_paginator .btn.active {
+    color: black;
+    background-color: transparent;
+}
+#id_paginator .btn:hover {
+    background-color: transparent;
+}
+#id_paginator table th:first-child {
+    width:20%
+}
+#id_paginator table th:last-child {
+    width:20%
 }
 
-.navbar-light .navbar-toggler {
+.navbar-toggler {
     border: none;
 }
 
@@ -134,12 +162,6 @@ li.page-item > a.btn {
 
 ul.pagination {
     margin-bottom: 0;
-}
-
-@media (max-width: 640px) {
-    #id_paginator {
-        display:none
-    }
 }
 
 .btn.btn-raised.btn-secondary,
@@ -245,9 +267,8 @@ select.form-control {
 form {
     background-color: whitesmoke;
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 5px;
     margin-bottom: 0;
-    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -270,8 +291,11 @@ form {
 #search_input:focus {
     box-shadow: none;
 }
+#search_input:focus::placeholder
+{ color:transparent; }
 
-#search_input::placeholder,
+input::placeholder { color:lightgrey; }
+
 #search_input {
     color: white;
 }
@@ -387,13 +411,17 @@ label.bmd-label-static {
     grid-area: header;
 }
 #main {
-    padding: 2rem;
     grid-area: main;
     position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid #d6d9dc;
     border-radius: 3px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    min-height:70vh;
 }
 #footer {
     grid-area: footer;

@@ -16,8 +16,8 @@
     {% endfor %}
 {% endif %}
 <form 
-  id="outcome-media-form" 
-  class="custom-validation"
+  id="outcome_media_form" 
+  class="custom-validation mt-auto"
   method="post"
   enctype="multipart/form-data"
   novalidate>
@@ -36,7 +36,7 @@
               Select a file
             </div>
           </div>
-          <div class="input-group row col-11 col-md-5">
+          <div class="input-group row col-11 col-md-10 col-lg-9 col-xl-7">
             <button class="btn btn-success add-media-upload">+</button>
             {{ upload_form.outcome_type }}
             <div class="invalid-feedback">
@@ -54,7 +54,7 @@
       <input type="Submit" class="btn btn-raised btn-primary" value="Submit">
     </div>
     {% block back_navigate %}
-    <a class="btn" href="{% url 'outcomes:outcome-list' %}">Cancel</a>
+    <a class="btn" href="{% url 'outcomes:outcome-media-update' outcome.slug %}">Clear</a>
     {% endblock back_navigate %}
   </div>
 </form>

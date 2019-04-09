@@ -79,7 +79,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = CourseForm
     
     def test_func(self):
-        return self.request.user.user_type == FACULTY
+        return self.request.user.user_role == FACULTY
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

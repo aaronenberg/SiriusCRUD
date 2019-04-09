@@ -9,6 +9,7 @@ from django.contrib.auth import (
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.contrib.postgres.search import SearchVector
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
@@ -140,7 +141,7 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'users/account_update_form.html'
 
     def test_func(self):
-        return self.request.user.user_type == FACULTY
+        return self.request.user.user_role == FACULTY
 
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
@@ -193,9 +194,20 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = 'users'
     queryset = BaseUser.objects.filter(is_active=True)
     template_name = 'users/user_list.html'
+    paginate_by = 10
 
     def test_func(self):
-        return self.request.user.user_type == 'FA'
+        return self.request.user.user_role == 'FA'
+
+
+class UserSearchResultsView(ListView):
+    model = BaseUser
+    context_object_name = 'users'
+    template_name = 'users/search_results_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('user_query')
+        return BaseUser.objects.annotate(search=SearchVector('username', 'first_name', 'last_name')).filter(search=query)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
