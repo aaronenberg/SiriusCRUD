@@ -22,6 +22,10 @@
     margin-top:1rem;
 }
 
+#login-form .form-row:last-child {
+    text-decoration: underline;
+}
+
 #login-form .form-row {
     display: flex;
     justify-content: flex-end;
@@ -82,3 +86,4 @@ div.alert {
     width: 75%;
     border-radius: 0.5rem;
 }
+

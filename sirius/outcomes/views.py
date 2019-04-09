@@ -37,6 +37,11 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user.is_privileged
 
+    def get_form_kwargs(self):
+        kwargs = super(OutcomeCreateView, self).get_form_kwargs()
+        kwargs['user_staffprofile'] = self.request.user.staffprofile
+        return kwargs
+
     def get(self, request, *args, **kwargs):
         self.object = None
         referer_page = self.request.META.get('HTTP_REFERER')

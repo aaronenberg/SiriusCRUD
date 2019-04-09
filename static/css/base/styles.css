@@ -477,4 +477,6 @@ body::-webkit-scrollbar-track {
 ::-webkit-scrollbar-thumb:hover {
     background-color: slategrey;
 }
-
+.fa-plus-circle {
+    margin-right: 0.5em;
+}

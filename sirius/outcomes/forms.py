@@ -79,7 +79,7 @@ class OutcomeForm(ModelForm):
         }),
         required=False,
     )
-    course = ModelChoiceField(queryset=Course.objects.all(),
+    course = ModelChoiceField(queryset=None,
         widget = Select(attrs={
             'id': 'outcome_course',
             'class': 'form-control select-fix-height',
@@ -101,7 +101,10 @@ class OutcomeForm(ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
+        user_staffprofile = kwargs.pop('user_staffprofile')
         super(OutcomeForm, self).__init__(*args, **kwargs)
+ 
+        self.fields['course'].queryset = user_staffprofile.courses.all()
 
         self.fields['title'].widget = TextInput(attrs={
             'id': 'outcome_title',

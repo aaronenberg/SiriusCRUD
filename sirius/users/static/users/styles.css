@@ -48,7 +48,7 @@ select:-internal-list-box option:checked {
     border-radius: 1rem;
     border-color: rgba(0,0,0, .4);
     border-style: solid;
-    border-width: .095rem;
+    border-width: 0.1rem;
     transition: background-color 0.1s ease;
     color:white;
 }

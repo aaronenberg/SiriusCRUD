@@ -71,7 +71,6 @@
     <script>
       window.Popper || document.write('<script src="{% static 'js/popper.min.js' %}">\x3C/script>')
     </script>
-
     <script 
         src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
         integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
@@ -80,12 +79,8 @@
     <script>
       $('body').bootstrapMaterialDesign || document.write('<script src="{% static 'js/bootstrap-material-design.min.js' %}">\x3C/script>')
     </script>
-
     <script
-      src="https://terrylinooo.github.io/jquery.disableAutoFill/assets/js/jquery.disableAutoFill.min.js">
-    </script>
-    <script>
-      jQuery.fn.disableAutoFill || document.write('<script src="{% static 'js/jquery.disableAutoFill.min.js' %}">\x3C/script>')
+        src="{% static 'js/jquery.disableAutoFill.min.js'%}">
     </script>
 
     <script>
