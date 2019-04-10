@@ -71,11 +71,6 @@
     border: 0.3rem solid #0f5e7f;
     align-self: center;
 }
-#reset_password_header,
-#reset_password_confirm_header {
-    position: absolute;
-    top: 2rem;
-}
 
 div.alert li {
     list-style:disc;

@@ -1,11 +1,9 @@
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
@@ -91,6 +89,11 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Outcome
     form_class = OutcomeForm
     template_name_suffix = '_update_form'
+
+    def get_form_kwargs(self):
+        kwargs = super(OutcomeUpdateView, self).get_form_kwargs()
+        kwargs['user_staffprofile'] = self.request.user.staffprofile
+        return kwargs
     
     def get_queryset(self):
         return Outcome.objects.exclude(Q(is_public=False))
@@ -181,7 +184,6 @@ class OutcomeMediaUpdateView(UpdateView):
         return self.form_valid(form)
 
     def form_valid(self, form):
-        import pdb; pdb.set_trace()
         outcomemedia = flatten_formset_file_fields(form)
         for media in outcomemedia:
             media.author = self.request.user

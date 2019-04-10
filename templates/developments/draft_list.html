@@ -1,0 +1,23 @@
+{% extends "developments/development_list.html" %}
+{% load development_tags %}
+
+{% block title %}
+  Saved Drafts | SIRIUS
+{% endblock title %}
+
+{% block development-list %}
+<div id="development_list" class="list-group">
+{% for development in developments %}
+  <a class="list-group-item list-group-item-action flex-column align-items-start"
+     href="{% url 'developments:draft-detail' development.slug %}">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ development }}</h5>
+      <small>{% time_since development.modified %}</small>
+    </div>
+    <small>{{ development.author }}</small>
+  </a>
+{% endfor %}
+</div>
+{% endblock development-list %}
+
+{%block draft_action %}{%endblock%}

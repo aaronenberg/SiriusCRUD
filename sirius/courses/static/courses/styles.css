@@ -24,3 +24,12 @@
     width: 100%;
     padding-bottom:1rem;
 }
+
+.list-group-item-action:first-child,
+.list-group-item-action:last-child,
+.list-group-item-action,
+.list-group-item-action.active:first-child,
+.list-group-item-action.active:last-child,
+.list-group-item-action.active {
+    min-height: 11vh;
+}

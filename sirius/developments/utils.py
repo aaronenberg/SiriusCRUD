@@ -6,7 +6,6 @@ from django.core.validators import MaxValueValidator
 from django.core.files.uploadedfile import UploadedFile
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
-from courses.models import Course
 
 
 def time_since(time):
@@ -83,31 +82,17 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-def get_course_from_url(url):
-    course_slug_pattern = re.compile('[A-Z]{2,4}\d{1,3}[A-Z]?')
-    match = course_slug_pattern.search(url) 
-    if match:
-        slug = match.group()
-        try:
-            path = reverse('courses:course-detail', kwargs={'slug': slug})
-        except NoReverseMatch:
-            return None
-        return Course.objects.get(slug=slug)
-    else:
-        return None
-
-
 def flatten_formset_file_fields(formset):
-    from .models import OutcomeMedia
+    from .models import DevelopmentMedia
     media = []
     id_match = re.compile('-([0-9]+)-')
     for file_field in formset.files.keys():
         form_id = int(id_match.search(file_field).groups()[0])
         for fp in formset.files.getlist(file_field):
             if isinstance(fp, UploadedFile):
-                outcome_type = formset.forms[form_id].cleaned_data['outcome_type']
-                outcome = formset.forms[form_id].cleaned_data['outcome']
-                media.append(OutcomeMedia(media=fp, outcome_type=outcome_type, outcome=outcome))
+                development_type = formset.forms[form_id].cleaned_data['development_type']
+                development = formset.forms[form_id].cleaned_data['development']
+                media.append(DevelopmentMedia(media=fp, development_type=development_type, development=development))
     return media
 
 
@@ -122,15 +107,15 @@ def update_files_formset(formset):
     for file_field in uploaded_file_fields:
         form_id = int(id_match.search(file_field).groups()[0])
         form = formset.forms[form_id]
-        outcomemedia = form.cleaned_data['id']
-        if outcomemedia:
+        developmentmedia = form.cleaned_data['id']
+        if developmentmedia:
             try:
                 files = formset.files.getlist(file_field)
                 media = files.pop()
                 formset.files.setlist(file_field, files)
                 if isinstance(media, UploadedFile):
-                    outcomemedia = form.save(commit=False)
-                    outcomemedia.media.save(media.name, media)
+                    developmentmedia = form.save(commit=False)
+                    developmentmedia.media.save(media.name, media)
             except KeyError:
                 continue
 

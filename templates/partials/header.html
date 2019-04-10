@@ -19,11 +19,18 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div id="nav-left" class="navbar-nav">
           <a class="nav-item nav-link
-                    {% if 'outcomes' in request.path or 'drafts' in request.path %}
+                    {% if 'outcomes' in request.path or 'drafts' in request.path and 'developments' not in request.path %}
                     active
                     {% endif %}"
              href="{% url 'outcomes:outcome-list' %}">
             Outcomes
+          </a>
+          <a class="nav-item nav-link
+                    {% if 'developments' in request.path %}
+                    active
+                    {% endif %}"
+             href="{% url 'developments:development-list' %}">
+            Faculty Developments
           </a>
           <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
              href="{% url 'courses:course-list' %}">

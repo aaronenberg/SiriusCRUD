@@ -28,6 +28,7 @@ urlpatterns = [
         name="favicon"),
     path('', include('users.urls', namespace='users')),
     path('', include('outcomes.urls', namespace='outcomes')),
+    path('', include('developments.urls', namespace='developments')),
     path('courses/', include('courses.urls', namespace='courses')),
 # static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

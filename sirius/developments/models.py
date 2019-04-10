@@ -8,7 +8,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from .utils import max_value_current_year, current_year, current_semester
+from .utils import max_value_current_year, current_semester, current_year
 
 
 FALL = 'FA'
@@ -23,14 +23,15 @@ SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
 ]
 
 
-class Outcome(models.Model):
+class Development(models.Model):
 
     author = models.ForeignKey(
         'users.BaseUser',
         on_delete=models.CASCADE,
-        related_name='outcomes',
+        related_name='developments',
         verbose_name=_('author')
     )
+
     title = models.CharField(_('title'), max_length=255, blank=False)
 
     description = models.TextField(
@@ -41,16 +42,6 @@ class Outcome(models.Model):
     )
 
     slug = models.SlugField(unique=True, editable=False)
-
-    course = models.ForeignKey(
-        'courses.Course',
-        on_delete=models.SET_NULL,
-        related_name='outcomes',
-        verbose_name=_('course'),
-        blank=True,
-        null=True
-    )
-    section = models.PositiveSmallIntegerField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -65,6 +56,7 @@ class Outcome(models.Model):
         default=FALL,
         blank=True
     )
+
     year = models.PositiveSmallIntegerField(
         _('year'),
         validators=[MinValueValidator(2000), max_value_current_year],
@@ -72,31 +64,31 @@ class Outcome(models.Model):
         null=True
     )
 
-    def get_absolute_url(self, outcome=None):
-        if outcome:
-            if not isinstance(outcome, Outcome):
-                raise ValueError("{} is not of type {}".format(type(outcome), Outcome))
-            if outcome.is_public:
-                return reverse('outcomes:outcome-media-update', kwargs={'slug': outcome.slug})
-            return reverse('outcomes:draft-detail', kwargs={'slug': outcome.slug})
+    def get_absolute_url(self, development=None):
+        if development:
+            if not isinstance(development, Development):
+                raise ValueError("{} is not of type {}".format(type(development), Development))
+            if development.is_public:
+                return reverse('developments:development-detail', kwargs={'slug': development.slug})
+            return reverse('developments:draft-detail', kwargs={'slug': development.slug})
         elif self.is_public:
-            return reverse('outcomes:outcome-media-update', kwargs={'slug': self.slug})
-        return reverse('outcomes:draft-detail', kwargs={'slug': self.slug})
+            return reverse('developments:development-detail', kwargs={'slug': self.slug})
+        return reverse('developments:draft-detail', kwargs={'slug': self.slug})
 
     def generate_slug(self):
         max_length = self._meta.get_field('slug').max_length
         slug = slugify(self.title)[:max_length]
-        if not Outcome.objects.filter(slug=slug).exists():
+        if not Development.objects.filter(slug=slug).exists():
             return slug
         for i in itertools.count(1):
             slug_truncated = slug[:max_length - len(str(i)) - 1]
-            if not Outcome.objects.filter(slug="{}-{}".format(slug_truncated, i)).exists():
+            if not Development.objects.filter(slug="{}-{}".format(slug_truncated, i)).exists():
                 return "{}-{}".format(slug_truncated, i)
         return
 
     def save(self, *args, **kwargs):
         self.slug = self.generate_slug()
-        super(Outcome, self).save(*args, **kwargs)
+        super(Development, self).save(*args, **kwargs)
 
     def __str__(self):
         if len(self.title) >= 75:
@@ -104,14 +96,14 @@ class Outcome(models.Model):
         return self.title
 
 
-class OutcomeMedia(models.Model):
+class DevelopmentMedia(models.Model):
 
     ANALYZED_DATA = 'AD'
     POSTER = 'PO'
     RAW_DATA = 'RD'
     REPORT = 'RE'
     OTHER = 'OT'
-    OUTCOME_TYPES = BLANK_CHOICE_DASH + [
+    DEVELOPMENT_TYPES = BLANK_CHOICE_DASH + [
         (ANALYZED_DATA, 'Analyzed Data'),
         (POSTER, 'Poster'),
         (RAW_DATA, 'Raw Data'),
@@ -119,7 +111,7 @@ class OutcomeMedia(models.Model):
         (OTHER, 'Other'),
     ]
 
-    outcome = models.ForeignKey('Outcome', on_delete=models.CASCADE, related_name='media')
+    development = models.ForeignKey('Development', on_delete=models.CASCADE, related_name='development_media')
 
     # insert uuid to prevent renaming file when a file with same name already exists
     def upload_to(instance, filename):
@@ -128,27 +120,27 @@ class OutcomeMedia(models.Model):
 
     media = models.FileField(_('file upload'), upload_to=upload_to)
 
-    outcome_type = models.CharField(
-        _('outcome type'),
+    development_type = models.CharField(
+        _('development type'),
         max_length=2,
-        choices=OUTCOME_TYPES,
+        choices=DEVELOPMENT_TYPES,
         default="",
         blank=True,
         help_text=_("Select the file type")
     )
+
     author = models.ForeignKey(
         'users.BaseUser',
         on_delete=models.CASCADE,
-        related_name='uploads',
+        related_name='development_uploads',
         verbose_name=_('author')
     )
+
     created = models.DateTimeField(auto_now_add=True)
 
     modified = models.DateTimeField(auto_now=True)
 
     is_public = models.BooleanField(default=False)
-
-    section = models.PositiveSmallIntegerField(blank=True, null=True)
 
     semester = models.CharField(
         _('semester'),
@@ -172,5 +164,5 @@ class OutcomeMedia(models.Model):
     def save(self, *args, **kwargs):
         self.year = current_year()
         self.semester = current_semester()
-        super(OutcomeMedia, self).save(*args, **kwargs)
+        super(DevelopmentMedia, self).save(*args, **kwargs)
 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static development_tags %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'developments/styles.css' %}">
+{% endblock custom_css %}
+
+{% block title %}
+  Developments | SIRIUS
+{% endblock title %}
+
+{% block content-main %}
+
+  {% block development_actions %}
+    {% if user.is_authenticated and user.is_privileged %}
+    <div id="development_actions">
+      <a 
+        class="btn btn-raised btn-primary" 
+        href="{% url 'developments:development-create' %}">
+        <i class="fas fa-plus-circle"></i>
+        New Development
+      </a>
+      {% block draft_action %}
+      <a 
+        class="btn btn-raised btn-secondary"
+        href="{% url 'developments:draft-list' %}">
+        Saved Drafts
+      </a>
+      {% endblock %}
+    </div>
+    {% endif %}
+  {% endblock development_actions %}
+
+  {% block development-list %}
+  <div id="development_list" class="list-group">
+      {% for development in developments %}
+        <a class="list-group-item
+                  list-group-item-action
+                  flex-column
+                  align-items-start" 
+           href="{% url 'developments:development-detail' development.slug %}">
+          <div class="d-flex w-100 justify-content-between">
+            <small class="filter mb-1">{{ development.author }}</small>
+            <small>{% time_since development.modified %}</small>
+          </div>
+            <h5 class="filter mb-1">{{ development }}</h5>
+        </a>
+      {% endfor %}
+  </div>
+  {% endblock development-list %}
+
+{% endblock %}

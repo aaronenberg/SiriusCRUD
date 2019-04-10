@@ -20,20 +20,20 @@
     }
 }
 
-#outcome-media-forms-row {
+#development-media-forms-row {
     border: 0.2rem solid gainsboro; 
-    border-radius: 5px;
+    border-radius: 1rem;
     background-color: rgba(18,85,74, 0.1);
     height:23vh;
     margin-bottom: 1rem;
     padding: 0.8rem;
     align-items:center;
 }
-#outcome-media-forms {
+#development-media-forms {
     overflow-y: auto;
     height:100%;
 }
-#outcome-media-forms .bmd-form-group {
+#development-media-forms .bmd-form-group {
     padding-top: 0;
 }
 
@@ -47,22 +47,22 @@
 }
 
 @media (max-width: 767.98px) {
-    #outcome-media-forms-row {
+    #development-media-forms-row {
         margin-top:1rem;
         height:35vh;
     }
 }
 
-#outcome_list {
+#development_list {
     width:100%;
 }
 
-#outcome-media-forms .invalid-feedback {
+#development-media-forms .invalid-feedback {
     position: relative;
     margin-left: 3rem;
 }
 
-#outcome_media_form {
+#development_media_form {
     display:flex;
     flex-direction:column;
     width:75%;
@@ -70,7 +70,7 @@
     align-self: center;
 }
 
-#outcome-media-forms .form-group:first-child hr {
+#development-media-forms .form-group:first-child hr {
     display: none;
 }
 

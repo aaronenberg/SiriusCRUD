@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load development_tags %}
+
+
+{% block title %}
+  {{ development.title }} | SIRIUS
+{% endblock title %}
+
+{% block content-main %}
+
+<div id="development_detail">
+  <div id="development_detail_title">
+    <h6>{{ development.title }}</h6>
+  </div>
+  <div id="development_detail_description">
+    <p>{{ development.description }}</p>
+  </div>
+  <div id="development_detail_subject">
+    {{ development.get_subject_display }}
+  </div>
+  <div id="development_detail_development_type">
+    {{ development.get_development_type_display }}
+  </div>
+  <div id="development_detail_semester">
+    <p>
+      {% if development.semester %} {{ development.get_semester_display }} {% endif %}
+      {% if development.year %}{{ development.year }} {% endif %}
+    </p>
+  </div>
+  <div id="development_detail_media">
+    <ul>
+    {% for type in DEVELOPMENT_TYPES %}
+    <h6>{{ type }}</h6>
+      {% for media in developmentmedia_list %}
+        {% if media.get_development_type_display == type %}
+        <li>
+          <a href="{{ media.media.url }}">{{ media.filename }}</a>
+          {{ media.modified }}
+        </li>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    </ul>
+  </div>
+  <div id="development_detail_author">
+    <small>Last updated by <b>{{ development.author.get_full_name }}</b> at: 
+    {{ development.modified }}
+    </small>
+  </div>
+  {% if user.pk == development.author.pk %}
+  <div class="submit-row">
+    <a class="btn btn-raised btn-primary" 
+       href="{% if development.is_public %}
+              {% url 'developments:development-update' development.slug %}
+             {% else %}
+              {% url 'developments:draft-update' development.slug %}
+             {% endif %}">
+       Edit
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+{% block extra-content %}
+{% endblock extra-content %}
+
+{% endblock content-main %}
+

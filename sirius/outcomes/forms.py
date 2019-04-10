@@ -1,8 +1,6 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Layout, Submit, Field, HTML, BaseInput
 from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES 
 from courses.models import Course
 from .utils import current_year, filename
@@ -111,7 +109,6 @@ class OutcomeForm(ModelForm):
             'class': 'form-control',
             'name': 'title',
         })
-        self.fields['title'].label = 'Title'
         self.fields['description'].widget = Textarea(attrs={
             'id': 'outcome_description',
             'class': 'form-control',

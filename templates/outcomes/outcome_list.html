@@ -33,29 +33,28 @@
 
   {% block outcome-list %}
   <div id="outcome_list" class="list-group">
-      {% for outcome in outcomes %}
-        <a class="list-group-item
-                  list-group-item-action
-                  flex-column
-                  align-items-start
-              {% if outcome.course.subject == 'GEOL' %} subject-geol
-              {% elif outcome.course.subject == 'CHEM' %} subject-chem
-              {% elif outcome.course.subject == 'ENVS' %} subject-envs
-              {% elif outcome.course.subject == 'BIO' %} subject-bio
-              {% elif outcome.course.subject == 'CE' %} subject-ce
-              {% endif %}"
-           href="{% url 'outcomes:outcome-media-update' outcome.slug %}">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 data-input="title" class="filter mb-1">{{ outcome }}</h5>
-            <small>{% time_since outcome.modified %}</small>
-          </div>
-          <p data-input="course" class="filter mb-1">{{ outcome.course }}</p>
-          <small data-input="author" class="filter">{{ outcome.author }}</small>
-		  <small hidden data-input="description" class="filter">{{ outcome.description }}</small>
-		  <small hidden data-input="semester" class="filter">{{ outcome.get_semester_display }}</small>
-		  <small hidden data-input="year" class="filter">{{ outcome.year }}</small>
-        </a>
-      {% endfor %}
+    {% for outcome in outcomes %}
+    <a class="list-group-item
+              list-group-item-action
+              flex-column
+              align-items-start
+          {% if outcome.course.subject == 'GEOL' %} subject-geol
+          {% elif outcome.course.subject == 'CHEM' %} subject-chem
+          {% elif outcome.course.subject == 'ENVS' %} subject-envs
+          {% elif outcome.course.subject == 'BIO' %} subject-bio
+          {% elif outcome.course.subject == 'CE' %} subject-ce
+          {% endif %}"
+       href="{% url 'outcomes:outcome-media-update' outcome.slug %}">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="filter mb-1">{{ outcome }}</h5>
+        <small class="mb-auto">{% time_since outcome.modified %}</small>
+      </div>
+      {% if outcome.course %}
+      <p class="filter mt-auto mb-0">{{ outcome.course }}</p>
+      {% endif %}
+
+    </a>
+    {% endfor %}
   </div>
   {% endblock outcome-list %}
 

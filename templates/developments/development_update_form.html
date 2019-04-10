@@ -1,0 +1,19 @@
+{% extends "developments/development_create_form.html" %}
+{% load development_tags %}
+
+{% if upload_form.instance.id %}
+{% block add_media_form %}{% endblock add_media_form %}
+{% endif %}
+
+{% block save_draft %}
+<input type="Submit"
+       class="btn btn-danger" 
+       name="_save_draft"
+       value="{% if development.is_public %}
+              Make Private{% else %}Save Draft
+              {% endif %}"> 
+{% endblock save_draft %}
+
+{% block back_navigate %}
+<a class="btn" name="cancel" href="{% get_absolute_url development %}">Cancel</a>
+{% endblock back_navigate %}

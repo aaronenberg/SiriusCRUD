@@ -218,7 +218,7 @@ ul.pagination {
     width: 100%;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
-    border-radius: .75rem;
+    border-radius: 5px;
     margin-top: 1rem;
     border-style: solid;
     border-width: 0.1rem;
@@ -479,4 +479,10 @@ body::-webkit-scrollbar-track {
 }
 .fa-plus-circle {
     margin-right: 0.5em;
+}
+
+.main-header {
+    position: absolute;
+    top: 1rem;
+    width: calc(100% - 2rem);
 }

@@ -31,7 +31,9 @@
       </div>
       <div id="main">
         {% include 'partials/messages.html' %}
-        {% block content-main %} {% endblock content-main %}
+        {% block content-main %}
+        {% block content-header %}{% endblock content-header %}
+        {% endblock content-main %}
         {% if is_paginated %}
           {% include 'partials/paginator.html' %}
         {% endif %}
