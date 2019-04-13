@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "courses/subject_list.html" %}
 {% load static %}
 
 {% block custom_css %}
@@ -9,7 +9,6 @@
   Courses | SIRIUS
 {% endblock title %}
 
-{% block content-main %}
 
 {% if user.is_superuser %}
 <div id="course_actions">
@@ -20,24 +19,33 @@
 </div>
 {% endif %}
 
-  <div id="course_list" class="list-group align-items-center">
-    {% for course in courses %}
-    <a class="justify-content-center
-              list-group-item
-              list-group-item-action
-              flex-column align-items-start 
-              {% if course.subject == 'GEOL' %} subject-geol
-              {% elif course.subject == 'CHEM' %} subject-chem
-              {% elif course.subject == 'ENVS' %} subject-envs
-              {% elif course.subject == 'BIO' %} subject-bio
-              {% elif course.subject == 'CE' %} subject-ce
-              {% endif %}"
-       href="{{ course.get_absolute_url }}">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{ course }}</h5>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
+{% block course_list %}
+<div id="course_list" class="list-group align-items-center">
+  {% for course in courses %}
+  <a class="justify-content-center
+            list-group-item
+            list-group-item-action
+            flex-column align-items-start 
+            {% if course.subject == 'GEOL' %} subject-geol
+            {% elif course.subject == 'CHEM' %} subject-chem
+            {% elif course.subject == 'ENVS' %} subject-envs
+            {% elif course.subject == 'BIO' %} subject-bio
+            {% elif course.subject == 'CE' %} subject-ce
+            {% endif %}"
+     href="{{ course.get_absolute_url }}">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ course }}</h5>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock course_list %}
 
-{% endblock %}
+{% block custom_js %}
+<script>
+$('#course_list .list-group-item-action').hover(
+  function(){ $(this).addClass('active') },
+  function(){ $(this).removeClass('active') }
+)
+</script>
+{% endblock custom_js %}

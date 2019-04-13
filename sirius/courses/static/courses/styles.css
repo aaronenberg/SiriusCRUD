@@ -22,14 +22,46 @@
 
 #course_list {
     width: 100%;
-    padding-bottom:1rem;
+    padding-bottom: 1rem;
 }
 
+#subject_list {
+    flex-direction: row;
+    flex-grow: 0;
+}
+#subject_list .list-group-item-action:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+#subject_list .list-group-item-action:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+#subject_list .list-group-item-action {
+    border-radius: 0;
+}
+#subject_list .list-group-item-action:hover {
+    color: white;
+    text-decoration: underline;
+}
 .list-group-item-action:first-child,
 .list-group-item-action:last-child,
 .list-group-item-action,
 .list-group-item-action.active:first-child,
 .list-group-item-action.active:last-child,
 .list-group-item-action.active {
-    min-height: 11vh;
+    min-height: 5vh;
+    text-align: center;
+    border-width: 1px;
+}
+
+#subject_list .list-group-item-action.active:first-child,
+#subject_list .list-group-item-action.active:last-child,
+#subject_list .list-group-item-action.active {
+    border-color: black;
+    text-decoration: underline;
 }

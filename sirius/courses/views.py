@@ -1,23 +1,42 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic.list import ListView
+from django.shortcuts import render, redirect, reverse
+from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
 from .forms import CourseForm
 from .models import Course
 from users.models import FACULTY
 
 
-class CourseListView(LoginRequiredMixin, ListView):
-    ''' Displays all public courses, restricting raw data viewing to authenticated users '''
+class SubjectListView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'courses/subject_list.html'
+        
+    def get_context_data(self, **kwargs):
+        context = super(SubjectListView, self).get_context_data(**kwargs)
+        context['subjects'] = [s for s in Course.SUBJECT_CHOICES if s[0]]
+        return context
+
+
+class SubjectCoursesListView(LoginRequiredMixin, ListView):
+    ''' Displays all course subjects'''
 
     model = Course
     context_object_name = 'courses'
-    # cast course number, avoiding any possible letter, to an integer
-    queryset = Course.objects.extra(
-        select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
-        ).order_by('subject','course_number')
-    paginate_by = 7
+
+    def get_context_data(self, **kwargs):
+        context = super(SubjectCoursesListView, self).get_context_data(**kwargs)
+        context['subjects'] = [s for s in Course.SUBJECT_CHOICES if s[0]]
+        return context
+
+    def get_queryset(self):
+        subject_from_path = self.request.path.split('/')[2]
+        # cast course number, avoiding any possible letter, to an integer
+        queryset = Course.objects.extra(
+            select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+            ).order_by('subject','course_number').filter(subject=subject_from_path)
+        return queryset
 
 
 class CourseDetailView(DetailView):
@@ -64,7 +83,7 @@ class CourseCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('courses:course-list')
+        return redirect('courses:subject-list')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -85,6 +104,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
+        import pdb; pdb.set_trace()
         context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context) 
 
@@ -98,6 +118,7 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.form_valid(form)
 
     def form_valid(self, form):
+        import pdb; pdb.set_trace()
         form.save()
         return redirect(self.object)
 
@@ -105,3 +126,13 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = self.get_context_data(form=form)
         return render(self.request, self.get_template_names(), context)
 
+
+class CourseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+    model = Course
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get_success_url(self):
+        return reverse('courses:subject-courses-list', kwargs={'subject':self.object.subject})

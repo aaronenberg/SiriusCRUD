@@ -43,9 +43,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def get(self, request, *args, **kwargs):
         self.object = None
         referer_page = self.request.META.get('HTTP_REFERER')
-        if referer_page and reverse('courses:course-list') in referer_page:
-            course = get_course_from_url(referer_page)
-            self.initial = {'course': course.pk}
+        self.initial = {'course': get_course_from_url(referer_page)}
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         outcomemedia_form = OutcomeMediaFormSet()

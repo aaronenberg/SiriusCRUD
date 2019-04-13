@@ -78,23 +78,20 @@ def current_semester():
     return SUMMER
 
 
-
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
 def get_course_from_url(url):
-    course_slug_pattern = re.compile('[A-Z]{2,4}\d{1,3}[A-Z]?')
-    match = course_slug_pattern.search(url) 
-    if match:
-        slug = match.group()
+    if url and reverse('courses:subject-list') in url:
         try:
-            path = reverse('courses:course-detail', kwargs={'slug': slug})
-        except NoReverseMatch:
+            course_slug_from_path = url.split('/')[-2]
+            course = Course.objects.get(slug=course_slug_from_path)
+        except Course.DoesNotExist:
             return None
-        return Course.objects.get(slug=slug)
     else:
         return None
+    return course.pk
 
 
 def flatten_formset_file_fields(formset):

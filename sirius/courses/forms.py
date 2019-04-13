@@ -122,3 +122,4 @@ class CourseForm(ModelForm):
         if not number_pattern.match(number):
             raise ValidationError("Course number format invalid: Course number must have atleast 1 number optionally followed by a letter.")
         return number
+

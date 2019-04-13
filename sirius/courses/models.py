@@ -23,7 +23,7 @@ class Course(models.Model):
 
     number = models.CharField(max_length=4)
 
-    slug = models.SlugField(primary_key=True, editable=False)
+    slug = models.SlugField(unique=True)
     
     subject = models.CharField(max_length=4, choices=SUBJECT_CHOICES)
 
@@ -40,7 +40,7 @@ class Course(models.Model):
         unique_together = ("subject", "number")
 
     def get_absolute_url(self):
-        return reverse('courses:course-detail', kwargs={'slug': self.slug})
+        return reverse('courses:course-detail', kwargs={'subject': self.subject, 'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = "{}{}".format(self.subject, self.number)

@@ -30,10 +30,10 @@
                     active
                     {% endif %}"
              href="{% url 'developments:development-list' %}">
-            Faculty Developments
+            Faculty Development
           </a>
           <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
-             href="{% url 'courses:course-list' %}">
+             href="{% url 'courses:subject-list' %}">
             Courses
           </a>
           {% if user.user_role == 'FA' %}
