@@ -72,7 +72,7 @@
     {% endif %}
   {% for outcome in course_outcomes %}
     <li class="nav-item">
-      <a id="id_outcome_{{ outcome.id }}" class="nav-link" href="javascript:void(0)" data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
+      <a id="id_outcome_{{ outcome.id }}" class="outcome nav-link" href="javascript:void(0)" data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
         {{ outcome.title }}
       </a>
     </li>
@@ -171,9 +171,9 @@
 {% block custom_js %}
   <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
   <script type="text/javascript">
-    $("#id_outcomes .nav-link").first().addClass("btn-secondary")
-    $("#id_outcomes .nav-link").click(function(){
-        $("#id_outcomes .nav-link.btn-secondary").removeClass("btn-secondary");
+    $("#id_outcomes .outcome").first().addClass("btn-secondary")
+    $("#id_outcomes .outcome").click(function(){
+        $("#id_outcomes .outcome.btn-secondary").removeClass("btn-secondary");
         $(this).addClass("btn-secondary");
     });
   </script>
