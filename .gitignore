@@ -117,3 +117,8 @@ dmypy.json
 run-server
 set-env
 set-path
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
