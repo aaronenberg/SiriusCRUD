@@ -106,65 +106,90 @@
   <div id="id_outcome_media">
     <ul class="nav nav-tabs" id="outcome_media_tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="tab_raw_data" data-toggle="tab" href="#raw_data" role="tab" aria-controls="home" aria-selected="true">Raw Data</a>
+        <a class="nav-link active"
+           id="tab_raw_data"
+           href="#raw_data"
+           data-toggle="tab"
+           role="tab"
+           aria-controls="home"
+           aria-selected="true">
+          Raw Data
+        </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link" id="tab_analyzed_data" data-toggle="tab" href="#analyzed_data" role="tab" aria-controls="profile" aria-selected="false">Analyzed Data</a>
+        <a class="nav-link"
+           id="tab_analyzed_data"
+           href="#analyzed_data"
+           data-toggle="tab"
+           role="tab"
+           aria-controls="profile"
+           aria-selected="false">
+           Analyzed Data
+        </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link" id="tab_curriculum" data-toggle="tab" href="#curriculum" role="tab" aria-controls="contact" aria-selected="false">Curriculum</a>
+        <a class="nav-link"
+           id="tab_curriculum"
+           href="#curriculum"
+           data-toggle="tab"
+           role="tab"
+           aria-controls="contact"
+           aria-selected="false">
+           Curriculum
+        </a>
       </li>
     </ul>
 
     <div class="tab-content" id="id_outcome_media_content">
       <div class="tab-pane show active" 
-           id="raw_data" role="tabpanel" 
+           id="raw_data"
+           role="tabpanel" 
            aria-labelledby="tab_raw_data">
         <ul>
-        {% for raw_data in latest_outcome.raw_data %}
+          {% for raw_data in latest_outcome.raw_data %}
           <li>
             <a href="{{ raw_data.media.url }}">
               {{ raw_data.filename }}
             </a>
           </li>
-        {% endfor %}
+          {% endfor %}
         </ul>
       </div>
+
       <div class="tab-pane"
            id="analyzed_data" 
            role="tabpanel"
            aria-labelledby="tab_analyzed_data">
         <ul>
-        {% for analyzed_data in latest_outcome.analyzed_data %}
+          {% for analyzed_data in latest_outcome.analyzed_data %}
           <li>
             <a href="{{ analyzed_data.media.url }}">
               {{ analyzed_data.filename }}
             </a>
           </li>
-        {% endfor %}
+          {% endfor %}
         </ul>
       </div>
+
       <div class="tab-pane"
            id="curriculum"
            role="tabpanel"
            aria-labelledby="tab_curriculum">
         <ul>
-        {% for curriculum in latest_outcome.curriculum %}
+          {% for curriculum in latest_outcome.curriculum %}
           <li>
             <a href="{{ curriculum.media.url }}">
               {{ curriculum.filename }}
             </a>
           </li>
-        {% endfor %}
+          {% endfor %}
         </ul>
       </div>
     </div>
   </div>
-
 </div>
-
-
-
 
 {% endblock content-main %}
 

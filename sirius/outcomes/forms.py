@@ -123,6 +123,7 @@ class OutcomeForm(ModelForm):
         })
 
         section_choices = []
+        import pdb; pdb.set_trace()
         course_id = None
         if 'course' in self.initial:
             course_id = self.initial.get('course')
@@ -131,7 +132,7 @@ class OutcomeForm(ModelForm):
         elif self.instance.pk and self.instance.course:
             course_id = self.instance.course.pk
 
-        if course_id:
+        if course_id != None:
             course = Course.objects.get(pk=course_id)
             section_choices += BLANK_CHOICE_DASH
             for section in course.sections:
