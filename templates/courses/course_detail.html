@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'courses/styles.css' %}">
+{% endblock custom_css %}
 
 {% block title %}
   {{ course }}
@@ -6,41 +11,23 @@
 
 {% block content-main %}
 
-<div id="course_detail_title">
-  <h6>{{ course }}</h6>
-</div>
-<div id="course_detail_description">
-  <p>{{ course.description }}</p>
-</div>
-<div id="course_detail_sections">
-  <label>Sections</label>
-  <p>
-  {% for section in course.sections %}
-    {{ section | stringformat:"02d" }}
-  {% endfor %}
-  </p>
-</div>
-<div>
-  Related Outcomes
-  <ul>
-    {% for outcome in outcomes %}
-    <li>
-      <a href="{{ outcome.get_absolute_url }}">
-        {{ outcome.title }}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-<div class="row">
-  {% if user.is_privileged and course in user.staffprofile.courses.all %}
-  <a class="btn btn-raised btn-primary" href="{% url 'outcomes:outcome-create' %}">Create Outcome</a>
+
+<div id="course_detail_actions" class="mb-3 ml-auto">
+  {% if user.is_privileged and course in user.staffprofile.courses.all or user.is_superuser %}
+  <a class="btn btn-primary" href="{% url 'outcomes:outcome-create' %}">New Outcome</a>
+  <a 
+    class="btn btn-secondary"
+    href="{% url 'outcomes:draft-list' %}">
+    Saved Drafts
+  </a>
   {% endif %}
   {% if user.user_role == 'FA' %}
+  <div class="ml-auto">
   <a class="btn btn-secondary" 
      href="{% url 'courses:course-update' course.subject course.slug %}">
-    Edit
+    Edit Course
   </a>
+  {% endif %}
 
   {% if user.is_superuser %}
   <div class="modal fade" id="remove-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -58,7 +45,7 @@
         <div class="modal-footer">
           <form action="{% url "courses:course-delete" course.subject course.slug %}" method="post">
             {% csrf_token %}
-            <button class="btn btn-raised btn-danger">
+            <button type="submit" class="btn btn-raised btn-danger">
               Remove Course
             </button>
           </form>
@@ -66,12 +53,128 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-danger" data-toggle="modal" data-target="#remove-course-modal">
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#remove-course-modal">
    Remove Course 
   </button>
+  </div>
   {% endif %}
 
-  {% endif %}
 </div>
 
+<div id="course_detail_title">
+  <h6>{{ course }}</h6>
+</div>
+<div id="course_detail_description">
+  <p>{{ course.description }}</p>
+</div>
+
+<div id="id_course_outcomes">
+  <ul id="id_outcomes" class="nav flex-column">
+  {% for outcome in course_outcomes %}
+    <li class="nav-item">
+      <a id="id_outcome_{{ outcome.id }}" class="nav-link" href="javascript:void(0)" data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
+        {{ outcome.title }}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+
+
+  <div id="id_outcome_title_description">
+    <div id="id_outcome_title">
+      <div class="submit-row">
+        <div class="mr-auto">
+          <h6>{{ latest_outcome.outcome.title }}</h6>
+        </div>
+        {% if latest_outcome and user.is_authenticated %}
+        <a href="{% url 'outcomes:outcome-media-update' latest_outcome.outcome.slug %}">
+          <i class="fal fa-upload"></i>
+        </a>
+        {% if latest_outcome.outcome.author == user or user.is_superuser %}
+        <a href="{% url 'outcomes:outcome-update' latest_outcome.outcome.slug %}">
+          <i class="fal fa-pencil-alt"></i>
+        </a>
+        {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div id="id_outcome_description">
+      <p>{{ latest_outcome.outcome.description }}</p>
+    </div>
+  </div>
+
+  <div id="id_outcome_media">
+    <ul class="nav nav-tabs" id="outcome_media_tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="tab_raw_data" data-toggle="tab" href="#raw_data" role="tab" aria-controls="home" aria-selected="true">Raw Data</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="tab_analyzed_data" data-toggle="tab" href="#analyzed_data" role="tab" aria-controls="profile" aria-selected="false">Analyzed Data</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="tab_curriculum" data-toggle="tab" href="#curriculum" role="tab" aria-controls="contact" aria-selected="false">Curriculum</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="id_outcome_media_content">
+      <div class="tab-pane fade show active" 
+           id="raw_data" role="tabpanel" 
+           aria-labelledby="tab_raw_data">
+        <ul>
+        {% for raw_data in latest_outcome.raw_data %}
+          <li>
+            <a href="{{ raw_data.media.url }}">
+              {{ raw_data.filename }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+      <div class="tab-pane fade"
+           id="analyzed_data" 
+           role="tabpanel"
+           aria-labelledby="tab_analyzed_data">
+        <ul>
+        {% for analyzed_data in latest_outcome.analyzed_data %}
+          <li>
+            <a href="{{ analyzed_data.media.url }}">
+              {{ analyzed_data.filename }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+      <div class="tab-pane fade"
+           id="curriculum"
+           role="tabpanel"
+           aria-labelledby="tab_curriculum">
+        <ul>
+        {% for curriculum in latest_outcome.curriculum %}
+          <li>
+            <a href="{{ curriculum.media.url }}">
+              {{ curriculum.filename }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
 {% endblock content-main %}
+
+{% block custom_js %}
+  <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
+  <script type="text/javascript">
+    $("#id_outcomes .nav-link").first().addClass("active")
+    $("#id_outcomes .nav-link").click(function(){
+        $("#id_outcomes .nav-link.active").removeClass("active");
+        $(this).addClass("active");
+    });
+  </script>
+{% endblock custom_js %}

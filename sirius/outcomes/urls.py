@@ -5,7 +5,6 @@ from . import views
 app_name = 'outcomes'
 
 urlpatterns = [
-    path('outcomes/', views.OutcomeListView.as_view(), name='outcome-list'),
     path(
         'outcomes/<slug:slug>/',
         views.OutcomeMediaUpdateView.as_view(),

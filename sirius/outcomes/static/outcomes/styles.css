@@ -65,7 +65,7 @@
 #outcome_media_form {
     display:flex;
     flex-direction:column;
-    width:75%;
+    width: 100%;
     border: 0.3rem solid #0f5e7f;
     align-self: center;
 }

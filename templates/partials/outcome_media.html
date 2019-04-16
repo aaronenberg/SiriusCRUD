@@ -1,0 +1,49 @@
+<ul id="media_raw_data">
+{% for raw_data in outcome_media.raw_data %}
+  <li>
+    <a href="{{ raw_data.media.url }}">
+      {{ raw_data.filename }}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+
+<ul id="media_analyzed_data">
+{% for analyzed_data in outcome_media.analyzed_data %}
+  <li>
+    <a href="{{ analyzed_data.media.url }}">
+      {{ analyzed_data.filename }}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+
+<ul id="media_curriculum">
+{% for curriculum in outcome_media.curriculum %}
+  <li>
+    <a href="{{ curriculum.media.url }}">
+      {{ curriculum.filename }}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+
+<div class="submit-row">
+  <div class="mr-auto">
+    <h6>{{ outcome_media.outcome.title }}</h6>
+  </div>
+  {% if user.is_authenticated %}
+  <a href="{% url 'outcomes:outcome-media-update' outcome_media.outcome.slug %}">
+    <i class="fal fa-upload"></i>
+  </a>
+  {% if outcome_media.outcome.author == user or user.is_superuser %}
+  <a href="{% url 'outcomes:outcome-update' outcome_media.outcome.slug %}">
+    <i class="fal fa-pencil-alt"></i>
+  </a>
+  {% endif %}
+  {% endif %}
+</div>
+
+<p>
+  {{ outcome_media.outcome.description }}
+</p>

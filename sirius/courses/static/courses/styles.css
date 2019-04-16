@@ -65,3 +65,63 @@
     border-color: black;
     text-decoration: underline;
 }
+
+#id_course_outcomes {
+    display:grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 40% 60%;
+    grid-template-areas:
+        "outcomes outcome_description"
+        "outcomes outcome_media";
+    height: 40vh;
+    background-color: whitesmoke;
+    border: 2px solid #0f5e7f;
+    border-radius: 5px;
+}
+
+#id_outcomes {
+    grid-area: outcomes;
+    border-right: 2px solid #0f5e7f;
+    overflow-y: auto;
+    flex-wrap: nowrap;
+}
+
+#id_outcomes .nav-link.active {
+    color: black;
+}
+
+#id_outcome_media {
+    grid-area: outcome_media;
+}
+
+#id_outcome_title {
+    padding:0.5rem;
+}
+
+#id_outcome_description {
+    grid-area: outcome_description;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-y: auto;
+    max-height:50%;
+}
+
+#id_outcome_title_description {
+    border-bottom: 2px solid #0f5e7f;
+}
+#id_outcome_media_content {
+    overflow-y: auto;
+    max-height: 75%;
+    padding-top:1em;
+}
+
+.nav-tabs .nav-link {
+    padding: 1em;
+}
+.nav-tabs .nav-link.active {
+    border-color: grey;
+}
+
+.fa-upload {
+    margin-right: 1rem;
+}

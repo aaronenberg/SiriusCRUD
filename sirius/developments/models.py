@@ -32,11 +32,11 @@ class Development(models.Model):
         verbose_name=_('author')
     )
 
-    title = models.CharField(_('title'), max_length=255, blank=False)
+    title = models.CharField(_('title'), max_length=99, blank=False)
 
     description = models.TextField(
         _('description'),
-        max_length=512,
+        max_length=2000,
         blank=True,
         help_text=_("Type a description...")
     )
@@ -98,7 +98,7 @@ class Development(models.Model):
 
 class DevelopmentMedia(models.Model):
 
-    ANALYZED_DATA = 'AD'
+    ANALYZED_DATA = 'SD'
     POSTER = 'PO'
     RAW_DATA = 'RD'
     REPORT = 'RE'

@@ -18,12 +18,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div id="nav-left" class="navbar-nav">
-          <a class="nav-item nav-link
-                    {% if 'outcomes' in request.path or 'drafts' in request.path and 'developments' not in request.path %}
-                    active
-                    {% endif %}"
-             href="{% url 'outcomes:outcome-list' %}">
-            Outcomes
+          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
+             href="{% url 'courses:subject-list' %}">
+            Courses
           </a>
           <a class="nav-item nav-link
                     {% if 'developments' in request.path %}
@@ -31,10 +28,6 @@
                     {% endif %}"
              href="{% url 'developments:development-list' %}">
             Faculty Development
-          </a>
-          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
-             href="{% url 'courses:subject-list' %}">
-            Courses
           </a>
           {% if user.user_role == 'FA' %}
           <a class="nav-item nav-link {% if 'user' in request.path %}active{% endif %}" 
@@ -47,7 +40,7 @@
           {% if user.is_authenticated %}
           <a class="nav-item nav-link {% if 'account' in request.path %}active{% endif %}"
              href="{% url 'users:account-update' %}">
-            {{ user.email | lower}}
+            {{ user.email }}
           </a>
           <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
           {% else %}
@@ -80,5 +73,4 @@
       </div>
     </div>
   </div>
-
 </div>

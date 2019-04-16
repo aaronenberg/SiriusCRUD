@@ -46,12 +46,11 @@ body, html {
 #right {
     grid-area: right;
     background: whitesmoke;
-}
-
+} 
 @media (min-width: 768px) {
     #container {
-        display:grid;
-        grid-template-columns: 20% auto 20%;
+        display: grid;
+        grid-template-columns: 20% 60% 20%;
         grid-template-rows: max-content minmax(80vh, auto) minmax(10vh, auto);
         grid-template-areas:
             "header header header"
@@ -83,7 +82,6 @@ body, html {
 li {
     list-style: none;
 }
-
 
 div.alert {
     margin-top:0.5rem;
@@ -422,6 +420,7 @@ label.bmd-label-static {
     padding-top: 2rem;
     padding-bottom: 2rem;
     min-height:70vh;
+    word-break: break-word;
 }
 #footer {
     grid-area: footer;

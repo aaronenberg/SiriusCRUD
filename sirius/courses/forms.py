@@ -98,6 +98,7 @@ class CourseForm(ModelForm):
             'id': 'course_title',
             'class': 'form-control',
             'name': 'title',
+            'maxlength': '99',
         })
         self.fields['number'].widget = TextInput(attrs={
             'id': 'course_number',
@@ -114,6 +115,7 @@ class CourseForm(ModelForm):
             'id': 'outcome_description',
             'class': 'form-control',
             'name': 'description',
+            'maxlength': '2000',
         })
 
     def clean_number(self):

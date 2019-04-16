@@ -87,11 +87,13 @@ class DevelopmentForm(ModelForm):
             'id': 'development_title',
             'class': 'form-control',
             'name': 'title',
+            'maxlength': '99',
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'development_description',
             'class': 'form-control',
             'name': 'description',
+            'maxlength': '2000',
         })
 
     def clean_year(self):

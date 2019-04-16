@@ -99,20 +99,27 @@ class OutcomeForm(ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        user_staffprofile = kwargs.pop('user_staffprofile')
+        user = kwargs.pop('user')
         super(OutcomeForm, self).__init__(*args, **kwargs)
  
-        self.fields['course'].queryset = user_staffprofile.courses.all()
+        if user.is_superuser:
+            self.fields['course'].queryset = Course.objects.extra(
+                select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+                ).order_by('subject','course_number')
+        else:
+            self.fields['course'].queryset = user.staffprofile.courses.all()
 
         self.fields['title'].widget = TextInput(attrs={
             'id': 'outcome_title',
             'class': 'form-control',
             'name': 'title',
+            'maxlength': '99',
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'outcome_description',
             'class': 'form-control',
             'name': 'description',
+            'maxlength': '2000',
         })
 
         section_choices = []

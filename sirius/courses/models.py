@@ -19,7 +19,7 @@ class Course(models.Model):
         (GEOLOGY, 'Geology'),
     ]
 
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, max_length=2000)
 
     number = models.CharField(max_length=4)
 

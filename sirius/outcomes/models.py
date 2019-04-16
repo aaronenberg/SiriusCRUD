@@ -31,11 +31,11 @@ class Outcome(models.Model):
         related_name='outcomes',
         verbose_name=_('author')
     )
-    title = models.CharField(_('title'), max_length=255, blank=False)
+    title = models.CharField(_('title'), max_length=99, blank=False)
 
     description = models.TextField(
         _('description'),
-        max_length=512,
+        max_length=2000,
         blank=True,
         help_text=_("Type a description...")
     )
@@ -107,15 +107,13 @@ class Outcome(models.Model):
 class OutcomeMedia(models.Model):
 
     ANALYZED_DATA = 'AD'
-    POSTER = 'PO'
     RAW_DATA = 'RD'
-    REPORT = 'RE'
+    CURRICULUM = 'CU'
     OTHER = 'OT'
     OUTCOME_TYPES = BLANK_CHOICE_DASH + [
-        (ANALYZED_DATA, 'Analyzed Data'),
-        (POSTER, 'Poster'),
         (RAW_DATA, 'Raw Data'),
-        (REPORT, 'Report'),
+        (ANALYZED_DATA, 'Analyzed Data'),
+        (CURRICULUM, 'Curriculum'),
         (OTHER, 'Other'),
     ]
 

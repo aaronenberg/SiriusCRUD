@@ -50,3 +50,12 @@
   {% endblock development-list %}
 
 {% endblock %}
+
+{% block custom_js %}
+<script>
+$('#development_list .list-group-item-action').hover(
+  function(){ $(this).addClass('active') },
+  function(){ $(this).removeClass('active') }
+)
+</script>
+{% endblock custom_js %}

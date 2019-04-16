@@ -14,16 +14,6 @@ from .models import Outcome, OutcomeMedia
 from .forms import OutcomeForm, OutcomeMediaFormSet, OutcomeMediaUpdateFormSet
 
 
-class OutcomeListView(ListView):
-    ''' Displays a list of outcomes. Users are able to see all of their own outcomes, public or private,
-        as well as other users' public outcomes. Additionally, unauthenticated users may not view 
-        certain types of outcomes '''
-
-    model = Outcome
-    context_object_name = 'outcomes'
-    queryset = Outcome.objects.exclude(is_public=False).order_by('-modified')
-
-
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ''' Displays a form to create a new outcome and a separate form for uploaded attachments
         only for authenticated users '''
@@ -37,7 +27,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(OutcomeCreateView, self).get_form_kwargs()
-        kwargs['user_staffprofile'] = self.request.user.staffprofile
+        kwargs['user'] = self.request.user
         return kwargs
 
     def get(self, request, *args, **kwargs):
@@ -72,7 +62,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             media.author = self.request.user
             media.is_public = True
             media.save()
-        return redirect('outcomes:outcome-list')
+        return redirect('courses:subject-list')
 
     def form_invalid(self, form, outcomemedia_form, context):
         return render(self.request, self.get_template_names(), context)
@@ -90,14 +80,14 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(OutcomeUpdateView, self).get_form_kwargs()
-        kwargs['user_staffprofile'] = self.request.user.staffprofile
+        kwargs['user'] = self.request.user
         return kwargs
     
     def get_queryset(self):
         return Outcome.objects.exclude(Q(is_public=False))
 
     def test_func(self):
-        return self.request.user == self.get_object().author
+        return self.request.user == self.get_object().author or self.request.user.is_superuser
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -137,7 +127,7 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
-        return redirect('outcomes:outcome-list')
+        return redirect('courses:subject-list')
 
     def form_invalid(self, form, outcomemedia_form):
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
@@ -186,7 +176,7 @@ class OutcomeMediaUpdateView(UpdateView):
         for media in outcomemedia:
             media.author = self.request.user
             media.save()
-        return redirect('outcomes:outcome-list')
+        return redirect('courses:subject-list')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -239,9 +229,11 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
         return render(self.request, self.get_template_names(), context)
 
 
-class DraftListView(LoginRequiredMixin, OutcomeListView):
+class DraftListView(LoginRequiredMixin, ListView):
     ''' Displays a list of the current user's unpublished drafts.
         The drafts in this list are only available to the currently logged in user. '''
+    model = Outcome
+    context_object_name = 'outcomes'
 
     template_name = 'outcomes/draft_list.html'
 
