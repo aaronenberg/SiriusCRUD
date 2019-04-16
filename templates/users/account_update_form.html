@@ -97,7 +97,12 @@
   {% if staffprofile_form %}
   <div class="form-row justify-content-end mb-auto">
     {% if user.user_role == 'FA' %}
-    <button id="user-courses-button" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#add-courses-modal">
+    <a 
+      class="mr-auto btn btn-dark"
+      href="{% url 'outcomes:draft-list' %}">
+      Saved Drafts
+    </a>
+   <button id="user-courses-button" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>
     {% endif %}
