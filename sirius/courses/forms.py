@@ -11,8 +11,6 @@ from django.forms import (
 )
 from django.contrib.postgres.forms import SimpleArrayField
 from django.contrib.postgres.utils import prefix_validation_error
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import ButtonHolder, Div, Layout, Submit, Field
 from .models import Course
 
 
