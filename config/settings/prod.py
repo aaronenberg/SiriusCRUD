@@ -4,8 +4,11 @@ from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
 
-with open(os.environ.get('CONFIG_SECRETS')) as f:
- secrets = json.loads(f.read())
+configs = []
+CONFIG_FILES = ['SECRETS', 'DB_CONFIG', 'EMAIL_CONFIG', 'PATHS_CONFIG']
+for config in CONFIG_FILES:
+    with open(os.environ.get(config)) as f:
+        configs += json.loads(f.read())
 
 def get_env_var(setting, secrets=secrets):
      try:
@@ -21,7 +24,7 @@ def get_env_var(setting, secrets=secrets):
 
 DEBUG = False
 
-SECRET_KEY = get_env_var('SIRIUS_SECRET_KEY')
+SECRET_KEY = get_env_var('SECRET_KEY')
 
 ALLOWED_HOSTS += ['']
 
@@ -40,12 +43,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = get_env_var('SERVER_EMAIL')
 SERVER_EMAIL = get_env_var('SERVER_EMAIL')
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = get_env_var('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_HOST_USER = get_env_var('SERVER_EMAIL')
 EMAIL_HOST_PASSWORD = get_env_var('SERVER_EMAIL_PASSWORD')
 
-
-MEDIA_ROOT = get_env_var('SIRIUS_MEDIA_ROOT')
+MEDIA_ROOT = get_env_var('MEDIA_ROOT')
 
 TEMPLATES[0]['DIRS'] = ['templates',]
