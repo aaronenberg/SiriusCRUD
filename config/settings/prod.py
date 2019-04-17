@@ -4,7 +4,7 @@ DEBUG = False
 
 SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
 
-ALLOWED_HOSTS += ['']
+ALLOWED_HOSTS += ['sirius-test2.z4tvkmcyrp.us-west-1.elasticbeanstalk.com']
 
 if 'RDS_HOSTNAME' in os.environ:
     DATABASES = {
