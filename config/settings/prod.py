@@ -1,33 +1,51 @@
+import os
+import json
+from django.core.exceptions import ImproperlyConfigured
 from .base import *
+
+
+with open(os.environ.get('CONFIG_SECRETS')) as f:
+ secrets = json.loads(f.read())
+
+def get_env_var(setting, secrets=secrets):
+     try:
+         val = secrets[setting]
+         if val == 'True':
+             val = True
+         elif val == 'False':
+             val = False
+         return val
+     except KeyError:
+         error_msg = "ImproperlyConfigured: Set {0} environment variable".format(setting)
+         raise ImproperlyConfigured(error_msg)
 
 DEBUG = False
 
-SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
+SECRET_KEY = get_env_var('SIRIUS_SECRET_KEY')
 
-ALLOWED_HOSTS += ['sirius-test2.z4tvkmcyrp.us-west-1.elasticbeanstalk.com']
+ALLOWED_HOSTS += ['']
 
-if 'RDS_HOSTNAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_env_var('RDS_DB_NAME'),
+        'USER': get_env_var('RDS_USERNAME'),
+        'PASSWORD': get_env_var('RDS_PASSWORD'),
+        'HOST': get_env_var('RDS_HOSTNAME'),
+        'PORT': get_env_var('RDS_PORT'),
     }
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.environ['EMAIL']
-SERVER_EMAIL = os.environ['EMAIL']
+DEFAULT_FROM_EMAIL = get_env_var('SERVER_EMAIL')
+SERVER_EMAIL = get_env_var('SERVER_EMAIL')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ['EMAIL']
-EMAIL_HOST_PASSWORD = os.environ['SIRIUS_EMAIL_PASS']
+EMAIL_HOST_USER = get_env_var('SERVER_EMAIL')
+EMAIL_HOST_PASSWORD = get_env_var('SERVER_EMAIL_PASSWORD')
 
 
-MEDIA_ROOT = os.environ['SIRIUS_MEDIA_ROOT']
+MEDIA_ROOT = get_env_var('SIRIUS_MEDIA_ROOT')
 
 TEMPLATES[0]['DIRS'] = ['templates',]
