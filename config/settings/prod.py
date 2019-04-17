@@ -26,7 +26,7 @@ DEBUG = False
 
 SECRET_KEY = get_env_var('SECRET_KEY')
 
-ALLOWED_HOSTS += ['']
+ALLOWED_HOSTS += ['sirius-test.us-west-1.elasticbeanstalk.com']
 
 DATABASES = {
     'default': {
