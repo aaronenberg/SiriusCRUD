@@ -5,7 +5,7 @@ from .base import *
 
 
 configs = {}
-CONFIG_FILES = ['SECRETS', 'DB_CONFIG', 'EMAIL_CONFIG', 'PATHS_CONFIG']
+CONFIG_FILES = ['SECRETS', 'DB_CONFIG', 'EMAIL_CONFIG', 'PATHS_CONFIG', 'ALLOWED_HOSTS']
 for config in CONFIG_FILES:
     with open(os.environ.get(config)) as f:
         configs.update(json.loads(f.read()))
