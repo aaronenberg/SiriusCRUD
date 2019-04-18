@@ -26,7 +26,7 @@ DEBUG = False
 
 SECRET_KEY = get_env_var('SECRET_KEY')
 
-ALLOWED_HOSTS += list(get_env_var('ALLOWED_HOSTS'))
+ALLOWED_HOSTS += ['.elasticbeanstalk.com']
 
 DATABASES = {
     'default': {
