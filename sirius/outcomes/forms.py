@@ -123,7 +123,6 @@ class OutcomeForm(ModelForm):
         })
 
         section_choices = []
-        import pdb; pdb.set_trace()
         course_id = None
         if 'course' in self.initial:
             course_id = self.initial.get('course')
