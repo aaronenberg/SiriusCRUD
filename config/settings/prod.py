@@ -10,9 +10,9 @@ for config in CONFIG_FILES:
     with open(os.environ.get(config)) as f:
         configs += json.loads(f.read())
 
-def get_env_var(setting, secrets=secrets):
+def get_env_var(setting, configs=configs):
      try:
-         val = secrets[setting]
+         val = configs[setting]
          if val == 'True':
              val = True
          elif val == 'False':
@@ -26,7 +26,7 @@ DEBUG = False
 
 SECRET_KEY = get_env_var('SECRET_KEY')
 
-ALLOWED_HOSTS += ['sirius-test.us-west-1.elasticbeanstalk.com']
+ALLOWED_HOSTS += list(get_env_var('ALLOWED_HOSTS'))
 
 DATABASES = {
     'default': {
