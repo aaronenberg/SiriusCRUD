@@ -51,3 +51,4 @@ EMAIL_HOST_PASSWORD = get_env_var('SERVER_EMAIL_PASSWORD')
 MEDIA_ROOT = get_env_var('MEDIA_ROOT')
 
 TEMPLATES[0]['DIRS'] = ['templates',]
+FIXTURE_DIRS = ['fixtures']
