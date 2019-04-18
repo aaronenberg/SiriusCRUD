@@ -4,11 +4,11 @@ from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
 
-configs = []
+configs = {}
 CONFIG_FILES = ['SECRETS', 'DB_CONFIG', 'EMAIL_CONFIG', 'PATHS_CONFIG']
 for config in CONFIG_FILES:
     with open(os.environ.get(config)) as f:
-        configs += json.loads(f.read())
+        configs.update(json.loads(f.read()))
 
 def get_env_var(setting, configs=configs):
      try:
