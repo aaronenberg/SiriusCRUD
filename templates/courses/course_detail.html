@@ -148,7 +148,7 @@
            role="tabpanel" 
            aria-labelledby="tab_raw_data">
         <ul>
-          {% if user.is_privileged %}
+          {% if user.is_authenticated %}
           {% for raw_data in latest_outcome.raw_data %}
           <li>
             <a href="{{ raw_data.media.url }}">

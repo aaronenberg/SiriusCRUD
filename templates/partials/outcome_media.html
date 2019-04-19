@@ -1,5 +1,5 @@
 <ul id="media_raw_data">
-{% if user.is_privileged %}
+{% if user.is_authenticated %}
 {% for raw_data in outcome_media.raw_data %}
   <li>
     <a href="{{ raw_data.media.url }}">
