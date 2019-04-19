@@ -77,5 +77,5 @@ STATICFILES_LOCATION = 'static'
 STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 MEDIAFILES_LOCATION = 'media'
-MEDIAFILES_STORAGE = 'config.custom_storages.MediaStorage'
-MEDIA_URL = 'https://{0}/{1}/'.format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILES_STORAGE = 'config.custom_storages.MediaStorage'
+#MEDIA_URL = 'https://{0}/{1}/'.format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
