@@ -148,6 +148,7 @@
            role="tabpanel" 
            aria-labelledby="tab_raw_data">
         <ul>
+          {% if user.is_privileged %}
           {% for raw_data in latest_outcome.raw_data %}
           <li>
             <a href="{{ raw_data.media.url }}">
@@ -155,6 +156,9 @@
             </a>
           </li>
           {% endfor %}
+          {% else %}
+            <li><p>Please login to view this data set.</p></li>
+          {% endif %}
         </ul>
       </div>
 

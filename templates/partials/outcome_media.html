@@ -1,4 +1,5 @@
 <ul id="media_raw_data">
+{% if user.is_privileged %}
 {% for raw_data in outcome_media.raw_data %}
   <li>
     <a href="{{ raw_data.media.url }}">
@@ -6,7 +7,11 @@
     </a>
   </li>
 {% endfor %}
+{% else %}
+  <li><p>Please login to view this data set.</p></li>
+{% endif %}
 </ul>
+
 
 <ul id="media_analyzed_data">
 {% for analyzed_data in outcome_media.analyzed_data %}
