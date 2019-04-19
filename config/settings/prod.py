@@ -66,7 +66,9 @@ AWS_ACCESS_KEY_ID = get_env_var('AWS_ACCESS_KEY_ID')
 AWS_STORAGE_BUCKET_NAME = get_env_var('AWS_STORAGE_BUCKET_NAME')
 AWS_SECRET_ACCESS_KEY = get_env_var('AWS_SECRET_ACCESS_KEY')
 AWS_S3_REGION_NAME = get_env_var('AWS_S3_REGION_NAME')
-AWS_S3_CUSTOM_DOMAIN = 's3-{0}.amazonaws.com/{1}'.format(AWS_S3_REGION_NAME, AWS_STORAGE_BUCKET_NAME)
+AWS_S3_CALLING_FORMAT = 'boto.s3.connection.OrdinaryCallingFormat'
+AWS_S3_HOST = 's3-us-west-1.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
     'CacheControl': 'max-age=94608000',
