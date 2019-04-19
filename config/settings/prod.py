@@ -5,7 +5,14 @@ from .base import *
 
 
 configs = {}
-CONFIG_FILES = ['SECRETS', 'DB_CONFIG', 'EMAIL_CONFIG', 'PATHS_CONFIG', 'ALLOWED_HOSTS']
+CONFIG_FILES = [
+    'ALLOWED_HOSTS',
+    'DB_CONFIG',
+    'EMAIL_CONFIG',
+    'PATHS_CONFIG',
+    'SECRETS',
+    'S3_CONFIG'
+]
 for config in CONFIG_FILES:
     with open(os.environ.get(config)) as f:
         configs.update(json.loads(f.read()))
@@ -25,6 +32,8 @@ def get_env_var(setting, configs=configs):
 DEBUG = False
 
 SECRET_KEY = get_env_var('SECRET_KEY')
+
+INSTALLED_APPS += ['storages']
 
 ALLOWED_HOSTS += ['.elasticbeanstalk.com']
 
@@ -52,3 +61,15 @@ MEDIA_ROOT = get_env_var('MEDIA_ROOT')
 
 TEMPLATES[0]['DIRS'] = ['templates',]
 FIXTURE_DIRS = ['fixtures']
+
+AWS_ACCESS_KEY_ID = get_env_var('AWS_ACCESS_KEY_ID')
+AWS_STORAGE_BUCKET_NAME = get_env_var('AWS_STORAGE_BUCKET_NAME')
+AWS_SECRET_ACCESS_KEY = get_env_var('AWS_SECRET_ACCESS_KEY')
+AWS_S3_REGION_NAME = get_env_var('AWS_S3_REGION_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'CacheControl': 'max-age=94608000',
+}
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
