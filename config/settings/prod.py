@@ -6,10 +6,8 @@ from .base import *
 
 configs = {}
 CONFIG_FILES = [
-    'ALLOWED_HOSTS',
     'DB_CONFIG',
     'EMAIL_CONFIG',
-    'PATHS_CONFIG',
     'SECRETS',
     'S3_CONFIG'
 ]
@@ -57,7 +55,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = get_env_var('SERVER_EMAIL')
 EMAIL_HOST_PASSWORD = get_env_var('SERVER_EMAIL_PASSWORD')
 
-#MEDIA_ROOT = get_env_var('MEDIA_ROOT')
 
 TEMPLATES[0]['DIRS'] = ['templates',]
 FIXTURE_DIRS = ['fixtures']
@@ -78,4 +75,3 @@ STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
-#MEDIA_URL = 'https://{0}/{1}/'.format(AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
