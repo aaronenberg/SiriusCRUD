@@ -86,8 +86,39 @@
     flex-wrap: nowrap;
 }
 
-#id_outcomes .nav-link.active {
-    color: black;
+#id_outcomes .btn-secondary .nav-link {
+    color: white;
+
+}
+
+#id_outcomes .nav-item.btn-secondary {
+    background-color: #5a6268;
+        border-color: #545b62
+}
+
+a > .svg-icon {
+    width: 1em;
+}
+.outcome-link {
+    align-self: center;
+}
+
+a .svg-icon:hover {
+    filter: 
+    invert(0.5)
+    sepia(1)
+    hue-rotate(200deg)
+    saturate(4)
+    brightness(1);
+}
+
+#id_outcomes .outcome {
+    width: 85%;
+    color: #004a43;
+}
+#id_outcomes .row {
+    margin: 0;
+
 }
 
 #id_outcome_media {

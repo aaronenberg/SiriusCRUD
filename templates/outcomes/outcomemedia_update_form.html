@@ -8,13 +8,13 @@
 {% block extra-content %}
 
 {% if user.is_authenticated %}
-{% if form.errors %}
+  {% if form.errors %}
     {% for error in form.non_form_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
+    <div class="alert alert-danger">
+      <strong>{{ error|escape }}</strong>
+    </div>
     {% endfor %}
-{% endif %}
+  {% endif %}
 <form 
   id="outcome_media_form" 
   class="custom-validation mt-auto"

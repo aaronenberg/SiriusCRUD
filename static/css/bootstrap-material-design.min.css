@@ -10137,9 +10137,11 @@ fieldset[disabled][disabled] .has-danger .form-control, fieldset[disabled][disab
     .bmd-form-group.bmd-collapse-inline .collapsing {
       transition-duration: 0.2s;
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
-  #id_password::placeholder, #id_username::placeholder {
+  #id_password::placeholder, 
+  #id_username::placeholder {
     line-height: inherit; }
-  #search_input::placeholder { 
+  #search_input::placeholder,
+  #user_search_input::placeholder { 
     line-height: 1.75rem; }
   .bmd-form-group .form-control, .bmd-form-group .custom-file-control,
   .bmd-form-group label, .bmd-form-group input::placeholder{

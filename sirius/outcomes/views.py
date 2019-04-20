@@ -55,13 +55,15 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.instance.is_public = True
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
-        form.save()
+        outcome = form.save()
         # for a file field to accept multiple files we save each file, creating a new OutcomeMedia object
         outcomemedia = flatten_formset_file_fields(outcomemedia_form)
         for media in outcomemedia:
             media.author = self.request.user
             media.is_public = True
             media.save()
+        if outcome.course:
+            return redirect(outcome.course.get_absolute_url())
         return redirect('courses:subject-list')
 
     def form_invalid(self, form, outcomemedia_form, context):
@@ -119,7 +121,7 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             form.instance.is_public = False
         else:
             form.instance.is_public = True
-        form.save()
+        outcome = form.save()
         update_files_formset(outcomemedia_form)
         if self.request.FILES:
             outcomemedia = flatten_formset_file_fields(outcomemedia_form)
@@ -127,6 +129,8 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
+        if outcome.course:
+            return redirect(outcome.course.get_absolute_url())
         return redirect('courses:subject-list')
 
     def form_invalid(self, form, outcomemedia_form):
@@ -135,8 +139,10 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class OutcomeMediaUpdateView(UpdateView):
-    ''' Displays user-submitted posts for an outcome. Template hides form to 
-        submit a post and certain types of outcomes from unauthenticated users.'''
+    '''
+    Displays outcome details and a form for authenticated 
+    users to submit files to the outcome. 
+    '''
 
     template_name = 'outcomes/outcomemedia_update_form.html'
     context_object_name = 'outcome'
@@ -176,6 +182,8 @@ class OutcomeMediaUpdateView(UpdateView):
         for media in outcomemedia:
             media.author = self.request.user
             media.save()
+        if self.object.course:
+            return redirect(self.object.course.get_absolute_url())
         return redirect('courses:subject-list')
 
     def form_invalid(self, form):

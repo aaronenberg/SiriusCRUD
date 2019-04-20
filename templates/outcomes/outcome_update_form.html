@@ -15,5 +15,5 @@
 {% endblock save_draft %}
 
 {% block back_navigate %}
-<a class="btn" name="cancel" href="{% get_absolute_url outcome %}">Cancel</a>
+<a class="btn" name="cancel" href="{{ outcome.course.get_absolute_url }}">Cancel</a>
 {% endblock back_navigate %}

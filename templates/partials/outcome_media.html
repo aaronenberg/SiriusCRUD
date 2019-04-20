@@ -37,15 +37,26 @@
   <div class="mr-auto">
     <h6>{{ outcome_media.outcome.title }}</h6>
   </div>
-  {% if user.is_authenticated %}
-  <a href="{% url 'outcomes:outcome-media-update' outcome_media.outcome.slug %}">
-    <i class="fal fa-upload"></i>
-  </a>
   {% if outcome_media.outcome.author == user or user.is_superuser %}
-  <a href="{% url 'outcomes:outcome-update' outcome_media.outcome.slug %}">
-    <i class="fal fa-pencil-alt"></i>
-  </a>
-  {% endif %}
+  <div class="btn-group m-0">
+    <button class="btn bmd-btn-icon dropdown-toggle" 
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+      <i class="material-icons">more_vert</i>
+    </button>  
+    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex2">
+      <a class="dropdown-item"
+         href="{% url 'outcomes:outcome-update' outcome_media.outcome.slug %}">
+        Edit
+      </a>
+      <a class="dropdown-item"
+         href="{% url 'outcomes:outcome-submissions-update' outcome_media.outcome.slug %}">
+        Review Submissions
+      </a>
+    </div>
+  </div>
   {% endif %}
 </div>
 

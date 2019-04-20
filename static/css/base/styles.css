@@ -289,10 +289,12 @@ form {
 #search_input:focus {
     box-shadow: none;
 }
-#search_input:focus::placeholder
+#search_input:focus::placeholder,
+#course_sections:focus::placeholder,
+#user_search_input:focus::placeholder
 { color:transparent; }
 
-input::placeholder { color:lightgrey; }
+input::placeholder {  }
 
 #search_input {
     color: white;
@@ -434,7 +436,8 @@ label.bmd-label-static {
 
 #outcome-form,
 #course-form,
-#user-form
+#user-form,
+#development-form
 {
     display:flex;
     flex-direction:column;
@@ -465,6 +468,7 @@ body::-webkit-scrollbar-track {
     width: 10px;
     background-color: #F5F5F5;
 }
+
 
 ::-webkit-scrollbar-thumb {
     background-color: #818B99;

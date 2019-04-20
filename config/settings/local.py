@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = True
 
-SECRET_KEY = os.environ['SIRIUS_SECRET_KEY']
+SECRET_KEY = os.environ['SECRET_KEY']
 
 ALLOWED_HOSTS += ['*']
 
@@ -27,7 +27,7 @@ EMAIL_HOST_USER = os.environ['EMAIL']
 EMAIL_HOST_PASSWORD = os.environ['SIRIUS_EMAIL_PASS']
 
 
-MEDIA_ROOT = os.environ['SIRIUS_MEDIA_ROOT']
+MEDIA_ROOT = os.environ['MEDIA_ROOT']
 
 INTERNAL_IPS = '127.0.0.1'
 

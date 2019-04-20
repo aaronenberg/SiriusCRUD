@@ -67,7 +67,6 @@ class OutcomeForm(ModelForm):
             'name': 'year',
         }),
         required=False,
-        initial=current_year
     )
     section = ChoiceField(
         widget = Select(attrs={
