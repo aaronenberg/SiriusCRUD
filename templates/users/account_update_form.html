@@ -18,33 +18,33 @@
   {% csrf_token %}
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-12 col-lg-6">
+    <div class="form-group bmd-form-group col-12 col-lg-6">
       <label for="user-email" class="bmd-label-static">Email Address</label>
       {{ form.email }}
       {{ form.email.errors }}
     </div>
 
-    <div class="form-group col-12 col-lg-6">
-      <label for="user-username" class="bmd-label-static">Username</label>
+    <div class="form-group bmd-form-group col-12 col-lg-6">
+      <label for="user-username" class="bmd-label-static">{{ form.username.label }}</label>
       {{ form.username }}
     </div>
   </div>
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-12 col-lg-6">
-      <label for="user-first-name" class="bmd-label-static">First Name</label>
+    <div class="form-group bmd-form-group col-12 col-lg-6">
+      <label for="user-first-name" class="bmd-label-static">{{ form.first_name.label }}</label>
         {{ form.first_name }}
     </div>
 
-    <div class="form-group col-12 col-lg-6">
-      <label for="user-last-name" class="bmd-label-static">Last Name</label>
+    <div class="form-group bmd-form-group col-12 col-lg-6">
+      <label for="user-last-name" class="bmd-label-static">{{ form.last_name.label }}</label>
         {{ form.last_name }}
     </div>
   </div>
 
   {% if form.user_role and user.is_privileged %}
-  <div class="form-group">
-    <label for="user-user-type" class="bmd-label-static">User Role</label>
+  <div class="form-group bmd-form-group">
+    <label for="user-user-type" class="bmd-label-static">{{ form.user_role.label }}</label>
       {{ form.user_role }}
   </div>
   {% endif  %}
@@ -97,11 +97,6 @@
   {% if staffprofile_form %}
   <div class="form-row justify-content-end mb-auto">
     {% if user.user_role == 'FA' %}
-    <a 
-      class="mr-auto btn btn-dark"
-      href="{% url 'outcomes:draft-list' %}">
-      Saved Drafts
-    </a>
    <button id="user-courses-button" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#add-courses-modal">
       Add/Remove Courses
     </button>

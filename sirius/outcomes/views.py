@@ -11,7 +11,12 @@ from django.urls import reverse
 from courses.models import Course
 from .utils import get_course_from_url, flatten_formset_file_fields, update_files_formset
 from .models import Outcome, OutcomeMedia
-from .forms import OutcomeForm, OutcomeMediaFormSet, OutcomeMediaUpdateFormSet
+from .forms import (
+    OutcomeForm, 
+    OutcomeMediaFormSet,
+    OutcomeMediaUpdateFormSet,
+    UnprivilegedOutcomeMediaFormSet,
+)
 
 
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -165,13 +170,13 @@ class OutcomeMediaUpdateView(UpdateView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = OutcomeMediaFormSet()
+        form = UnprivilegedOutcomeMediaFormSet()
         context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context) 
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = OutcomeMediaFormSet(request.POST, request.FILES, instance=self.object)
+        form = UnprivilegedOutcomeMediaFormSet(request.POST, request.FILES, instance=self.object)
         context = self.get_context_data(form=form)
         if not form.is_valid():
             return self.form_invalid(form) 

@@ -96,9 +96,6 @@
         border-color: #545b62
 }
 
-a > .svg-icon {
-    width: 1em;
-}
 .outcome-link {
     align-self: center;
 }

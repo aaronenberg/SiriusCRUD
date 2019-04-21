@@ -14,7 +14,18 @@ function updateElementIndex(el, prefix, ndx) {
 
 function cloneMore(selector, prefix) {
     var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+    var max = $('#id_' + prefix + '-MAX_NUM_FORMS').val();
+
+    if (total >= max)
+        return false;
+
     var newElement = $(selector).clone(true);
+    if (total >= max - 1) {
+        newElement.find('.btn.add-media-upload')
+        .removeClass('btn-success').addClass('btn-danger')
+        .removeClass('add-media-upload').addClass('remove-media-upload')
+        .html('&#120273;');
+    }
 
     newElement.find(':input').each(function() {
       if (typeof($(this).attr('name')) != 'undefined') {
@@ -53,6 +64,14 @@ function deleteForm(prefix, btn) {
               });
           }
       }
+    }
+    if (total <= 2) {
+        console.log('hello');
+       $('.btn.remove-media-upload')
+        .removeClass('btn-danger')
+        .removeClass('remove-media-upload')
+        .addClass('add-media-upload')
+        .html('+');
     }
     return false;
 }

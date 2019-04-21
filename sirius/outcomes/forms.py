@@ -24,9 +24,27 @@ OutcomeMediaFormSet = inlineformset_factory(
     formset=BaseOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
     extra=1,
+    validate_max=True,
     widgets={'media': FileInput(attrs={
                 'class': 'custom-file',
                 'multiple': True
+            }),
+            'outcome_type': Select(attrs={
+                'class': 'form-control select-fix-height'
+            })
+    }
+)
+
+UnprivilegedOutcomeMediaFormSet = inlineformset_factory(
+    Outcome,
+    OutcomeMedia,
+    formset=BaseOutcomeMediaFormSet,
+    fields=('media', 'outcome_type'),
+    extra=1,
+    max_num=5,
+    validate_max=True,
+    widgets={'media': FileInput(attrs={
+                'class': 'custom-file',
             }),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
@@ -40,6 +58,7 @@ OutcomeMediaUpdateFormSet = inlineformset_factory(
     formset=BaseInlineFormSet,
     exclude = ('media', 'author'),
     extra=0,
+    validate_max=True,
     widgets={'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
             })

@@ -11,23 +11,49 @@
 
 {% block content-main %}
 
-<form method="post">
+  <div id="outcome_detail_title" class="submit-row align-items-center">
+    <div class="mr-auto">
+      {% if outcome.course %}
+      <a href="{{ outcome.course.get_absolute_url }}">
+        <h5>{{ outcome.course }}</h5>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <div id="outcome_detail_course_semester">
+      {% if outcome.semester %} | {{ outcome.get_semester_display }} {% endif %}
+      {% if outcome.year %}{{ outcome.year }} {% endif %}
+  </div>
+  <h6>{{ outcome.title }}</h6>
+
+{% if form.initial_form_count > 0 %}
+<form id="submission-form" method="post">
   {% csrf_token %}
 
   {{ form.management_form }}
 
   {% for media in form %}
     {{ media.id }}
-    <a href="{{ media.instance.media.url }}">{{ media.instance.filename }}</a>
-    <small>uploaded by: {{ media.instance.author }}</small>
-    <div class="col-11 col-lg-4">
-      {{ media.outcome_type }}
-    </div>
-    <div>
-      <p>{{ media.is_public }} publish</p>
-    </div>
-    <div>
-      <p>{{ media.is_delete }} delete</p>
+    <div class="form-group bmd-form-group">
+      <div class="col-12 form-row">
+        <a href="{{ media.instance.media.url }}">{{ media.instance.filename }}</a>
+      </div>
+      <div class="col-12 form-row">
+        <small>uploaded by: {{ media.instance.author }}</small>
+      </div>
+      <div class="col-12 form-row">
+        <div class="col-4">
+          {{ media.outcome_type }}
+        </div>
+        <div class="submission-actions col-4">
+          <div class="col-12 form-row align-items-center">
+          {{ media.is_public }} <span class="ml-1">publish</span>
+          </div>
+          <div class="col-12 form-row align-items-center">
+          {{ media.is_delete }} <span class="ml-1">delete</span>
+          </div>
+        </div>
+      </div>
     </div>
   {% endfor %}
 
@@ -37,7 +63,23 @@
     </div>
   </div>
 </form>
+{% else %}
+<p>There are currently no submissions.</p> 
+{% endif %}
 
 
 {% endblock content-main %}
 
+{% block custom_js %}
+  <script type="text/javascript">
+    $("input[type=checkbox]").click(function() {
+        if ($(this).attr("id").indexOf("public") > -1)
+            $(this).closest(".submission-actions")
+            .find("input[id*='delete']").prop("checked", false);
+        else 
+          $(this).closest(".submission-actions")
+          .find("input[id*='public']").prop("checked", false);
+    });
+           
+  </script>
+{% endblock custom_js %}

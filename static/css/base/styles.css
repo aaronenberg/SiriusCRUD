@@ -437,7 +437,8 @@ label.bmd-label-static {
 #outcome-form,
 #course-form,
 #user-form,
-#development-form
+#development-form,
+#submission-form
 {
     display:flex;
     flex-direction:column;
@@ -488,4 +489,8 @@ body::-webkit-scrollbar-track {
     position: absolute;
     top: 1rem;
     width: calc(100% - 2rem);
+}
+
+a > .svg-icon {
+    width: 1em;
 }

@@ -44,7 +44,7 @@
   {% csrf_token %}
 
   <div class="form-row">
-    <div class="form-group col-12">
+    <div class="form-group bmd-form-group col-12">
       <label for="outcome_title" class="control-label bmd-label-static">{{form.title.label}}</label>
       {{ form.title }}
       <div class="invalid-feedback">
@@ -54,29 +54,29 @@
   </div>
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-12 col-lg-9">
+    <div class="form-group bmd-form-group col-12 col-lg-9">
       <label for="outcome_course" class="bmd-label-static">{{ form.course.label }}</label>
         {{ form.course }}
     </div>
-    <div class="form-group col-12 col-lg-2">
+    <div class="form-group bmd-form-group col-12 col-lg-2">
       <label for="outcome_course_section" class="bmd-label-static">{{ form.section.label }}</label>
       {{ form.section }}
     </div>
   </div>
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-12 col-lg-9">
+    <div class="form-group bmd-form-group col-12 col-lg-9">
       <label for="outcome_semester" class="bmd-label-static">{{ form.semester.label }}</label>
         {{ form.semester }}
     </div>
-    <div class="form-group col-12 col-lg-2">
+    <div class="form-group bmd-form-group col-12 col-lg-2">
       <label for="outcome_year" class="bmd-label-static">{{ form.year.label }}</label>
       {{ form.year }}
     </div>
   </div>
 
   <div class="form-row">
-    <div class="form-group col-12">
+    <div class="form-group bmd-form-group col-12">
       <label for="outcome_description" class="bmd-label-static">{{ form.description.label }}</label>
       {{ form.description }}
     </div>

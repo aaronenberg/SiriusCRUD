@@ -14,7 +14,7 @@
 {% if user.is_superuser %}
 <div id="course_actions">
   <a class="btn btn-raised btn-primary" href="{% url 'courses:course-create' %}">
-    <i class="fas fa-plus-circle"></i>
+    <img class="svg-icon mr-1" src="{% static 'img/font-awesome/plus-circle.svg' %}">
     Add Course
   </a>
 </div>

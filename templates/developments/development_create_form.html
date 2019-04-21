@@ -43,7 +43,7 @@
   {% csrf_token %}
 
   <div class="form-row">
-    <div class="form-group col-12">
+    <div class="form-group bmd-form-group col-12">
       <label for="development_title" class="control-label bmd-label-static">{{form.title.label}}</label>
       {{ form.title }}
       <div class="invalid-feedback">
@@ -53,18 +53,18 @@
   </div>
 
   <div class="form-row justify-content-between">
-    <div class="form-group col-12 col-lg-9">
+    <div class="form-group bmd-form-group col-12 col-lg-9">
       <label for="development_semester" class="bmd-label-static">{{ form.semester.label }}</label>
         {{ form.semester }}
     </div>
-    <div class="form-group col-12 col-lg-2">
+    <div class="form-group bmd-form-group col-12 col-lg-2">
       <label for="development_year" class="bmd-label-static">{{ form.year.label }}</label>
       {{ form.year }}
     </div>
   </div>
 
   <div class="form-row">
-    <div class="form-group col-12">
+    <div class="form-group bmd-form-group col-12">
       <label for="development_description" class="bmd-label-static">{{ form.description.label }}</label>
       {{ form.description }}
     </div>
@@ -75,7 +75,7 @@
   <div id="development-media-forms-row">
     <div id="development-media-forms">
       {% for upload_form in developmentmedia_form %}
-      <div class="form-group media-upload spacer">
+      <div class="form-group bmd-form-group media-upload spacer">
         <hr/>
         <div class="custom-file col-11">
           {% if upload_form.instance.media %}
