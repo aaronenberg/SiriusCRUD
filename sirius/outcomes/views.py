@@ -230,6 +230,9 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
 
     def form_valid(self, form):
         form.save()
+        for outcomemedia in form.queryset:
+            if outcomemedia.is_delete:
+                outcomemedia.delete()
         return redirect(self.object.get_absolute_url())
 
     def form_invalid(self, form):

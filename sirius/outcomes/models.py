@@ -146,6 +146,8 @@ class OutcomeMedia(models.Model):
 
     is_public = models.BooleanField(default=False)
 
+    is_delete = models.BooleanField(default=False)
+
     section = models.PositiveSmallIntegerField(blank=True, null=True)
 
     semester = models.CharField(

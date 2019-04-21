@@ -24,7 +24,10 @@
       {{ media.outcome_type }}
     </div>
     <div>
-      <p>publish {{ media.is_public }}</p>
+      <p>{{ media.is_public }} publish</p>
+    </div>
+    <div>
+      <p>{{ media.is_delete }} delete</p>
     </div>
   {% endfor %}
 
