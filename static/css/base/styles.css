@@ -28,10 +28,6 @@ body, html {
     #id-main-nav {
         justify-content:center;
     }
-    #outcome_list, #course_list {
-        padding-right:0.5rem;
-        padding-left:0.5rem;
-    }
     .submit-row {
         margin-top: 1rem;
     }
@@ -60,6 +56,9 @@ body, html {
 
     #main {
         padding: 2rem;
+    }
+    #main p {
+        max-width: 75%;
     }
     div.alert {
         position: absolute;
@@ -494,3 +493,4 @@ body::-webkit-scrollbar-track {
 a > .svg-icon {
     width: 1em;
 }
+

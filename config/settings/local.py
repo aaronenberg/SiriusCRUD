@@ -31,7 +31,7 @@ MEDIA_ROOT = os.environ['MEDIA_ROOT']
 
 INTERNAL_IPS = '127.0.0.1'
 
-INSTALLED_APPS += ['debug_toolbar', ]
+INSTALLED_APPS += ['debug_toolbar', 'django_extensions']
 
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
 
@@ -42,3 +42,8 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 FIXTURE_DIRS = ['fixtures']
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+}
