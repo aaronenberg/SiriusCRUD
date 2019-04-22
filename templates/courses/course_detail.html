@@ -136,7 +136,7 @@
 
   <div id="id_outcome_title_description">
     <div id="id_outcome_title">
-      <div class="submit-row align-items-center">
+      <div class="submit-row mt-0 align-items-center">
         <div class="mr-auto">
           <h6 class="mb-0">{{ latest_outcome.outcome.title }}</h6>
         </div>
@@ -219,7 +219,7 @@
         </a>
          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_section">
            <li id="id_section_all"
-               class="dropdown-item"
+               class="dropdown-item selected"
                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
              all
            </li>
@@ -242,11 +242,10 @@
         <ul>
           {% if user.is_authenticated %}
           {% for raw_data in latest_outcome.raw_data %}
-          <li class="row w-100 mt-1 justify-content-between">
+          <li class="w-100 row mt-1">
             <a href="{{ raw_data.media.url }}">
               {{ raw_data.filename }}
             </a>
-            <span>{{ raw_data.section | stringformat:"02d" }}</span>
           </li>
           {% endfor %}
           {% else %}
@@ -261,11 +260,10 @@
            aria-labelledby="tab_analyzed_data">
         <ul>
           {% for analyzed_data in latest_outcome.analyzed_data %}
-          <li class="row w-100 mt-1 justify-content-between">
+          <li class="w-100 row mt-1">
             <a href="{{ analyzed_data.media.url }}">
               {{ analyzed_data.filename }}
             </a>
-            <span>{{ analyzed_data.section | stringformat:"02d" }}</span>
           </li>
           {% endfor %}
         </ul>
@@ -277,7 +275,7 @@
            aria-labelledby="tab_curriculum">
         <ul>
           {% for curriculum in latest_outcome.curriculum %}
-          <li>
+          <li class="w-100 row mt-1">
             <a href="{{ curriculum.media.url }}">
               {{ curriculum.filename }}
             </a>

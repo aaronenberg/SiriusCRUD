@@ -1,11 +1,10 @@
 <ul id="media_raw_data">
 {% if user.is_authenticated %}
 {% for raw_data in outcome_media.raw_data %}
-  <li class="row w-100 mt-1 justify-content-between">
+  <li class="w-100 row mt-1">
     <a href="{{ raw_data.media.url }}">
       {{ raw_data.filename }}
     </a>
-    <span>{{ raw_data.section | stringformat:"02d" }}</span>
   </li>
 {% endfor %}
 {% else %}
@@ -16,18 +15,17 @@
 
 <ul id="media_analyzed_data">
 {% for analyzed_data in outcome_media.analyzed_data %}
-  <li class="row w-100 mt-1 justify-content-between">
+  <li class="row mt-1">
     <a href="{{ analyzed_data.media.url }}">
       {{ analyzed_data.filename }}
     </a>
-    <span>{{ analyzed_data.section | stringformat:"02d" }}</span>
   </li>
 {% endfor %}
 </ul>
 
 <ul id="media_curriculum">
 {% for curriculum in outcome_media.curriculum %}
-  <li class="row w-100 mt-1 justify-content-between">
+  <li class="row mt-1">
     <a href="{{ curriculum.media.url }}">
       {{ curriculum.filename }}
     </a>

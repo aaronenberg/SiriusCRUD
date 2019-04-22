@@ -70,12 +70,11 @@
 #id_course_outcomes {
     display:grid;
     grid-template-columns: 30% 70%;
-    grid-template-rows: 5vh 20vh minmax(40vh, auto);
+    grid-template-rows: 5vh 20vh 40vh;
     grid-template-areas:
         "new_outcome outcome_description"
         "outcomes outcome_description"
         "outcomes outcome_media";
-    height: 75vh;
     background-color: whitesmoke;
     border: 2px solid #0f5e7f;
     border-radius: 5px;
@@ -114,13 +113,19 @@ a .svg-icon:hover {
     brightness(1);
 }
 
+#id_outcomes .btn-secondary .svg-icon {
+    width: 1em;
+}
+#id_outcomes .svg-icon {
+    width: 0;
+}
+
 #id_outcomes .outcome {
     width: 85%;
     color: #004a43;
 }
 #id_outcomes .row {
     margin: 0;
-
 }
 
 #id_outcome_media {
@@ -200,20 +205,19 @@ a .svg-icon:hover {
     #id_course_outcomes {
         display: flex;
         flex-direction: column;
-        height: 80vh;
     }
     #id_outcome_title {
         padding-top:0;
     }
-    #id_outcome_description {
-    }
     #id_outcomes {
-        height: 15vh;
+        height: 30vh;
         border-right: 0;
     }
     #id_outcome_title_description {
         border-top: 2px solid #0f5e7f;
-        height: 15vh;
+    }
+    #id_outcome_description {
+        height: 20vh;
     }
     #id_outcome_media_content {
         overflow-y: auto;
@@ -221,9 +225,21 @@ a .svg-icon:hover {
     }
 }
 
+@media (max-width: 566.98px) {
+    #id_course_outcomes {
+        height: unset;
+    }
+    #outcome_media_tabs {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 #outcome_media_tabs .dropdown-menu {
     min-width: unset;
     max-width: 5rem;
+    max-height: 30vh;
+    overflow-y: auto;
 }
 #outcome_media_tabs .dropdown-menu .dropdown-item {
     min-width: unset;
