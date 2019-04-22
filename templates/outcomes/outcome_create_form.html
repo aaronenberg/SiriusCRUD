@@ -87,28 +87,7 @@
   <div id="outcome-media-forms-row">
     <div id="outcome-media-forms">
       {% for upload_form in outcomemedia_form %}
-      <div class="form-group media-upload spacer">
-        <hr/>
-        <div class="custom-file col-11">
-          {% if upload_form.instance.media %}
-            {{ upload_form.id }}
-            Current:
-            <a href="{{ upload_form.instance.media.url }}">
-              {{ upload_form.instance.filename }}
-            </a>
-          {% endif %}
-          {{ upload_form.media }}
-        </div>
-        <div class="input-group row col-11 col-sm-12 col-xl-6 col-lg-8">
-          {% if not upload_form.instance.id %}
-          <button class="btn btn-success add-media-upload">+</button>
-          {% endif %}
-          {{ upload_form.outcome_type }}
-          <div class="invalid-feedback">
-            Select a file type
-          </div>
-        </div>
-      </div>
+        {% include 'partials/media_upload.html' %}
       {% endfor %}
     </div>
   </div>
@@ -129,7 +108,9 @@
 {% endblock content-main %}
 
 {% block custom_js %}
-<script src="{% static 'js/outcomemedia-formset-management.js'%}" type='text/javascript'></script>
+<script type='text/javascript'>
+    {% include 'partials/js/outcomemedia-formset-management.js' %}
+</script>
 <script src="{% static 'js/get-course-sections.js'%}" type='text/javascript'></script>
 <script>$('#outcome_title').disableAutoFill();</script>
 {% endblock custom_js %}

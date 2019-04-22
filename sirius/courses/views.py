@@ -49,11 +49,18 @@ Outcome_Media = namedtuple('Outcome_Media',
 )
 def get_outcome_media(request):
     outcome_id = request.GET.get('outcome_id')
-    outcome = Outcome.objects.get(pk=outcome_id)
-    raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
-    analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
-    curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
-    outcome_media = Outcome_Media(outcome, raw_data, analyzed_data, curriculum)
+    section = request.GET.get('section')
+    if outcome_id is not None:
+        outcome = Outcome.objects.get(pk=outcome_id)
+        raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+        analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
+        curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
+        outcome_media = Outcome_Media(outcome, raw_data, analyzed_data, curriculum)
+        if section is not None and section != 'all':
+            raw_data = raw_data.filter(section=section)
+            analyzed_data = analyzed_data.filter(section=section)
+            curriculum = curriculum.filter(section=section)
+        outcome_media = Outcome_Media(outcome, raw_data, analyzed_data, curriculum)
     return render(
         request, 
         'partials/outcome_media.html',

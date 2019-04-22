@@ -70,7 +70,7 @@
     align-self: center;
 }
 
-#development-media-forms .form-group:first-child hr {
+#development-media-forms .media-upload:first-child hr {
     display: none;
 }
 
@@ -81,4 +81,17 @@
 .list-group-item-action.active:last-child,
 .list-group-item-action.active {
     min-height: 11vh;
+}
+
+.add-media-upload,
+.add-media-upload:hover,
+.add-media-upload:active,
+.add-media-upload:focus,
+.remove-media-upload,
+.remove-media-upload:hover,
+.remove-media-upload:active,
+.remove-media-upload:focus {
+    text-decoration: none;
+    background-color: unset;
+    color: black;
 }

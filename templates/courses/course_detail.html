@@ -8,12 +8,13 @@
   #id_course_detail_description a {
       position:relative;
       height: 65px;
+      width: 10px;
   }
   #id_course_detail_description a:after {
-      content: url({% static 'img/font-awesome/caret-up.svg' %});
+      content: url({% static 'img/font-awesome/caret-down.svg' %});
   }
   #id_course_detail_description a.collapsed:after {
-      content: url({% static 'img/font-awesome/caret-down.svg' %});
+      content: url({% static 'img/font-awesome/caret-up.svg' %});
   }
 </style>
 {% endblock custom_css %}
@@ -84,7 +85,8 @@
 
 <div class="align-items-center row m-0 mr-auto" id="id_course_detail_description">
   <h6 class="mr-1 mb-0">Course Description</h6>
-  <a data-toggle="collapse" 
+  <a href="javascript:void(0)"
+     data-toggle="collapse" 
      data-target="#collapseExample"
      aria-expanded="false"
      aria-controls="collapseExample">
@@ -134,9 +136,9 @@
 
   <div id="id_outcome_title_description">
     <div id="id_outcome_title">
-      <div class="submit-row">
+      <div class="submit-row align-items-center">
         <div class="mr-auto">
-          <h6>{{ latest_outcome.outcome.title }}</h6>
+          <h6 class="mb-0">{{ latest_outcome.outcome.title }}</h6>
         </div>
         {% if latest_outcome %}
         {% if latest_outcome.outcome.author == user or user.is_superuser %}
@@ -205,6 +207,31 @@
            Curriculum
         </a>
       </li>
+
+      <div class="ml-auto mr-2 dropdown">
+        <a class="nav-link dropdown-toggle"
+           id="dropdown_section"
+           href="#section"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">
+           Section
+        </a>
+         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_section">
+           <li id="id_section_all"
+               class="dropdown-item"
+               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
+             all
+           </li>
+           {% for section in course.sections %}
+           <li id="id_section_{{ section }}" 
+               class="dropdown-item"
+               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
+               {{ section | stringformat:"02d"  }}
+           </li>
+           {% endfor %}
+         </div>
+      </div>
     </ul>
 
     <div class="tab-content" id="id_outcome_media_content">
@@ -215,10 +242,11 @@
         <ul>
           {% if user.is_authenticated %}
           {% for raw_data in latest_outcome.raw_data %}
-          <li>
+          <li class="row w-100 mt-1 justify-content-between">
             <a href="{{ raw_data.media.url }}">
               {{ raw_data.filename }}
             </a>
+            <span>{{ raw_data.section | stringformat:"02d" }}</span>
           </li>
           {% endfor %}
           {% else %}
@@ -233,10 +261,11 @@
            aria-labelledby="tab_analyzed_data">
         <ul>
           {% for analyzed_data in latest_outcome.analyzed_data %}
-          <li>
+          <li class="row w-100 mt-1 justify-content-between">
             <a href="{{ analyzed_data.media.url }}">
               {{ analyzed_data.filename }}
             </a>
+            <span>{{ analyzed_data.section | stringformat:"02d" }}</span>
           </li>
           {% endfor %}
         </ul>
@@ -264,4 +293,10 @@
 
 {% block custom_js %}
   <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
+  <script type="text/javascript">
+    $('#outcome_media_tabs .dropdown-item').click(function() {
+        $('#outcome_media_tabs .dropdown-item.selected').removeClass('selected');
+        $(this).addClass('selected');
+    });
+  </script>
 {% endblock custom_js %}

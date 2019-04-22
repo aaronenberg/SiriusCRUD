@@ -220,3 +220,17 @@ a .svg-icon:hover {
         height: 40vh;
     }
 }
+
+#outcome_media_tabs .dropdown-menu {
+    min-width: unset;
+    max-width: 5rem;
+}
+#outcome_media_tabs .dropdown-menu .dropdown-item {
+    min-width: unset;
+    min-height: unset;
+    cursor: pointer;
+}
+
+.dropdown-item.selected {
+    background-color: darkgrey;
+}

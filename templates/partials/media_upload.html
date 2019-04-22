@@ -1,0 +1,35 @@
+{% load static %}
+
+
+<div class="media-upload spacer">
+  <hr/>
+  <div class="custom-file">
+    {% if upload_form.instance.media %}
+      {{ upload_form.id }}
+      Current:
+      <a href="{{ upload_form.instance.media.url }}">
+        {{ upload_form.instance.filename }}
+      </a>
+    {% endif %}
+    {{ upload_form.media }}
+  </div>
+  <div class="bmd-form-group input-group flex-column">
+    <div class="col-12 col-xl-6 col-lg-8">
+    {% if upload_form.development_type %}
+      {{ upload_form.development_type }}
+    {% elif upload_form.outcome_type %}
+      {{ upload_form.outcome_type }}
+    {% endif %}
+    </div>
+    {% if not upload_form.instance.id %}
+    <a href="javascript:void(0)" class="mt-2 mb-2 add-media-upload">
+      <img class="mr-2 svg-icon" 
+           src="{% static 'img/font-awesome/layer-plus.svg' %}">
+      Add another file
+    </a>
+    {% endif %}
+    <div class="invalid-feedback">
+      Select a file type
+    </div>
+  </div>
+</div>

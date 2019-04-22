@@ -1,3 +1,6 @@
+{% load static %}
+
+
 function updateElementIndex(el, prefix, ndx) {
     var id_regex = new RegExp('(' + prefix + '-\\d+)');
     var replacement = prefix + '-' + ndx;
@@ -13,8 +16,19 @@ function updateElementIndex(el, prefix, ndx) {
 }
 
 function cloneMore(selector, prefix) {
-    var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    var max = parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
+
+    if (total >= max)
+        return false;
+
     var newElement = $(selector).clone(true);
+
+    if (total >= max - 1) {
+        newElement.find('.add-media-upload')
+        .removeClass('add-media-upload').addClass('remove-media-upload')
+        .html('<img class="mr-2 svg-icon" src="{% static "img/font-awesome/layer-minus.svg" %}"> Remove File');
+    }
 
     newElement.find(':input').each(function() {
       if (typeof($(this).attr('name')) != 'undefined') {
@@ -30,10 +44,9 @@ function cloneMore(selector, prefix) {
     $(selector).after(newElement);
 
     var conditionRow = $('.media-upload:not(:last)');
-    conditionRow.find('.btn.add-media-upload')
-    .removeClass('btn-success').addClass('btn-danger')
+    conditionRow.find('.add-media-upload')
     .removeClass('add-media-upload').addClass('remove-media-upload')
-    .html('&#120273;');
+    .html('<img class="mr-2 svg-icon" src="{% static "img/font-awesome/layer-minus.svg" %}"> Remove File');
 
     return false;
 }
@@ -53,6 +66,12 @@ function deleteForm(prefix, btn) {
               });
           }
       }
+    }
+    if (total <= 2) {
+       $('.remove-media-upload')
+        .removeClass('remove-media-upload')
+        .addClass('add-media-upload')
+        .html('<img class="mr-2 svg-icon" src="{% static "img/font-awesome/layer-plus.svg" %}"> Add another file');
     }
     return false;
 }

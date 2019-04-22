@@ -56,7 +56,7 @@ OutcomeMediaUpdateFormSet = inlineformset_factory(
     Outcome,
     OutcomeMedia,
     formset=BaseInlineFormSet,
-    exclude = ('media', 'author'),
+    exclude = ('media', 'author', 'year', 'section',),
     extra=0,
     validate_max=True,
     widgets={'outcome_type': Select(attrs={

@@ -166,6 +166,8 @@ class OutcomeMediaUpdateView(UpdateView):
         context['outcomemedia_list'] = media
         types = [t['outcome_type'] for t in media.values('outcome_type')]
         context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
+        if self.object.course:
+            context['outcome_course_sections'] = self.object.course.sections
         return context
     
     def get(self, request, *args, **kwargs):
@@ -186,6 +188,7 @@ class OutcomeMediaUpdateView(UpdateView):
         outcomemedia = flatten_formset_file_fields(form)
         for media in outcomemedia:
             media.author = self.request.user
+            media.section = self.request.POST['section']
             media.save()
         if self.object.course:
             return redirect(self.object.course.get_absolute_url())
