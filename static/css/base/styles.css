@@ -486,9 +486,9 @@ label.bmd-label-static {
 {
     display:flex;
     flex-direction:column;
+    flex-grow: 1;
     width:100%;
     border: 0.3rem solid #0f5e7f;
-    min-height:100%;
 }
 .center {
     align-self:center;

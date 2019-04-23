@@ -11,14 +11,6 @@
 
 {% block content-main %}
 
-{% if user.is_superuser %}
-<div id="course_actions">
-  <a class="btn btn-raised btn-primary" href="{% url 'courses:course-create' %}">
-    <img class="svg-icon mr-1" src="{% static 'img/font-awesome/plus-circle.svg' %}">
-    Add Course
-  </a>
-</div>
-{% endif %}
 
 <div id="subject_list" class="list-group">
 {% for subject_item in subjects %}
@@ -42,6 +34,15 @@
   </a>
 {% endfor %}
 </div>
+
+{% if user.is_superuser %}
+<div id="course_actions" class="mt-3">
+  <a class="text-center" href="{% url 'courses:course-create' %}">
+    <img class="svg-icon mr-1 mb-1" src="{% static 'img/font-awesome/plus-circle-black.svg' %}">
+    Add Course
+  </a>
+</div>
+{% endif %}
 
 {% block course_list %}
 <div id="course_list" class="list-group align-items-center">

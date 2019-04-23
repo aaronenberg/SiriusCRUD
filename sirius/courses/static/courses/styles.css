@@ -250,3 +250,8 @@ a .svg-icon:hover {
 .dropdown-item.selected {
     background-color: darkgrey;
 }
+
+#course_actions a {
+    text-decoration: none;
+    color: black;
+}

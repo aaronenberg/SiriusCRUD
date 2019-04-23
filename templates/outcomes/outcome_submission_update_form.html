@@ -34,7 +34,7 @@
 
   {% for media in form %}
     {{ media.id }}
-    <div class="form-group bmd-form-group">
+    <div class="form-group bmd-form-group pt-3 mb-0">
       <div class="col-12 form-row">
         <a href="{{ media.instance.media.url }}">{{ media.instance.filename }}</a>
       </div>
@@ -42,10 +42,10 @@
         <small>uploaded by: {{ media.instance.author }}</small>
       </div>
       <div class="col-12 form-row">
-        <div class="col-4">
+        <div class="col-xl-6 col-lg-8 col-md-8 col-sm-8">
           {{ media.outcome_type }}
         </div>
-        <div class="submission-actions col-4">
+        <div class="submission-actions col-xl-6 col-lg-4 col-md-4 col-sm-4 col-12">
           <div class="col-12 form-row align-items-center">
           {{ media.is_public }} <span class="ml-1">publish</span>
           </div>
@@ -54,10 +54,11 @@
           </div>
         </div>
       </div>
+      <hr/>
     </div>
   {% endfor %}
 
-  <div class="submit-row">
+  <div class="submit-row mt-auto">
     <div class="mr-auto">
       <input type="Submit" class="btn btn-raised btn-primary" value="Save">
     </div>
