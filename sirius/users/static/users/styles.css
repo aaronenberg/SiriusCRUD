@@ -48,7 +48,7 @@ select:-internal-list-box option:checked {
     border-style: solid;
     border-width: 0.1rem;
     color:white;
-    max-height: 5vh;
+    max-height: 10vh;
 }
 
 .errorlist {
@@ -60,6 +60,7 @@ select:-internal-list-box option:checked {
     background-color: rgba(18,85,74, 0.1);
     height:20vh;
     margin-bottom: 0.3rem;
+    margin-top: 0.5rem;
     align-items:center;
     padding:1rem;
 }

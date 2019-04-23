@@ -50,48 +50,50 @@
   {% endif  %}
 
   {% if form.instance.staffprofile %}
-  <label for="mysirius-courses" class="bmd-label-static">MySIRIUS Courses</label>
-  {% if staffprofile_form %}
-  <div class="modal fade" id="add-courses-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="courses-modal-title">Courses</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <small>Select the courses you are currently teaching:</small>
-          {{ staffprofile_form.courses }}
-        </div>
-        <div class="modal-footer">
-          <button id="user-courses-submit" type="Submit" class="btn btn-primary">Save changes</button>
+  <div class="form-group bmd-form-group">
+    <label for="mysirius-courses" class="bmd-label-static">MySIRIUS Courses</label>
+    {% if staffprofile_form %}
+    <div class="modal fade" id="add-courses-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="courses-modal-title">Courses</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <small>Select the courses you are currently teaching:</small>
+            {{ staffprofile_form.courses }}
+          </div>
+          <div class="modal-footer">
+            <button id="user-courses-submit" type="Submit" class="btn btn-primary">Save changes</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  {% endif %}
-  <div id="mysirius-courses-row">
-    <div id="mysirius-courses" class="list-group">
-      {% for course in users_courses %}
-      <a class="justify-content-center
-                list-group-item
-                list-group-item-action
-                flex-column 
-                align-items-start
-              {% if course.subject == 'GEOL' %} subject-geol
-              {% elif course.subject == 'CHEM' %} subject-chem
-              {% elif course.subject == 'ENVS' %} subject-envs
-              {% elif course.subject == 'BIO' %} subject-bio
-              {% elif course.subject == 'CE' %} subject-ce
-              {% endif %}"
-         href="{{ course.get_absolute_url }}">
-        <div class="d-flex w-100 justify-content-between">
-          <h6>{{ course }}</h6>
-        </div>
-      </a>
-      {% endfor %}
+    {% endif %}
+    <div id="mysirius-courses-row">
+      <div id="mysirius-courses" class="list-group">
+        {% for course in users_courses %}
+        <a class="justify-content-center
+                  list-group-item
+                  list-group-item-action
+                  flex-column 
+                  align-items-start
+                {% if course.subject == 'GEOL' %} subject-geol
+                {% elif course.subject == 'CHEM' %} subject-chem
+                {% elif course.subject == 'ENVS' %} subject-envs
+                {% elif course.subject == 'BIO' %} subject-bio
+                {% elif course.subject == 'CE' %} subject-ce
+                {% endif %}"
+           href="{{ course.get_absolute_url }}">
+          <div class="d-flex w-100 justify-content-between">
+            <h6>{{ course }}</h6>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
   </div>
   {% if staffprofile_form %}
@@ -107,7 +109,7 @@
   <div class="submit-row mt-auto">
     <input class="btn btn-raised btn-primary" type="Submit" value="Save">
     {% if form.instance == user %}
-    <a class="btn btn-raised btn-secondary" href="{% url 'users:password_change' %}">Change Password</a>
+    <a class="btn btn-dark" href="{% url 'users:password_change' %}">Change Password</a>
     {% endif %}
   </div>
 </form>
