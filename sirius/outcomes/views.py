@@ -15,7 +15,7 @@ from .forms import (
     OutcomeForm, 
     OutcomeMediaFormSet,
     OutcomeMediaUpdateFormSet,
-    UnprivilegedOutcomeMediaFormSet,
+    OutcomeSubmissionsUpdateFormSet,
 )
 
 
@@ -172,13 +172,13 @@ class OutcomeMediaUpdateView(UpdateView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = UnprivilegedOutcomeMediaFormSet()
+        form = OutcomeMediaUpdateFormSet()
         context = self.get_context_data(form=form)
         return render(request, self.get_template_names(), context) 
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = UnprivilegedOutcomeMediaFormSet(request.POST, request.FILES, instance=self.object)
+        form = OutcomeMediaUpdateFormSet(request.POST, request.FILES, instance=self.object)
         context = self.get_context_data(form=form)
         if not form.is_valid():
             return self.form_invalid(form) 
@@ -221,7 +221,7 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = OutcomeMediaUpdateFormSet(
+        form = OutcomeSubmissionsUpdateFormSet(
                 instance=self.object,
                 queryset=OutcomeMedia.objects.filter(is_public=False)
         )
@@ -230,7 +230,7 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = OutcomeMediaUpdateFormSet(request.POST, instance=self.object)
+        form = OutcomeSubmissionsUpdateFormSet(request.POST, instance=self.object)
         context = self.get_context_data(form=form)
         if not form.is_valid():
             return self.form_invalid(form) 
@@ -241,6 +241,8 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
         for outcomemedia in form.queryset:
             if outcomemedia.is_delete:
                 outcomemedia.delete()
+        if self.object.course:
+            return redirect(self.object.course.get_absolute_url())
         return redirect(self.object.get_absolute_url())
 
     def form_invalid(self, form):

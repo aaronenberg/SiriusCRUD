@@ -18,9 +18,16 @@ class BaseOutcomeMediaFormSet(BaseInlineFormSet):
                 raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
 
 
-class BaseUnprivilegedOutcomeMediaFormSet(BaseOutcomeMediaFormSet):
+class BaseOutcomeSubmissionsUpdateFormSet(BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
-        super(BaseUnprivilegedOutcomeMediaFormSet, self).__init__(*args, **kwargs)
+        super(BaseOutcomeSubmissionsUpdateFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
+
+
+class BaseOutcomeMediaUpdateFormSet(BaseOutcomeMediaFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseOutcomeMediaUpdateFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
 
@@ -42,10 +49,10 @@ OutcomeMediaFormSet = inlineformset_factory(
     }
 )
 
-UnprivilegedOutcomeMediaFormSet = inlineformset_factory(
+OutcomeMediaUpdateFormSet = inlineformset_factory(
     Outcome,
     OutcomeMedia,
-    formset=BaseUnprivilegedOutcomeMediaFormSet,
+    formset=BaseOutcomeMediaUpdateFormSet,
     fields=('media', 'outcome_type'),
     extra=1,
     max_num=5,
@@ -59,10 +66,10 @@ UnprivilegedOutcomeMediaFormSet = inlineformset_factory(
     }
 )
 
-OutcomeMediaUpdateFormSet = inlineformset_factory(
+OutcomeSubmissionsUpdateFormSet = inlineformset_factory(
     Outcome,
     OutcomeMedia,
-    formset=BaseUnprivilegedOutcomeMediaFormSet,
+    formset=BaseOutcomeSubmissionsUpdateFormSet,
     exclude = ('media', 'author', 'year', 'section',),
     extra=0,
     validate_max=True,
