@@ -16,7 +16,7 @@
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
         <div id="nav-left" class="navbar-nav">
           <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
              href="{% url 'courses:subject-list' %}">
@@ -38,7 +38,7 @@
         </div>
         <div id="nav-right" class="navbar-nav">
           {% if user.is_authenticated %}
-          <div class="btn-group m-0">
+          <div id="nav_account_dropdown" class="btn-group m-0">
             <a href="javascript:void(0)"
                class="nav-item nav-link dropdown-toggle
                       {% if 'account' in request.path %}
@@ -50,17 +50,28 @@
               {{ user.email }}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item "
+              <a class="dropdown-item"
                  href="{% url 'users:account-update' %}">
                  SIRIUS Account
               </a>
-              <a class="dropdown-item "
+              <a class="dropdown-item"
                  href="{% url 'outcomes:draft-list' %}">
                  Saved Drafts
               </a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
             </div>
+          </div>
+          <div id="nav_account" class="text-center">
+            <a class="nav-item nav-link"
+               href="{% url 'users:account-update' %}">
+               SIRIUS Account
+            </a>
+              <a class="nav-item nav-link"
+                 href="{% url 'outcomes:draft-list' %}">
+                 Saved Drafts
+              </a>
+            <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
           </div>
           {% else %}
             {% if 'login' not in request.path %}

@@ -48,6 +48,17 @@ p, li {
     position: relative;
     color: black;
 }
+@media (min-width: 992px) {
+    #nav_account {
+        display: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    #nav_account_dropdown {
+        display: none;
+    }
+}
 
 @media (min-width: 768px) {
     #container {
@@ -533,6 +544,9 @@ a > .svg-icon {
     margin-left: 2rem;
 }
 
+#goals_list {
+    width: 75%;
+}
 #goals_list li {
     list-style: decimal;
 }
