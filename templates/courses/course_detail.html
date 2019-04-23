@@ -24,7 +24,7 @@
 {% endblock title %}
 
 {% block content-main %}
-<div class="submit-row align-items-center mb-2">
+<div class="submit-row align-items-center">
   <div id="course_detail_title">
     <h5>{{ course }}</h5>
   </div>
@@ -97,7 +97,7 @@
   <p class="m-auto">{{ course.description }}</p>
 </div>
 
-<h6>Course Outcomes</h6>
+<h6 class="mb-4">Course Outcomes</h6>
 <div id="id_course_outcomes">
     <a id="id_new_outcome" class="btn-dark nav-link" href="{% url 'outcomes:outcome-create' %}">
       <img class="mr-1 svg-icon" src="{% static 'img/font-awesome/plus-circle.svg' %}">

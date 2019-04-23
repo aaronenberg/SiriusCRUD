@@ -94,14 +94,18 @@
 
   <div class="submit-row">
     <div class="mr-auto">
-      {% block back_navigate %}
-      <a class="btn" href="{% url 'courses:subject-list' %}">Cancel</a>
-      {% endblock back_navigate %}
+      <input type="Submit" class="btn btn-raised btn-primary" value="Post">
+      {% block save_draft%}
+      <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+      {% endblock save_draft %}
     </div>
-    {% block save_draft%}
-    <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
-    {% endblock save_draft %}
-    <input type="Submit" class="btn btn-raised btn-primary" value="Post">
+    {% block back_navigate %}
+    {% if request.META.HTTP_REFERER %}
+    <a class="btn" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    {% else %}
+    <a class="btn" href="{% url 'courses:subject-list' %}">Cancel</a>
+    {% endif %}
+    {% endblock back_navigate %}
   </div>
 </form>
 
