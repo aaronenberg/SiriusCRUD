@@ -22,7 +22,7 @@
 
 #development-media-forms-row {
     border: 0.2rem solid gainsboro; 
-    border-radius: 1rem;
+    border-radius: 5px;
     background-color: rgba(18,85,74, 0.1);
     height:23vh;
     margin-bottom: 1rem;

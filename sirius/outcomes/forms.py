@@ -1,7 +1,7 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
-from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES 
+from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES
 from courses.models import Course
 from .utils import current_year, filename
 
@@ -16,6 +16,13 @@ class BaseOutcomeMediaFormSet(BaseInlineFormSet):
                 raise ValidationError("File type was chosen without uploading a file.")
             if media and not outcome_type:
                 raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
+
+
+class BaseUnprivilegedOutcomeMediaFormSet(BaseOutcomeMediaFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseUnprivilegedOutcomeMediaFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
 
 
 OutcomeMediaFormSet = inlineformset_factory(
@@ -38,7 +45,7 @@ OutcomeMediaFormSet = inlineformset_factory(
 UnprivilegedOutcomeMediaFormSet = inlineformset_factory(
     Outcome,
     OutcomeMedia,
-    formset=BaseOutcomeMediaFormSet,
+    formset=BaseUnprivilegedOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
     extra=1,
     max_num=5,
@@ -55,7 +62,7 @@ UnprivilegedOutcomeMediaFormSet = inlineformset_factory(
 OutcomeMediaUpdateFormSet = inlineformset_factory(
     Outcome,
     OutcomeMedia,
-    formset=BaseInlineFormSet,
+    formset=BaseUnprivilegedOutcomeMediaFormSet,
     exclude = ('media', 'author', 'year', 'section',),
     extra=0,
     validate_max=True,

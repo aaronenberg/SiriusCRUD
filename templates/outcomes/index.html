@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 
 {% block title %}
@@ -6,24 +7,71 @@
 {% endblock title %}
 
 {% block content-main %}
-<h4>The Sirius Project</h4>
-<p>
-The Sustainable Interdisciplinary Research to Inspire Undergraduate Success (SIRIUS) Project aims to provide nearly 2,000 students, majoring in the Biological Sciences, with authentic research experiences. This is being achieved through the re-design and coordination of 12 laboratory courses, all focused on a common theme – the human impacts of the American River Ecosystem. The curriculum spans introductory to capstone-level courses and multiple sub-disciplines of biology, giving students repeated experiences to develop research skills and contribute novel data to the existing knowledge about the waterway that runs through the Sacramento State campus. 
-</p>
+<div class="list-group align-items-center w-100" id="project_statement">
+  <h4 class="mt-3">The SIRIUS Project</h4>
+  <p>
+    The Sustainable Interdisciplinary Research to Inspire Undergraduate Success (SIRIUS) Project aims to provide students majoring in Science, Technology, Engineering and Mathematics (STEM) with authentic professional learning experiences in the classroom. Our goal is to help each discipline develop and implement classroom experiences that reflect the activities of their working professionals. We have currently redesigned and coordinated scientific investigations in 18 laboratory science courses, all focused on a common theme – the human impacts on the American River Ecosystem that runs through our campus. The SIRIUS Project was developed in the Biology Department and has now expanded to other departments on campus, including Chemistry, Geology and Environmental Studies. Future goals include participation throughout the STEM disciplines at Sacramento State and from our critical education partners at the Los Rios Community College District in Sacramento.
+  </p>
+</div>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" 
+           src="{% static 'img/SIRIUSKeckCollection/SIRIUS 4.jpg' %}"
+           alt="First slide">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Student working with one of four fluorescent microscopes during Advanced Cell Biology</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" 
+           src="{% static 'img/SIRIUSKeckCollection/SIRIUS 16.jpg' %}"
+           alt="First slide">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Preparing mammalian cell cultures as part of the American River toxicology study in BIO 187</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100"
+           src="{% static 'img/SIRIUSKeckCollection/SIRIUS 18.jpg' %}"
+           alt="Third slide">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Students and faculty collecting plant and fungi samples along the American River</p>
+      </div>
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<div class="list-group align-items-center w-100 mt-4" id="goals_list">
 <h4>Our Goals</h4>
-<ul>
-  <li>
-    1. To provide high-impact research experiences to 100% of our students.
-  </li>
-  <li>
-    2. To develop a collaborative, interactive community of faculty, staff and students.
-  </li>
-  <li>
-    3. To bring the power of the University to bear on an important local scientific problem.
-  </li>
-  <li>
-    4. To help the Sacramento regional community sustain an important local treasure.
-  </li>
-</ul>
+  <ol>
+    <li class="mb-1">
+      To provide high-impact research experiences to 100% of our students.
+    </li>
+    <li class="mb-1">
+      To develop a collaborative, interactive community of faculty, staff and students.
+    </li>
+    <li class="mb-1">
+      To bring the power of the University to bear on an important local scientific problem.
+    </li>
+    <li>
+      To help the Sacramento regional community sustain an important local treasure.
+    </li>
+  </ol>
+</div>
 {% endblock content-main %}
 

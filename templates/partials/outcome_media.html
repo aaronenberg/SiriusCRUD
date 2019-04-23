@@ -15,7 +15,7 @@
 
 <ul id="media_analyzed_data">
 {% for analyzed_data in outcome_media.analyzed_data %}
-  <li class="row mt-1">
+  <li class="w-100 row mt-1">
     <a href="{{ analyzed_data.media.url }}">
       {{ analyzed_data.filename }}
     </a>
@@ -25,7 +25,7 @@
 
 <ul id="media_curriculum">
 {% for curriculum in outcome_media.curriculum %}
-  <li class="row mt-1">
+  <li class="w-100 row mt-1">
     <a href="{{ curriculum.media.url }}">
       {{ curriculum.filename }}
     </a>

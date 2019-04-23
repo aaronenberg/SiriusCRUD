@@ -1,6 +1,16 @@
 body, html {
     background-color: rgba(255, 255, 255);
 }
+label, h1, h2, h3, h4, h5, h6, th, .nav-item, .nav-link {
+    font-family: 'Lato', sans-serif;
+}
+
+p, li, td {
+    font-family: 'Neuton', serif;
+}
+p, li {
+    font-size: large;
+}
 .btn.bmd-btn-icon {
     fill: #fff;
 }
@@ -10,6 +20,60 @@ body, html {
     min-height: 100vh;
     flex-direction:column;
 }
+#left {
+    grid-area: left;
+    background-color: whitesmoke;
+}
+#right {
+    grid-area: right;
+    background: whitesmoke;
+} 
+
+.carousel {
+    align-self: center;
+}
+.carousel-inner {
+    display: flex;
+    background-color: lightgrey;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+.carousel-caption {
+    margin-top: 1rem;
+    height: 8vh;
+    position: relative;
+    color: black;
+}
+.carousel-indicators {
+    position: relative;
+    color: black;
+}
+
+@media (min-width: 768px) {
+    #container {
+        display: grid;
+        grid-template-columns: 20% 60% 20%;
+        grid-template-rows: max-content minmax(80vh, auto) minmax(10vh, auto);
+        grid-template-areas:
+            "header header header"
+            "left main right"
+            "left footer right";
+    }
+
+    #main {
+        padding: 2rem;
+    }
+    #main p {
+        max-width: 75%;
+    }
+    div.alert {
+        position: absolute;
+    }
+    .carousel {
+        width: 40vw;
+    }
+}
+
 @media (max-width: 767.98px) {
     #left, #right{
         display: none;
@@ -35,35 +99,6 @@ body, html {
         height:10vh;
     }
 }
-#left {
-    grid-area: left;
-    background-color: whitesmoke;
-}
-#right {
-    grid-area: right;
-    background: whitesmoke;
-} 
-@media (min-width: 768px) {
-    #container {
-        display: grid;
-        grid-template-columns: 20% 60% 20%;
-        grid-template-rows: max-content minmax(80vh, auto) minmax(10vh, auto);
-        grid-template-areas:
-            "header header header"
-            "left main right"
-            "left footer right";
-    }
-
-    #main {
-        padding: 2rem;
-    }
-    #main p {
-        max-width: 75%;
-    }
-    div.alert {
-        position: absolute;
-    }
-}
 
 .navbar-submit {
     border-radius: 4px;
@@ -75,7 +110,7 @@ body, html {
     text-transform: initial;
 }
 .nav-item.nav-link {
-    font-weight:500;
+    font-weight:700;
 }
 
 li {
@@ -493,3 +528,11 @@ a > .svg-icon {
     width: 1em;
 }
 
+.add-media-upload,
+.remove-media-upload {
+    margin-left: 2rem;
+}
+
+#goals_list li {
+    list-style: decimal;
+}

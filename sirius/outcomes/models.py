@@ -109,12 +109,15 @@ class OutcomeMedia(models.Model):
     ANALYZED_DATA = 'AD'
     RAW_DATA = 'RD'
     CURRICULUM = 'CU'
-    OTHER = 'OT'
     OUTCOME_TYPES = BLANK_CHOICE_DASH + [
         (RAW_DATA, 'Raw Data'),
         (ANALYZED_DATA, 'Analyzed Data'),
         (CURRICULUM, 'Curriculum'),
-        (OTHER, 'Other'),
+    ]
+
+    UNPRIVILEGED_OUTCOME_TYPES = BLANK_CHOICE_DASH + [
+        (RAW_DATA, 'Raw Data'),
+        (ANALYZED_DATA, 'Analyzed Data'),
     ]
 
     outcome = models.ForeignKey('Outcome', on_delete=models.CASCADE, related_name='media')
