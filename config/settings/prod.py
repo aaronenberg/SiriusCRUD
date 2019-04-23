@@ -9,7 +9,7 @@ CONFIG_FILES = [
     'DB_CONFIG',
     'EMAIL_CONFIG',
     'SECRETS',
-    'S3_CONFIG'
+    'AWS_CONFIG'
 ]
 for config in CONFIG_FILES:
     with open(os.environ.get(config)) as f:
