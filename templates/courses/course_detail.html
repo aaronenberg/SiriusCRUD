@@ -207,32 +207,63 @@
            Curriculum
         </a>
       </li>
-
-      <div class="ml-auto mr-2 dropdown">
-        <a class="nav-link dropdown-toggle"
-           id="dropdown_section"
-           href="#section"
-           data-toggle="dropdown"
-           aria-haspopup="true"
-           aria-expanded="false">
-           Section
-        </a>
-         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_section">
-           <li id="id_section_all"
-               class="dropdown-item selected"
-               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
-             all
-           </li>
-           {% for section in course.sections %}
-           <li id="id_section_{{ section }}" 
-               class="dropdown-item"
-               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}">
-               {{ section | stringformat:"02d"  }}
-           </li>
-           {% endfor %}
-         </div>
-      </div>
     </ul>
+
+    <div id="outcomemedia_filters" class="form-row justify-content-around">
+      <div class="form-group bmd-form-group col-3">
+        <label for="outcomemedia_year" class="bmd-label-static">Year</label>
+        <select class="form-control custom-select select-fix-height"
+                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+                id="outcomemedia_year"
+                name="year">
+          <option value="any">
+            ---------
+          </option>
+          {% for year in latest_outcome.year_choices %}
+          <option value="{{ year }}">
+            {{ year }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group bmd-form-group col-3">
+        <label for="outcomemedia_semester" class="bmd-label-static">Semester</label>
+        <select class="form-control custom-select select-fix-height"
+                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+                id="outcomemedia_semester"
+                name="semester">
+          <option value="any">
+            ---------
+          </option>
+          {% for semester in latest_outcome.semester_choices %}
+          <option value="{{ semester }}">
+            {{ semester }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group bmd-form-group col-3">
+        <label for="outcomemedia_section" class="bmd-label-static">Section</label>
+        <select class="form-control custom-select select-fix-height"
+                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+                id="outcomemedia_section"
+                name="section">
+          <option value="any">
+            ---------
+          </option>
+          {% for section in course.sections %}
+          <option value="{{ section }}">
+            {{ section }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div>
+      <hr/>
+    </div>
 
     <div class="tab-content" id="id_outcome_media_content">
       <div class="tab-pane show active" 
@@ -295,6 +326,11 @@
     $('#outcome_media_tabs .dropdown-item').click(function() {
         $('#outcome_media_tabs .dropdown-item.selected').removeClass('selected');
         $(this).addClass('selected');
+    });
+    $(document).on("change","select",function(){
+      $("option[value=" + this.value + "]", this)
+      .attr("selected", true).siblings()
+      .removeAttr("selected")
     });
   </script>
 {% endblock custom_js %}

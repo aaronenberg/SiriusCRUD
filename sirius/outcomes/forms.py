@@ -1,7 +1,7 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
 from django.forms.widgets import TextInput, Select, NumberInput
-from .models import Outcome, OutcomeMedia, SEMESTER_CHOICES
+from .models import Outcome, OutcomeMedia
 from courses.models import Course
 from .utils import current_year, filename
 
@@ -85,7 +85,7 @@ for y in reversed(range(2000, (current_year()+1))):
 
 class OutcomeForm(ModelForm):
 
-    semester = ChoiceField(choices=SEMESTER_CHOICES,
+    semester = ChoiceField(choices=Outcome.SEMESTER_CHOICES,
         widget = Select(attrs={
             'id': 'outcome_semester',
             'class': 'form-control custom-select select-fix-height',

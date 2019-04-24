@@ -1,5 +1,6 @@
 from collections import namedtuple
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -7,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from .forms import CourseForm
 from .models import Course
-from outcomes.models import Outcome
+from outcomes.models import Outcome, OutcomeMedia
 from users.models import FACULTY
 
 
@@ -45,27 +46,47 @@ class SubjectCoursesListView(ListView):
 
 
 Outcome_Media = namedtuple('Outcome_Media',
-    ['outcome', 'raw_data', 'analyzed_data', 'curriculum']
+    ['outcome', 'raw_data', 'analyzed_data', 'curriculum', 'year_choices', 'semester_choices']
 )
 def get_outcome_media(request):
     outcome_id = request.GET.get('outcome_id')
     section = request.GET.get('section')
-    if outcome_id is not None:
-        outcome = Outcome.objects.get(pk=outcome_id)
-        raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
-        analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
-        curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
-        outcome_media = Outcome_Media(outcome, raw_data, analyzed_data, curriculum)
-        if section is not None and section != 'all':
-            raw_data = raw_data.filter(section=section)
-            analyzed_data = analyzed_data.filter(section=section)
-            curriculum = curriculum.filter(section=section)
-        outcome_media = Outcome_Media(outcome, raw_data, analyzed_data, curriculum)
-    return render(
-        request, 
-        'partials/outcome_media.html',
-        {'outcome_media': outcome_media}
+    year = request.GET.get('year')
+    semester = request.GET.get('semester')
+
+    if outcome_id is None:
+        raise ValueError("Need primary key of an Outcome to get OutcomeMedia")
+    outcome = Outcome.objects.get(pk=outcome_id)
+    raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+    analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
+    curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
+    year_choices = outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
+    semester_choices = outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
+
+    if section is not None:
+        raw_data = raw_data.filter(section=section)
+        analyzed_data = analyzed_data.filter(section=section)
+        curriculum = curriculum.filter(Q(section=None) | Q(section=section))
+
+    if year is not None:
+        raw_data = raw_data.filter(year=year)
+        analyzed_data = analyzed_data.filter(year=year)
+        curriculum = curriculum.filter(Q(year=None) | Q(year=year))
+
+    if semester is not None:
+        raw_data = raw_data.filter(semester=semester)
+        analyzed_data = analyzed_data.filter(semester=semester)
+        curriculum = curriculum.filter(Q(semester=None) | Q(semester=semester))
+
+    outcome_media = Outcome_Media(
+            outcome, 
+            raw_data, 
+            analyzed_data,
+            curriculum,
+            year_choices,
+            semester_choices
     )
+    return render(request, 'partials/outcome_media.html', {'outcome_media': outcome_media})
 
 
 class CourseDetailView(DetailView):
@@ -83,8 +104,17 @@ class CourseDetailView(DetailView):
             raw_data = latest_outcome.media.filter(outcome_type='RD', is_public=True)
             analyzed_data = latest_outcome.media.filter(outcome_type='AD', is_public=True)
             curriculum = latest_outcome.media.filter(outcome_type='CU', is_public=True)
-            context['latest_outcome'] = Outcome_Media(latest_outcome, raw_data, analyzed_data, curriculum)
-        context['referer_page'] = self.request.META.get('HTTP_REFERER')
+            year_choices = latest_outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
+            semester_choices = latest_outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
+
+            context['latest_outcome'] = Outcome_Media(
+                latest_outcome, 
+                raw_data, 
+                analyzed_data,
+                curriculum,
+                year_choices,
+                semester_choices
+            )
         return context
 
 

@@ -11,19 +11,18 @@ from django.utils.translation import gettext_lazy as _
 from .utils import max_value_current_year, current_year, current_semester
 
 
-FALL = 'FA'
-WINTER = 'WI'
-SPRING = 'SP'
-SUMMER = 'SU'
-SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
-    (FALL, 'Fall'),
-    (WINTER, 'Winter'),
-    (SPRING, 'Spring'),
-    (SUMMER, 'Summer'),
-]
-
-
 class Outcome(models.Model):
+
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+        (SUMMER, 'Summer'),
+    ]
 
     author = models.ForeignKey(
         'users.BaseUser',
@@ -60,7 +59,7 @@ class Outcome(models.Model):
 
     semester = models.CharField(
         _('semester'),
-        max_length=2,
+        max_length=6,
         choices=SEMESTER_CHOICES,
         default=FALL,
         blank=True
@@ -106,6 +105,16 @@ class Outcome(models.Model):
 
 class OutcomeMedia(models.Model):
 
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+        (SUMMER, 'Summer'),
+    ]
     ANALYZED_DATA = 'AD'
     RAW_DATA = 'RD'
     CURRICULUM = 'CU'
@@ -155,10 +164,10 @@ class OutcomeMedia(models.Model):
 
     semester = models.CharField(
         _('semester'),
-        max_length=2,
+        max_length=6,
         choices=SEMESTER_CHOICES,
-        default=FALL,
-        blank=True
+        blank=True,
+        null=True
     )
     year = models.PositiveSmallIntegerField(
         _('year'),
@@ -173,7 +182,11 @@ class OutcomeMedia(models.Model):
         return os.path.basename(self.media.name)
 
     def save(self, *args, **kwargs):
-        self.year = current_year()
-        self.semester = current_semester()
+        if self.outcome_type == OutcomeMedia.CURRICULUM:
+            self.semester = None
+            self.year = None
+        else:
+            self.year = current_year()
+            self.semester = current_semester()
         super(OutcomeMedia, self).save(*args, **kwargs)
 

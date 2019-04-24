@@ -55,10 +55,10 @@ def current_year():
 
 
 def current_semester():
-    FALL = 'FA'
-    WINTER = 'WI'
-    SPRING = 'SP'
-    SUMMER = 'SU'
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
 
     today = datetime.date.today()
 
