@@ -46,7 +46,7 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django_ses.SESBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = get_env_var('SERVER_EMAIL')
 SERVER_EMAIL = get_env_var('SERVER_EMAIL')
