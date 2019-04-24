@@ -9,7 +9,7 @@ from django.contrib.auth import (
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
@@ -206,8 +206,9 @@ class UserSearchResultsView(ListView):
     template_name = 'users/search_results_list.html'
 
     def get_queryset(self):
-        query = self.request.GET.get('user_query')
-        return BaseUser.objects.annotate(search=SearchVector('username', 'first_name', 'last_name')).filter(search=query)
+        search_vector = SearchVector('username', 'first_name', 'last_name')
+        search_query = SearchQuery(self.request.GET.get('user_query'))
+        return BaseUser.objects.annotate(search=search_vector).filter(search=search_query)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

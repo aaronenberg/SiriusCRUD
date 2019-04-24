@@ -1,6 +1,6 @@
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -300,8 +300,9 @@ class SearchResultsView(ListView):
     template_name = 'outcomes/search_results_list.html'
 
     def get_queryset(self):
-        query = self.request.GET.get('query')
-        return Outcome.objects.annotate(search=SearchVector('description', 'title')).filter(search__icontains=query, is_public=True)
+        search_vector = SearchVector('description', 'title')
+        search_query = SearchQuery(self.request.GET.get('query'))
+        return Outcome.objects.annotate(search=search_vector).filter(search=search_query, is_public=True)
 
 
 def get_course_sections(request):

@@ -54,10 +54,12 @@
                  href="{% url 'users:account-update' %}">
                  SIRIUS Account
               </a>
+              {% if user.is_privileged %}
               <a class="dropdown-item"
                  href="{% url 'outcomes:draft-list' %}">
                  Saved Drafts
               </a>
+              {% endif %}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
             </div>
