@@ -301,7 +301,7 @@ class SearchResultsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('query')
-        return Outcome.objects.annotate(search=SearchVector('description', 'title')).filter(search=query, is_public=True)
+        return Outcome.objects.annotate(search=SearchVector('description', 'title')).filter(search__icontains=query, is_public=True)
 
 
 def get_course_sections(request):
