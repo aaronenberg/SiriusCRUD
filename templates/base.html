@@ -35,9 +35,6 @@
         {% block content-main %}
         {% block content-header %}{% endblock content-header %}
         {% endblock content-main %}
-        {% if is_paginated %}
-          {% include 'partials/paginator.html' %}
-        {% endif %}
       </div>
       <div id="right">
         {% block content-right %} {% endblock content-right %}
