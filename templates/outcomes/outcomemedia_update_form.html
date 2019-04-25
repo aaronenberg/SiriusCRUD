@@ -29,7 +29,7 @@
             class="col-lg-3 col-md-6 col-sm-6 form-control custom-select select-fix-height" 
             id="outcome_course_section">
         {% for section in outcome_course_sections %}
-        <option>{{ section }}</option>
+        <option>{{ section | stringformat:"02d" }}</option>
         {% endfor %}
     </select>
     <div class="invalid-feedback">
