@@ -7,12 +7,17 @@
 {% url 'developments:development-list' as development_list_url %}
 {% url 'courses:subject-list' as subject_list_url %}
 {% url 'outcomes:draft-list' as draft_list_url %}
+{% url 'index' as index_url %}
 
 <div id="menubar">
   <div id="menubar_desktop">
     <nav id="id-main-nav" class="navbar navbar-expand-lg navbar-dark">
-      <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="{% static 'img/sirius-logo-white-16x16.ico' %}">
+      <a class="navbar-brand" href="{{ index_url }}">
+        {% if index_url == request.path %}
+        <img src="{% static 'img/sirius-logo-white-24x24.ico' %}">
+        {% else %}
+        <img src="{% static 'img/sirius-logo-grey-24x24.ico' %}">
+        {% endif %}
       </a>
       <button class="navbar-toggler" 
               type="button" 
