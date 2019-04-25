@@ -108,7 +108,7 @@ LOGGING = {
             'formatter': 'aws',
         },
         'watchtower_request': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'watchtower.CloudWatchLogHandler',
                      'boto3_session': boto3_session,
                      'log_group': 'sirius-log',
