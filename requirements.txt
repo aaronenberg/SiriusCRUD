@@ -34,5 +34,6 @@ sqlparse==0.2.4
 termcolor==1.1.0
 texttable==0.9.1
 urllib3==1.24.1
+watchtower==0.5.5
 wcwidth==0.1.7
 websocket-client==0.56.0
