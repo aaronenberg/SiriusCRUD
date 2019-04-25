@@ -28,17 +28,17 @@
 
   <body>
     <div id="container">
-      {% include 'partials/header.html' %}
+      {% block header %}{% include 'partials/header.html' %}{% endblock %}
       <div id="left">
-        {% block content-left %}{% endblock content-left %}
+        {% block content-left %}{% endblock %}
       </div>
       <div id="main">
         {% include 'partials/messages.html' %}
-        {% block content-header %}{% endblock content-header %}
-        {% block content-main %}{% endblock content-main %}
+        {% block content-header %}{% endblock %}
+        {% block content-main %}{% endblock %}
       </div>
       <div id="right">
-        {% block content-right %}{% endblock content-right %}
+        {% block content-right %}{% endblock %}
       </div>
       <div id="footer">
       </div>
