@@ -87,10 +87,6 @@ boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'root': {
-        'level': logging.ERROR,
-        'handlers': ['console'],
-    },
     'formatters': {
         'simple': {
             'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
@@ -103,21 +99,59 @@ LOGGING = {
         },
     },
     'handlers': {
-        'watchtower': {
+        'watchtower_db': {
             'level': 'DEBUG',
             'class': 'watchtower.CloudWatchLogHandler',
                      'boto3_session': boto3_session,
                      'log_group': 'sirius-log',
-                     'stream_name': 'log-stream',
+                     'stream_name': 'django.db.backends',
+            'formatter': 'aws',
+        },
+        'watchtower_request': {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+                     'boto3_session': boto3_session,
+                     'log_group': 'sirius-log',
+                     'stream_name': 'django.request',
+            'formatter': 'aws',
+        },
+        'watchtower_server': {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+                     'boto3_session': boto3_session,
+                     'log_group': 'sirius-log',
+                     'stream_name': 'django.server',
+            'formatter': 'aws',
+        },
+        'watchtower_template': {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+                     'boto3_session': boto3_session,
+                     'log_group': 'sirius-log',
+                     'stream_name': 'django.template',
             'formatter': 'aws',
         },
     },
     'loggers': {
-        'django': {
-            'level': 'INFO',
-            'handlers': ['watchtower'],
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['watchtower_db'],
             'propagate': False,
         },
-        # add your other loggers here...
+        'django.request': {
+            'level': 'INFO',
+            'handlers': ['watchtower_request'],
+            'propagate': False,
+        },
+        'django.server': {
+            'level': 'INFO',
+            'handlers': ['watchtower_server'],
+            'propagate': False,
+        },
+        'django.template': {
+            'level': 'DEBUG',
+            'handlers': ['watchtower_template'],
+            'propagate': False,
+        },
     },
 }
