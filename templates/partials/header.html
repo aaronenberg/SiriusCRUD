@@ -1,6 +1,12 @@
 {% load static %}
 {% url 'outcomes:search-results' as search_results_url %}
-
+{% url 'users:login' as login_url %}
+{% url 'users:register' as registration_url %}
+{% url 'users:account-update' as account_url %}
+{% url 'users:user-list' as user_list_url %}
+{% url 'developments:development-list' as development_list_url %}
+{% url 'courses:subject-list' as subject_list_url %}
+{% url 'outcomes:draft-list' as draft_list_url %}
 
 <div id="menubar">
   <div id="menubar_desktop">
@@ -19,20 +25,17 @@
       </button>
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
         <div id="nav-left" class="navbar-nav">
-          <a class="nav-item nav-link {% if 'courses' in request.path %}active{% endif %}" 
-             href="{% url 'courses:subject-list' %}">
+          <a class="nav-item nav-link {% if subject_list_url in request.path %}active{% endif %}" 
+             href="{{ subject_list_url }}">
             Courses
           </a>
-          <a class="nav-item nav-link
-                    {% if 'developments' in request.path %}
-                    active
-                    {% endif %}"
-             href="{% url 'developments:development-list' %}">
+          <a class="nav-item nav-link {% if development_list_url in request.path %}active{% endif %}"
+             href="{{ development_list_url }}">
             Faculty Development
           </a>
           {% if user.user_role == 'FA' %}
-          <a class="nav-item nav-link {% if 'user' in request.path %}active{% endif %}" 
-             href="{% url 'users:user-list' %}">
+          <a class="nav-item nav-link {% if user_list_url in request.path %}active{% endif %}" 
+             href="{{ user_list_url }}">
             Users
           </a>
           {% endif %}
@@ -41,10 +44,7 @@
           {% if user.is_authenticated %}
           <div id="nav_account_dropdown" class="btn-group m-0">
             <a href="javascript:void(0)"
-               class="nav-item nav-link dropdown-toggle
-                      {% if 'account' in request.path %}
-                        active
-                      {% endif %}"
+               class="nav-item nav-link dropdown-toggle {% if account_url in request.path %}active{% endif %}"
                data-toggle="dropdown"
                aria-haspopup="true"
                aria-expanded="false">
@@ -52,7 +52,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item"
-                 href="{% url 'users:account-update' %}">
+                 href="{{ account_url }}">
                  SIRIUS Account
               </a>
               {% if user.is_privileged %}
@@ -66,23 +66,26 @@
             </div>
           </div>
           <div id="nav_account" class="text-center">
-            <a class="nav-item nav-link"
-               href="{% url 'users:account-update' %}">
+            <a class="nav-item nav-link {% if account_url in request.path %}active{% endif %}"
+               href="{{ account_url }}">
                SIRIUS Account
             </a>
-              <a class="nav-item nav-link"
-                 href="{% url 'outcomes:draft-list' %}">
+              <a class="nav-item nav-link {% if draft_list_url in request.path %}active{% endif %}"
+                 href="{{ draft_list_url }}">
                  Saved Drafts
               </a>
             <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
           </div>
           {% else %}
-            {% if 'login' not in request.path %}
-          <a class="nav-item nav-link" href="{% url 'users:login' %}">Login</a>
-            {% endif %}
-            {% if 'register' not in request.path %}
-          <a class="nav-item nav-link" href="{% url 'users:register' %}">Create Account</a>
-            {% endif %}
+            
+          <a class="nav-item nav-link {% if login_url in request.path %}active{% endif %}" 
+             href="{{ login_url }}">
+            Login
+          </a>
+            <a class="nav-item nav-link {% if registration_url in request.path %}active{% endif %}"
+               href="{{ registration_url }}">
+              Create Account
+            </a>
           {% endif %}
         </div>
       </div>
@@ -90,7 +93,7 @@
   </div>
   <div id="menubar_mobile">
     <div id="menubar_mobile_left">
-      <a href="{% url 'index'%}">
+      <a href="{% url 'index' %}">
         <img src="{% static 'img/sirius-logo-full-color-300.png' %}" 
              alt="The Sustainable Interdisciplinary Research to Inspire Undergraduate Success">
       </a>
