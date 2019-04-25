@@ -1,5 +1,6 @@
-import os
 import json
+import logging
+import os
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
@@ -80,18 +81,37 @@ MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
 
 LOGGING = {
-  'version': 1,
-  'handlers': {
-      'watchtower':  {
-          'level': 'DEBUG',
-          'class': 'watchtower.CloudWatchLogHandler',
-      },
-  },
-  'loggers': {
-      'django': {
-          'handlers': ['watchtower'],
-          'level': 'DEBUG',
-          'propagate': True,
-      },
-  }
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {
+        'level': logging.ERROR,
+        'handlers': ['console'],
+    },
+    'formatters': {
+        'simple': {
+            'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
+            'datefmt': "%Y-%m-%d %H:%M:%S"
+        },
+        'aws': {
+            # you can add specific format for aws here
+            'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
+            'datefmt': "%Y-%m-%d %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'watchtower': {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+                     'log_group': 'django-logging-group',
+                     'stream_name': 'django-logging-stream',
+            'formatter': 'aws',
+        },
+    },
+    'loggers': {
+        'django': {
+            'level': 'INFO',
+            'handlers': ['watchtower'],
+            'propagate': False,
+        },
+    },
 }
