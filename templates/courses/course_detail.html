@@ -30,7 +30,7 @@
   </div>
 
   <div id="course_detail_actions" class="ml-auto">
-    {% if user.user_role == 'FA' %}
+    {% if user.is_authenticated and user.user_role == 'FA' %}
     <div class="btn-group m-0">
       <button class="btn bmd-btn-icon dropdown-toggle" 
               type="button"

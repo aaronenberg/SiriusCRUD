@@ -40,7 +40,7 @@
     {% endif %}
   </div>
   <div id="outcome_detail_course_semester">
-      {% if outcome.semester %} | {{ outcome.get_semester_display }} {% endif %}
+      {% if outcome.semester %} | {{ outcome.semester }} {% endif %}
       {% if outcome.year %}{{ outcome.year }} {% endif %}
   </div>
   <h6>{{ outcome.title }}</h6>
@@ -51,14 +51,6 @@
   </div>
   <div id="outcome_detail_description">
     <p>{{ outcome.description }}</p>
-  </div>
-  <div id="outcome_detail_subject">
-    {{ outcome.get_subject_display }}
-  </div>
-  <div id="outcome_detail_outcome_type">
-    {{ outcome.get_outcome_type_display }}
-  </div>
-  <div class="submit-row">
   </div>
 </div>
 

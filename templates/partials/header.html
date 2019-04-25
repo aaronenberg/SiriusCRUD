@@ -4,6 +4,7 @@
 {% url 'users:register' as registration_url %}
 {% url 'users:account-update' as account_url %}
 {% url 'users:user-list' as user_list_url %}
+{% url 'users:user-search-results' as user_search_results_url %}
 {% url 'developments:development-list' as development_list_url %}
 {% url 'courses:subject-list' as subject_list_url %}
 {% url 'outcomes:draft-list' as draft_list_url %}
@@ -38,13 +39,11 @@
              href="{{ development_list_url }}">
             Faculty Development
           </a>
-          {% if user.is_authenticated %}
-            {% if user.user_role == 'FA' %}
+          {% if user.is_authenticated and user.user_role == 'FA' %}
           <a class="nav-item nav-link {% if user_list_url in request.path %}active{% endif %}" 
              href="{{ user_list_url }}">
             Users
           </a>
-            {% endif %}
           {% endif %}
         </div>
         <div id="nav-right" class="navbar-nav">
@@ -109,7 +108,7 @@
       <div id="search_bar">
         <form method="GET" action="{% url 'outcomes:search-results' %}" id="id-search-form" class="custom-validation" novalidate>
           <input required type="text" 
-                 value="{% if search_results_url in request.path %}{{ request.GET.query }}{% endif %}" 
+                 value="{% if search_results_url in request.path and not user_search_results_url in request.path %}{{ request.GET.query }}{% endif %}" 
                  id="search_input" 
                  name="query" 
                  placeholder="Search">
