@@ -322,15 +322,4 @@
 
 {% block custom_js %}
   <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
-  <script type="text/javascript">
-    $('#outcome_media_tabs .dropdown-item').click(function() {
-        $('#outcome_media_tabs .dropdown-item.selected').removeClass('selected');
-        $(this).addClass('selected');
-    });
-    $(document).on("change","select",function(){
-      $("option[value=" + this.value + "]", this)
-      .attr("selected", true).siblings()
-      .removeAttr("selected")
-    });
-  </script>
 {% endblock custom_js %}
