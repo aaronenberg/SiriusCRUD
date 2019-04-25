@@ -1,4 +1,5 @@
 {% load static %}
+{% url 'outcomes:search-results' as search_results_url %}
 
 
 <div id="menubar">
@@ -98,7 +99,7 @@
       <div id="search_bar">
         <form method="GET" action="{% url 'outcomes:search-results' %}" id="id-search-form" class="custom-validation" novalidate>
           <input required type="text" 
-                 value="{% if '/search/results' in request.path %}{{ request.GET.query }}{% endif %}" 
+                 value="{% if search_results_url in request.path %}{{ request.GET.query }}{% endif %}" 
                  id="search_input" 
                  name="query" 
                  placeholder="Search">
