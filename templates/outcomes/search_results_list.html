@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "outcomes/outcome_list.html" %}
 {% load static outcome_tags %}
 
 {% block title %}
@@ -6,30 +6,12 @@
 {% endblock title %}
 
 
-{% block content-main %}
-
-
-{% block header %}
+{% block content-header %}
 <div>
   <h5>'{{ request.GET.query }}' search results</h5>
 </div>
 {% endblock %}
 
-<div class="list-group align-items-center">
-  {% for outcome in outcomes %}
-  <a class="justify-content-center list-group-item list-group-item-action flex-column align-items-start"
-     href="{% get_absolute_url outcome %}">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ outcome }}</h5>
-      <small>{{ outcome.timesince_published }}</small>
-    </div>
-    <p class="mb-1">{{ outcome.course }}</p>
-    <small>{{ outcome.author }}</small>
-  </a>
-  {% endfor %}
-</div>
-
-{% endblock content-main %}
 
 {% block custom_js %}
 {% endblock custom_js %}

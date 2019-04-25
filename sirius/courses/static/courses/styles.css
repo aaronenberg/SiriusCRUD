@@ -179,16 +179,16 @@ a .svg-icon:hover {
 .fa-upload {
     margin-right: 1rem;
 }
+#subject_list .list-group-item-action:first-child,
+#subject_list .list-group-item-action:last-child,
+#subject_list .list-group-item-action {
+    margin-top: 0;
+}
 
 @media (max-width: 991.98px) {
     #subject_list {
         flex-direction: column;
         flex-grow: 0;
-    }
-    #subject_list .list-group-item-action:first-child,
-    #subject_list .list-group-item-action:last-child,
-    #subject_list .list-group-item-action {
-        margin-top: 0;
     }
     #subject_list .list-group-item-action:first-child {
         border-top-left-radius: 5px;

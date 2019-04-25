@@ -11,26 +11,6 @@
 
 {% block content-main %}
 
-  {% block outcome_actions %}
-    {% if user.is_authenticated and user.is_privileged %}
-    <div id="outcome_actions">
-      <a 
-        class="btn btn-raised btn-primary" 
-        href="{% url 'outcomes:outcome-create' %}">
-        <i class="fas fa-plus-circle"></i>
-        New Outcome
-      </a>
-      {% block draft_action %}
-      <a 
-        class="btn btn-raised btn-secondary"
-        href="{% url 'outcomes:draft-list' %}">
-        Saved Drafts
-      </a>
-      {% endblock %}
-    </div>
-    {% endif %}
-  {% endblock outcome_actions %}
-
   {% block outcome-list %}
   <div id="outcome_list" class="list-group">
     {% for outcome in outcomes %}
