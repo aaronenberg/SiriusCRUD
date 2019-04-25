@@ -83,7 +83,7 @@ DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
 
 boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
                         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                        region_name=AWS_REGION_NAME)
+                        region_name='us-west-1')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
