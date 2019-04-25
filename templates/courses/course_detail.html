@@ -211,6 +211,22 @@
 
     {% if latest_outcome %}
     <div id="outcomemedia_filters" class="form-row justify-content-around">
+      <div class="form-group bmd-form-group col-4">
+        <label for="outcomemedia_semester" class="bmd-label-static">Semester</label>
+        <select class="form-control custom-select select-fix-height"
+                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+                id="outcomemedia_semester"
+                name="semester">
+          <option value="any">
+            ---------
+          </option>
+          {% for semester in latest_outcome.semester_choices %}
+          <option value="{{ semester }}">
+            {{ semester }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
       <div class="form-group bmd-form-group col-3">
         <label for="outcomemedia_year" class="bmd-label-static">Year</label>
         <select class="form-control custom-select select-fix-height"
@@ -228,22 +244,6 @@
         </select>
       </div>
 
-      <div class="form-group bmd-form-group col-3">
-        <label for="outcomemedia_semester" class="bmd-label-static">Semester</label>
-        <select class="form-control custom-select select-fix-height"
-                data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
-                id="outcomemedia_semester"
-                name="semester">
-          <option value="any">
-            ---------
-          </option>
-          {% for semester in latest_outcome.semester_choices %}
-          <option value="{{ semester }}">
-            {{ semester }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
 
       <div class="form-group bmd-form-group col-3">
         <label for="outcomemedia_section" class="bmd-label-static">Section</label>
@@ -256,7 +256,7 @@
           </option>
           {% for section in course.sections %}
           <option value="{{ section }}">
-            {{ section }}
+            {{ section | stringformat:"02d" }}
           </option>
           {% endfor %}
         </select>
