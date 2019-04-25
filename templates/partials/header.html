@@ -38,11 +38,13 @@
              href="{{ development_list_url }}">
             Faculty Development
           </a>
-          {% if user.user_role == 'FA' %}
+          {% if user.is_authenticated %}
+            {% if user.user_role == 'FA' %}
           <a class="nav-item nav-link {% if user_list_url in request.path %}active{% endif %}" 
              href="{{ user_list_url }}">
             Users
           </a>
+            {% endif %}
           {% endif %}
         </div>
         <div id="nav-right" class="navbar-nav">
