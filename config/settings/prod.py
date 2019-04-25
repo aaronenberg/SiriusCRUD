@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from boto3.session import Session
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
@@ -80,6 +81,9 @@ STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
 
+boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                        region_name=AWS_REGION_NAME)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -102,6 +106,7 @@ LOGGING = {
         'watchtower': {
             'level': 'DEBUG',
             'class': 'watchtower.CloudWatchLogHandler',
+                     'boto3_session': boto3_session,
                      'log_group': 'django-logging-group',
                      'stream_name': 'django-logging-stream',
             'formatter': 'aws',
@@ -113,5 +118,6 @@ LOGGING = {
             'handlers': ['watchtower'],
             'propagate': False,
         },
+        # add your other loggers here...
     },
 }
