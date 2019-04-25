@@ -78,3 +78,20 @@ STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
+
+LOGGING = {
+  'version': 1,
+  'handlers': {
+      'watchtower':  {
+          'level': 'DEBUG',
+          'class': 'watchtower.CloudWatchLogHandler',
+      },
+  },
+  'loggers': {
+      'django': {
+          'handlers': ['watchtower'],
+          'level': 'DEBUG',
+          'propagate': True,
+      },
+  }
+}
