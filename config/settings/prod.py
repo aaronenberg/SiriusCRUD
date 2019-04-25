@@ -108,7 +108,7 @@ LOGGING = {
             'class': 'watchtower.CloudWatchLogHandler',
                      'boto3_session': boto3_session,
                      'log_group': 'sirius-log',
-                     'stream_name': 'sirius-log-stream',
+                     'stream_name': 'log-stream',
             'formatter': 'aws',
         },
     },
