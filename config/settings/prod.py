@@ -139,7 +139,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.request': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['watchtower_request'],
             'propagate': False,
         },

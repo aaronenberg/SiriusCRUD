@@ -98,23 +98,24 @@ class CourseDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['course_outcomes'] = self.object.outcomes.filter(is_public=True).order_by("-modified")
-        latest_outcome = None
-        if len(context['course_outcomes']) > 0:
-            latest_outcome = context['course_outcomes'][0]
-            raw_data = latest_outcome.media.filter(outcome_type='RD', is_public=True)
-            analyzed_data = latest_outcome.media.filter(outcome_type='AD', is_public=True)
-            curriculum = latest_outcome.media.filter(outcome_type='CU', is_public=True)
-            year_choices = latest_outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
-            semester_choices = latest_outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
+        if len(context['course_outcomes']) == 0:
+            context['latest_outcome'] = None
+            return context
+        latest_outcome = context['course_outcomes'][0]
+        raw_data = latest_outcome.media.filter(outcome_type='RD', is_public=True)
+        analyzed_data = latest_outcome.media.filter(outcome_type='AD', is_public=True)
+        curriculum = latest_outcome.media.filter(outcome_type='CU', is_public=True)
+        year_choices = latest_outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
+        semester_choices = latest_outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
 
-            context['latest_outcome'] = Outcome_Media(
-                latest_outcome, 
-                raw_data, 
-                analyzed_data,
-                curriculum,
-                year_choices,
-                semester_choices
-            )
+        context['latest_outcome'] = Outcome_Media(
+            latest_outcome, 
+            raw_data, 
+            analyzed_data,
+            curriculum,
+            year_choices,
+            semester_choices
+        )
         return context
 
 

@@ -93,19 +93,19 @@
     <img class="svg-icon">
   </a>
 </div>
-<div class="mb-3 collapse show" id="collapseExample">
+<div class="collapse show" id="collapseExample">
   <p class="m-auto">{{ course.description }}</p>
 </div>
 
-<h6 class="mb-4">Course Outcomes</h6>
+<h6 class="mb-4 mt-3">Course Outcomes</h6>
 <div id="id_course_outcomes">
+    {% if user.is_authenticated and user.is_privileged and course in user.staffprofile.courses.all or user.is_superuser %}
     <a id="id_new_outcome" class="btn-dark nav-link" href="{% url 'outcomes:outcome-create' %}">
       <img class="mr-1 svg-icon" src="{% static 'img/font-awesome/plus-circle.svg' %}">
       New Outcome
     </a>
-  <ul id="id_outcomes" class="nav flex-column">
-    {% if user.is_privileged and course in user.staffprofile.courses.all or user.is_superuser %}
     {% endif %}
+  <ul id="id_outcomes" class="nav flex-column">
     {% for outcome in course_outcomes %}
       {% if outcome is course_outcomes.0 %}
       <li class="nav-item btn-secondary row">
@@ -136,12 +136,12 @@
 
   <div id="id_outcome_title_description">
     <div id="id_outcome_title">
+      {% if latest_outcome %}
       <div class="submit-row mt-0 align-items-center">
         <div class="mr-auto">
           <h6 class="mb-0">{{ latest_outcome.outcome.title }}</h6>
         </div>
-        {% if latest_outcome %}
-        {% if latest_outcome.outcome.author == user or user.is_superuser %}
+          {% if latest_outcome.outcome.author == user or user.is_superuser %}
         <div class="btn-group m-0">
           <button class="btn bmd-btn-icon dropdown-toggle" 
                   type="button"
@@ -161,12 +161,12 @@
             </a>
           </div>
         </div>
-        {% endif %}
-        {% endif %}
+          {% endif %}
       </div>
     </div>
     <div id="id_outcome_description">
       <p>{{ latest_outcome.outcome.description }}</p>
+      {% endif %}
     </div>
   </div>
 
@@ -209,6 +209,7 @@
       </li>
     </ul>
 
+    {% if latest_outcome %}
     <div id="outcomemedia_filters" class="form-row justify-content-around">
       <div class="form-group bmd-form-group col-3">
         <label for="outcomemedia_year" class="bmd-label-static">Year</label>
@@ -264,7 +265,9 @@
     <div>
       <hr/>
     </div>
+    {% endif %}
 
+    {% if latest_outcome %}
     <div class="tab-content" id="id_outcome_media_content">
       <div class="tab-pane show active" 
            id="raw_data"
@@ -315,6 +318,7 @@
         </ul>
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
 
