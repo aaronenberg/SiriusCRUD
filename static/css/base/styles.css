@@ -11,6 +11,15 @@ p, li, td {
 p, li {
     font-size: large;
 }
+.btn:hover,
+.btn.btn-primary:hover,
+.btn.btn-secondary:hover {
+    background-color: unset;
+    text-decoration: underline;
+}
+.btn.btn-raised:hover {
+    text-decoration: none;
+}
 .btn.bmd-btn-icon {
     fill: #fff;
 }
@@ -32,22 +41,31 @@ p, li {
 .carousel {
     align-self: center;
 }
+
 .carousel-inner {
-    display: flex;
-    background-color: lightgrey;
+    background-color: rgba(200,200,200, 0.5);
     border: 2px solid black;
     border-radius: 5px;
 }
+
 .carousel-caption {
     margin-top: 1rem;
-    height: 8vh;
+    height: 9vh;
     position: relative;
+    left: 0;
+}
+
+.carousel-caption p {
+    text-align:center;
+    width: 100%;
     color: black;
+    margin: 0 auto;
 }
 .carousel-indicators {
     position: relative;
     color: black;
 }
+
 @media (min-width: 992px) {
     #nav_account {
         display: none;
@@ -85,31 +103,6 @@ p, li {
     }
 }
 
-@media (max-width: 767.98px) {
-    #left, #right{
-        display: none;
-    }
-    #menubar_mobile {
-        flex-direction: column;
-    }
-    #menubar_mobile_left {
-        display:flex;
-        justify-content:center;
-        margin-bottom: 1rem;
-    }
-    #menubar_desktop a.navbar-brand {
-        display:none;
-    }
-    #id-main-nav {
-        justify-content:center;
-    }
-    .submit-row {
-        margin-top: 1rem;
-    }
-    #footer {
-        height:10vh;
-    }
-}
 
 .navbar-submit {
     border-radius: 4px;
@@ -549,4 +542,33 @@ a > .svg-icon {
 }
 #goals_list li {
     list-style: decimal;
+}
+
+@media (max-width: 767.98px) {
+    #left, #right{
+        display: none;
+    }
+    #menubar_mobile {
+        flex-direction: column;
+    }
+    #menubar_mobile_left {
+        display:flex;
+        justify-content:center;
+        margin-bottom: 1rem;
+    }
+    #menubar_desktop a.navbar-brand {
+        display:none;
+    }
+    #id-main-nav {
+        justify-content:center;
+    }
+    .submit-row {
+        margin-top: 1rem;
+        flex-direction: column;
+        align-items:center;
+        
+    }
+    #footer {
+        height:10vh;
+    }
 }

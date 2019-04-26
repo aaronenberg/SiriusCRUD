@@ -15,9 +15,9 @@
   </div>
   <div class="bmd-form-group input-group flex-column">
     <div class="col-12 col-xl-6 col-lg-8">
-    {% if upload_form.development_type %}
+    {% if 'development' in request.path %}
       {{ upload_form.development_type }}
-    {% elif upload_form.outcome_type %}
+    {% elif 'outcome' in request.path %}
       {{ upload_form.outcome_type }}
     {% endif %}
     </div>

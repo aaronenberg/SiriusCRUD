@@ -58,7 +58,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form, outcomemedia_form):
         form.instance.author = self.request.user
         form.instance.is_public = True
-        if '_save_draft' in self.request.POST:
+        if '_save_draft' in self.request.POST.keys():
             form.instance.is_public = False
         outcome = form.save()
         # for a file field to accept multiple files we save each file, creating a new OutcomeMedia object

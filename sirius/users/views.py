@@ -20,7 +20,7 @@ from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from .forms import (
     AccountUpdateForm,
@@ -122,6 +122,10 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         except StaffProfile.DoesNotExist:
             if not form.is_valid():
                 return self.form_invalid(form)
+        if form.instance.is_active and '_deactivate_user' in request.POST.keys():
+            form.instance.is_active = False
+        elif not form.instance.is_active and '_activate_user' in request.POST.keys():
+            form.instance.is_active = True
         form.save()
         messages.success(request, 'Account changes saved')
         return redirect("users:account-update")
@@ -139,6 +143,7 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BaseUser
     form_class = AccountUpdateFormPrivileged
     template_name = 'users/account_update_form.html'
+    context_object_name = 'a_user'
 
     def test_func(self):
         return self.request.user.user_role == FACULTY
@@ -177,6 +182,10 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         except StaffProfile.DoesNotExist:
             if not form.is_valid():
                 return self.form_invalid(form)
+        if form.instance.is_active and '_deactivate_user' in request.POST.keys():
+            form.instance.is_active = False
+        elif not form.instance.is_active and '_activate_user' in request.POST.keys():
+            form.instance.is_active = True
         user = form.save()
         return redirect("users:user-detail", pk=user.pk)
 
@@ -192,7 +201,7 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     model = BaseUser
     context_object_name = 'users'
-    queryset = BaseUser.objects.filter(is_active=True).order_by('-user_role')
+    queryset = BaseUser.objects.order_by('-user_role')
     template_name = 'users/user_list.html'
     paginate_by = 10
 
@@ -250,7 +259,7 @@ class UserActivateView(View):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
         return user
-            
+
 
 class PasswordChangeView(auth_views.PasswordChangeView):
     form_class = PasswordChangeForm

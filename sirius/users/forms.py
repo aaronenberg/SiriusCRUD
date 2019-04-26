@@ -98,7 +98,7 @@ class AccountUpdateFormPrivileged(ModelForm):
     )
     class Meta:
         model = BaseUser
-        fields = ("email", "first_name", "last_name", "user_role", "username")
+        fields = ("email", "first_name", "last_name", "user_role", "username", "is_active")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -127,6 +127,9 @@ class AccountUpdateFormPrivileged(ModelForm):
         self.fields['first_name'].disabled = True
         self.fields['last_name'].disabled = True
         self.fields['username'].disabled = True
+
+    def clean_is_active(self):
+        return self.instance.is_active
 
 
 class AccountUpdateForm(ModelForm):
@@ -176,6 +179,9 @@ class AccountUpdateForm(ModelForm):
         if top_level_domain not in whitelist:
             raise ValidationError("Email must be a valid school email that ends with .edu")
         return email
+
+    def clean_is_active(self):
+        return self.instance.is_active
 
 
 class StaffProfileForm(ModelForm):
