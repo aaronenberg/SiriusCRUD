@@ -69,6 +69,12 @@
 
 {% block custom_js %}
 <script>
+  $('#subject_list .list-group-item-action.subject-bio').addClass('active')
+  $('#subject_list .list-group-item-action').click(
+      function(){ $(this).addClass('active') }
+  )
+</script>
+<script>
 $('#course_list .list-group-item-action').hover(
   function(){ $(this).addClass('active') },
   function(){ $(this).removeClass('active') }
