@@ -95,3 +95,112 @@
     background-color: unset;
     color: black;
 }
+
+#id_course_outcomes {
+    background-color: whitesmoke;
+    border: 2px solid #0f5e7f;
+    border-top: 0;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#id_outcome_media {
+    display: flex;
+    flex-direction: column;
+}
+
+#outcomemedia_filters {
+    background-color: #0f5e7f;
+}
+#outcomemedia_filters.form-row {
+    margin: 0;
+}
+#outcomemedia_filters .form-group {
+    margin-bottom: 1rem;
+}
+#outcomemedia_filters label {
+    color: white;
+}
+
+.tab-content {
+    height: 30vh;
+    overflow-y: auto;
+}
+
+.nav-tabs {
+    background-color: #0f5e7f;
+}
+.nav-tabs .nav-link {
+    padding: 1em;
+    color: white;
+}
+.nav-tabs .nav-link.active {
+    color: snow;
+}
+
+.fa-upload {
+    margin-right: 1rem;
+}
+#subject_list .list-group-item-action:first-child,
+#subject_list .list-group-item-action:last-child,
+#subject_list .list-group-item-action {
+    margin-top: 0;
+}
+
+@media (max-width: 991.98px) {
+    #subject_list {
+        flex-direction: column;
+        flex-grow: 0;
+    }
+    #subject_list .list-group-item-action:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 0;
+    }
+    #subject_list .list-group-item-action:last-child {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 5px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 5px;
+    }
+    #id_course_outcomes {
+        display: flex;
+        flex-direction: column;
+    }
+    #id_outcome_media_content {
+        overflow-y: auto;
+        height: 40vh;
+    }
+}
+
+@media (max-width: 566.98px) {
+    #id_course_outcomes {
+        height: unset;
+    }
+    #outcome_media_tabs {
+        display: flex;
+        flex-direction: column;
+    }
+    .tab-content {
+        height: 75vh;
+    }
+}
+
+#outcome_media_tabs .dropdown-menu {
+    min-width: unset;
+    max-width: 5rem;
+    max-height: 30vh;
+    overflow-y: auto;
+}
+#outcome_media_tabs .dropdown-menu .dropdown-item {
+    min-width: unset;
+    min-height: unset;
+    cursor: pointer;
+}
+
+#outcome_media_form {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}

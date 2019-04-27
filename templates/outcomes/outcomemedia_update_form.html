@@ -7,6 +7,7 @@
 
 {% block extra-content %}
 
+
 {% if user.is_authenticated %}
   {% if form.errors %}
     {% for error in form.non_form_errors %}
@@ -28,7 +29,7 @@
     <select name="section" 
             class="col-lg-3 col-md-6 col-sm-6 form-control custom-select select-fix-height" 
             id="outcome_course_section">
-        {% for section in outcome_course_sections %}
+        {% for section in outcome.course.sections %}
         <option>{{ section | stringformat:"02d" }}</option>
         {% endfor %}
     </select>
@@ -81,6 +82,7 @@
 {% endblock extra-content %}
 
 {% block custom_js %}
+  <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
   <script type="text/javascript">
     {% include 'partials/outcomemedia-formset-management.js' %}
   </script>

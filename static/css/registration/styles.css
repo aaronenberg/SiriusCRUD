@@ -1,8 +1,19 @@
+#user_registration_form,
+#set_password_form,
+#password_reset_form,
+#password_change_form,
 #login-form {
-    border: 5px solid #026373;
-    border-radius: 0.5rem;
+    border: 2px solid #0f5e7f;
+    align-self: center;
 }
 
+#user_registration_form,
+#set_password_form,
+#password_reset_form,
+#password_change_form {
+    display:flex;
+    flex-direction:column;
+}
 #login-form input[type="text"],
 #login-form input[type="password"]
 {
@@ -61,15 +72,9 @@
     #password_change_form {
         width:75%;
     }
-}
-#user_registration_form,
-#set_password_form,
-#password_reset_form,
-#password_change_form {
-    display:flex;
-    flex-direction:column;
-    border: 0.3rem solid #0f5e7f;
-    align-self: center;
+    div.alert {
+        width: 75%;
+    }
 }
 
 div.alert li {
@@ -78,7 +83,6 @@ div.alert li {
 }
 
 div.alert {
-    width: 75%;
     border-radius: 0.5rem;
 }
 

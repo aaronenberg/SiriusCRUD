@@ -1,3 +1,6 @@
+{% url 'courses:course-detail' as course_detail_url %}
+
+
 <ul id="media_raw_data">
 {% if user.is_authenticated %}
 {% for raw_data in outcome_media.raw_data %}
@@ -33,6 +36,7 @@
 {% endfor %}
 </ul>
 
+{% if course_detail_url in request.path %}
 <div class="submit-row align-items-center">
   <div class="mr-auto">
     <h6 class="mb-0">{{ outcome_media.outcome.title }}</h6>
@@ -63,3 +67,4 @@
 <p>
   {{ outcome_media.outcome.description }}
 </p>
+{% endif %}

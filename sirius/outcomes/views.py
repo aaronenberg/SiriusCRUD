@@ -1,3 +1,4 @@
+from collections import namedtuple
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery
@@ -143,6 +144,50 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return render(self.request, self.get_template_names(), context)
 
 
+Outcome_Media = namedtuple('Outcome_Media',
+    ['outcome', 'raw_data', 'analyzed_data', 'curriculum', 'year_choices', 'semester_choices']
+)
+
+def get_outcome_media(request):
+    outcome_slug = request.GET.get('outcome_slug')
+    section = request.GET.get('section')
+    year = request.GET.get('year')
+    semester = request.GET.get('semester')
+
+    if outcome_slug is None:
+        raise ValueError("Need slug or primary key of an Outcome to get OutcomeMedia")
+    outcome = Outcome.objects.get(slug=outcome_slug)
+    raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+    analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
+    curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
+    year_choices = outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
+    semester_choices = outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
+
+    if section is not None:
+        raw_data = raw_data.filter(section=section)
+        analyzed_data = analyzed_data.filter(section=section)
+        curriculum = curriculum.filter(Q(section=None) | Q(section=section))
+
+    if year is not None:
+        raw_data = raw_data.filter(year=year)
+        analyzed_data = analyzed_data.filter(year=year)
+        curriculum = curriculum.filter(Q(year=None) | Q(year=year))
+
+    if semester is not None:
+        raw_data = raw_data.filter(semester=semester)
+        analyzed_data = analyzed_data.filter(semester=semester)
+        curriculum = curriculum.filter(Q(semester=None) | Q(semester=semester))
+
+    outcome_media = Outcome_Media(
+        outcome,
+        raw_data, 
+        analyzed_data,
+        curriculum,
+        year_choices,
+        semester_choices
+    )
+    return render(request, 'partials/outcome_media.html', {'outcome_media': outcome_media})
+
 class OutcomeMediaUpdateView(UpdateView):
     '''
     Displays outcome details and a form for authenticated 
@@ -157,17 +202,23 @@ class OutcomeMediaUpdateView(UpdateView):
         return Outcome.objects.exclude(Q(is_public=False))
 
     def get_context_data(self, **kwargs):
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        queryset = OutcomeMedia.objects.filter(Q(outcome__pk=self.object.pk), Q(is_public=True))
-        if self.request.user.is_authenticated:
-            media = queryset
-        else:
-            media = queryset.filter(~Q(outcome_type=OutcomeMedia.RAW_DATA))
-        context['outcomemedia_list'] = media
-        types = [t['outcome_type'] for t in media.values('outcome_type')]
-        context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
-        if self.object.course:
-            context['outcome_course_sections'] = self.object.course.sections
+        raw_data = self.object.media.filter(outcome_type='RD', is_public=True)
+        analyzed_data = self.object.media.filter(outcome_type='AD', is_public=True)
+        curriculum = self.object.media.filter(outcome_type='CU', is_public=True)
+        year_choices = self.object.media.all().distinct(
+            'year').exclude(year__isnull=True).values_list('year', flat=True)
+        semester_choices = self.object.media.all().distinct(
+            'semester').exclude(semester__isnull=True).values_list('semester', flat=True)
+        context['outcome_media'] = Outcome_Media(
+            self.object,
+            raw_data, 
+            analyzed_data,
+            curriculum,
+            year_choices,
+            semester_choices
+        )
         return context
     
     def get(self, request, *args, **kwargs):

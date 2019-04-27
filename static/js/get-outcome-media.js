@@ -58,12 +58,19 @@ $("#id_outcomes .outcome").click(function () {
 
 
 $("#outcomemedia_filters select").change(function () {
+    var data;
     var outcome = $("#id_outcomes .btn-secondary .outcome");
-    var outcome_id = parseInt(outcome.attr('id').split('_').slice(-1).pop());
-    if (outcome_id === null)
+    if (outcome.length === 0) {
+        var outcome_slug = window.location.pathname.split('/').slice(-2)[0];
+        data = {'outcome_slug': outcome_slug};
+    }
+    else {
+        var outcome_id = parseInt(outcome.attr('id').split('_').slice(-1).pop());
+        data = {'outcome_id': outcome_id};
+    }
+    if (outcome_id === null && outcome_slug === null)
         return false;
 
-    var data = {'outcome_id': outcome_id};
     var success;
     var url = $(this).attr("data-outcome-media-url");
 

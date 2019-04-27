@@ -13,6 +13,7 @@ p, li {
 }
 .btn:hover,
 .btn.btn-primary:hover,
+.btn.btn-danger:hover,
 .btn.btn-secondary:hover {
     background-color: unset;
     text-decoration: underline;
@@ -66,6 +67,12 @@ p, li {
     color: black;
 }
 
+@media (min-width: 1200px) {
+    div.alert {
+        position: absolute;
+    }
+}
+
 @media (min-width: 992px) {
     #nav_account {
         display: none;
@@ -94,9 +101,6 @@ p, li {
     }
     #main p {
         max-width: 75%;
-    }
-    div.alert {
-        position: absolute;
     }
     .carousel {
         width: 40vw;
@@ -326,6 +330,7 @@ form {
 #search_input:focus {
     box-shadow: none;
 }
+
 #search_input:focus::placeholder,
 #course_sections:focus::placeholder,
 #user_search_input:focus::placeholder
@@ -481,7 +486,7 @@ label.bmd-label-static {
     flex-direction:column;
     flex-grow: 1;
     width:100%;
-    border: 0.3rem solid #0f5e7f;
+    border: 2px solid #0f5e7f;
 }
 .center {
     align-self:center;
@@ -564,8 +569,6 @@ a > .svg-icon {
     }
     .submit-row {
         margin-top: 1rem;
-        flex-direction: column;
-        align-items:center;
         
     }
     #footer {
