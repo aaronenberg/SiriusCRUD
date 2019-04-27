@@ -220,20 +220,6 @@ class UserSearchResultsView(ListView):
         return BaseUser.objects.annotate(search=search_vector).filter(search=search_query)
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
-    ''' Displays details of a user. '''
-
-    model = BaseUser
-    context_object_name = 'user_object'
-    template_name = 'users/user_detail.html'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if request.user == self.object:
-            return redirect("users:account-update")
-        return super().get(request, *args, **kwargs)
-
-
 User = get_user_model()
 
 class UserActivateView(View):

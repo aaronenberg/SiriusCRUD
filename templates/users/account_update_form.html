@@ -52,7 +52,7 @@
   {% endif  %}
   </div>
 
-  {% if form.instance.staffprofile %}
+  {% if form.instance.is_privileged and form.instance.staffprofile %}
   <div class="form-group bmd-form-group">
     <label for="mysirius-courses" class="bmd-label-static">MySIRIUS Courses</label>
     {% if staffprofile_form %}
@@ -134,17 +134,22 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Deactivate Account</h5>
+              <h5 class="modal-title">
+                {% if form.instance.is_active %}Deactivate{% else %}Activate{% endif %} Account</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               {% if form.instance == user %}
-              <h6 class="text-center">WARNING:</h6> 
-              <p>You will be logged out after deactivation and you will not be able to log in again unless an administrator reactivates your account.</p>
+              <p>You will be logged out and lose access to 
+                your account unless an administrator reactivates it.</p>
+              {% elif form.instance.is_active %}
+              <p>The user will be logged out and lose access to their account until it is reactivated</p>
+              <p>Confirm deactivation by clicking 'Deactivate' or close the popup to cancel.</p>
+              {% else %}
+              <p>Confirm activation by clicking 'Activate' or close the popup to cancel.</p>
               {% endif %}
-              <p>Confirm deactivation of this user's account by clicking the button or close to cancel.</p>
             </div>
             <div class="modal-footer">
               {% if form.instance.is_active %}
