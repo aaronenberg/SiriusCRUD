@@ -36,10 +36,10 @@
 <table class="sortable" id="users_table">
   <thead>
     <tr>
-      <th>Username <i class="fas fa-sort" aria-hidden="true"></i></th>
-      <th>First Name <i class="fas fa-sort" aria-hidden="true"></i></th>
-      <th>Last Name <i class="fas fa-sort" aria-hidden="true"></i></th>
-      <th>User Role <i class="fas fa-sort" aria-hidden="true"></i></th>
+      <th><span>Username <img class="svg-icon" src="{% static 'img/font-awesome/sort.svg' %}"></span></th>
+      <th><span>First Name <img class="svg-icon" src="{% static 'img/font-awesome/sort.svg' %}"></span></th>
+      <th><span>Last Name <img class="svg-icon" src="{% static 'img/font-awesome/sort.svg' %}"></span></th>
+      <th><span>User Role <img class="svg-icon" src="{% static 'img/font-awesome/sort.svg' %}"></span></th>
     </tr>
   </thead>
   <tbody>
@@ -53,6 +53,10 @@
   {% endfor %}
   </tbody>
 </table>
+
+{% if is_paginated %}
+  {% include 'partials/paginator.html' %}
+{% endif %}
 
 {% endblock content-main %}
 

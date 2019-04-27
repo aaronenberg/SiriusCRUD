@@ -144,3 +144,12 @@ tbody td a {
 h6 {
     line-height: 0.8;
 }
+th span {
+    display: flex;
+    align-items: center;
+    justify-content:center
+}
+th span .svg-icon {
+    width: 0.5em;
+    margin-left: 5px;
+}

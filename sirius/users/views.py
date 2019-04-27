@@ -201,7 +201,7 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     model = BaseUser
     context_object_name = 'users'
-    queryset = BaseUser.objects.order_by('-user_role')
+    queryset = BaseUser.objects.order_by('-is_active', '-user_role')
     template_name = 'users/user_list.html'
     paginate_by = 10
 
