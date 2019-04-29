@@ -96,8 +96,9 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         if self.object.is_privileged:
-            context['users_courses'] = self.object.staffprofile.courses.extra(select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
-        ).order_by('subject','course_number')
+            context['users_courses'] = self.object.staffprofile.courses.extra(
+                select={'course_number': "CAST(substring(number FROM '^[0-9]+') AS INTEGER)"}
+                ).order_by('subject','course_number')
         return context
 
     def get(self, request, *args, **kwargs):

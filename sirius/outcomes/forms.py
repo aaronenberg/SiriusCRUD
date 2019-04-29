@@ -59,9 +59,11 @@ OutcomeMediaUpdateFormSet = inlineformset_factory(
     validate_max=True,
     widgets={'media': FileInput(attrs={
                 'class': 'custom-file',
+                'required': 'true'
             }),
             'outcome_type': Select(attrs={
-                'class': 'form-control select-fix-height'
+                'class': 'form-control select-fix-height',
+                'required': 'true'
             })
     }
 )

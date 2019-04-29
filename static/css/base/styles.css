@@ -83,6 +83,10 @@ p, li {
     font-weight:700;
 }
 
+a {
+    color: black;
+}
+
 li {
     list-style: none;
 }

@@ -57,14 +57,14 @@ class DevelopmentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         form.instance.is_public = True
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
-        form.save()
+        development = form.save()
         # for a file field to accept multiple files we save each file, creating a new DevelopmentMedia object
         developmentmedia = flatten_formset_file_fields(developmentmedia_form)
         for media in developmentmedia:
             media.author = self.request.user
             media.is_public = True
             media.save()
-        return redirect('developments:development-list')
+        return redirect(development.get_absolute_url())
 
     def form_invalid(self, form, developmentmedia_form, context):
         return render(self.request, self.get_template_names(), context)
@@ -96,7 +96,6 @@ class DevelopmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
         return render(request, self.get_template_names(), context) 
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
@@ -124,7 +123,7 @@ class DevelopmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
-        return redirect('developments:development-list')
+        return redirect(self.object.get_absolute_url())
 
     def form_invalid(self, form, developmentmedia_form):
         context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)

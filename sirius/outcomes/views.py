@@ -1,5 +1,6 @@
 from collections import namedtuple
 import re
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.uploadedfile import UploadedFile
@@ -73,9 +74,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             media.author = self.request.user
             media.is_public = True
             media.save()
-        if outcome.course:
-            return redirect(outcome.course.get_absolute_url())
-        return redirect('courses:subject-list')
+        return redirect(outcome.get_absolute_url())
 
     def form_invalid(self, form, outcomemedia_form, context):
         return render(self.request, self.get_template_names(), context)
@@ -140,9 +139,7 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
-        if outcome.course:
-            return redirect(outcome.course.get_absolute_url())
-        return redirect('courses:subject-list')
+        return redirect(outcome.get_absolute_url())
 
     def form_invalid(self, form, outcomemedia_form):
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
@@ -238,6 +235,7 @@ class OutcomeMediaUpdateView(UpdateView):
         context = self.get_context_data(form=form)
         if not form.is_valid():
             return self.form_invalid(form) 
+        messages.success(request, 'Submission complete - Your submission has been sent for review.')
         return self.form_valid(form)
 
     def form_valid(self, form):
@@ -246,9 +244,7 @@ class OutcomeMediaUpdateView(UpdateView):
             media.author = self.request.user
             media.section = self.request.POST['section']
             media.save()
-        if self.object.course:
-            return redirect(self.object.course.get_absolute_url())
-        return redirect('courses:subject-list')
+        return redirect(self.object.get_absolute_url())
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
@@ -267,14 +263,6 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
     def get_queryset(self):
         return Outcome.objects.filter(author=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        media = OutcomeMedia.objects.filter(outcome__pk=self.object.pk)
-        context['outcomemedia_list'] = media
-        types = [t['outcome_type'] for t in media.values('outcome_type')]
-        context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
-        return context
-    
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = OutcomeSubmissionsUpdateFormSet(
@@ -318,24 +306,15 @@ class DraftListView(LoginRequiredMixin, ListView):
             return Outcome.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
-class DraftDetailView(LoginRequiredMixin, DetailView):
+class DraftDetailView(OutcomeMediaUpdateView):
     ''' Displays details of an outcome. Allows a user to hide their private outcomes from
         other users. Additionally, unauthenticated users may not view certain types of outcomes '''
 
     template_name = 'outcomes/outcome_detail.html'
     model = Outcome
-    context_object_name = 'outcome'
 
     def get_queryset(self):
         return Outcome.objects.filter(Q(is_public=False), Q(author=self.request.user))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        media = OutcomeMedia.objects.filter(outcome__pk=self.object.pk)
-        context['outcomemedia_list'] = media
-        types = [t['outcome_type'] for t in media.values('outcome_type')]
-        context['OUTCOME_TYPES'] = [t[1] for t in OutcomeMedia.OUTCOME_TYPES if t[0] in types]
-        return context
 
 
 class DraftUpdateView(OutcomeUpdateView):

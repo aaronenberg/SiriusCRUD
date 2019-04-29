@@ -82,14 +82,14 @@
 
   <div class="submit-row">
     <div class="mr-auto">
+      <input type="Submit" class="btn btn-raised btn-primary" value="Post">
+      {% block save_draft%}
+      <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
+      {% endblock save_draft %}
+    </div>
       {% block back_navigate %}
       <a class="btn" href="{% url 'developments:development-list' %}">Cancel</a>
       {% endblock back_navigate %}
-    </div>
-    {% block save_draft%}
-    <input type="Submit" class="btn btn-danger" value="Save Draft" name="_save_draft">
-    {% endblock save_draft %}
-    <input type="Submit" class="btn btn-raised btn-primary" value="Post">
   </div>
 </form>
 

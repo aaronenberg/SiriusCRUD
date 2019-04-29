@@ -2625,7 +2625,6 @@ tbody.collapse.show {
   position: relative;
   display: inline-block;
   width: 100%;
-  height: calc(2.4375rem + 2px);
   margin-bottom: 0; }
 
 .custom-file-input {

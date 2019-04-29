@@ -23,8 +23,8 @@ urlpatterns = [
     path('outcomes/create/new/', views.OutcomeCreateView.as_view(), name='outcome-create'),
     path('drafts/', views.DraftListView.as_view(), name='draft-list'),
     path('outcomes/search/results/', views.SearchResultsView.as_view(), name='search-results'),
-    path('drafts/<slug:slug>/', views.DraftDetailView.as_view(), name='draft-detail'),
-    path('drafts/<slug:slug>/edit/', views.DraftUpdateView.as_view(), name='draft-update'),
+    path('outcomes/drafts/<slug:slug>/', views.DraftDetailView.as_view(), name='draft-detail'),
+    path('outcomes/drafts/<slug:slug>/edit/', views.DraftUpdateView.as_view(), name='draft-update'),
     path('ajax/get-sections/', views.get_course_sections, name='ajax-get-sections'),
     path('outcomes/ajax/get-outcome-media/', views.get_outcome_media, name='outcomes-ajax-get-outcome-media'),
 ]

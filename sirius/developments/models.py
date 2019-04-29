@@ -86,10 +86,6 @@ class Development(models.Model):
                 return "{}-{}".format(slug_truncated, i)
         return
 
-    def save(self, *args, **kwargs):
-        self.slug = self.generate_slug()
-        super(Development, self).save(*args, **kwargs)
-
     def __str__(self):
         if len(self.title) >= 75:
             return self.title[:72] + "..."
