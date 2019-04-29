@@ -31,7 +31,7 @@
         {% endfor %}
     </select>
     <div class="invalid-feedback">
-      Enter your section
+      Choose your section
     </div>
   </div>
 
@@ -40,29 +40,8 @@
   {% for upload_form in form %}
   <div class="w-100 mt-1" id="outcome-media-forms-row">
     <div id="outcome-media-forms">
-        <div class="media-upload spacer">
-          <hr/>
-          <div class="custom-file">
-            {{ upload_form.media }}
-            <div class="invalid-feedback">
-              Select a file
-            </div>
-          </div>
-          <div class="bmd-form-group input-group flex-column">
-            <div class="col-12 col-xl-6 col-lg-8">
-              {{ upload_form.outcome_type }}
-            </div>
-            <a href="javascript:void(0)" class="mt-2 mb-2 add-media-upload">
-              <img class="mr-2 svg-icon" 
-                   src="{% static 'img/font-awesome/layer-plus.svg' %}">
-              Add another file
-            </a>
-            <div class="invalid-feedback">
-              Select a file type
-            </div>
-          </div>
-        </div>
-      </div>
+      {% include 'partials/media_upload.html' %}
+    </div>
   </div>
   {% endfor %}
 
@@ -70,7 +49,7 @@
     <div class="mr-auto">
       <input type="Submit" class="btn btn-raised btn-primary" value="Submit">
     </div>
-    <button class="btn" type="reset">Clear</button>
+    <button id="clear_form" class="btn" type="reset">Clear</button>
   </div>
 </form>
 {% endif %}
@@ -80,8 +59,16 @@
   <script src={% static 'js/get-outcome-media.js' %} type="text/javascript"></script>
   <script type="text/javascript">
     {% include 'partials/outcomemedia-formset-management.js' %}
+
     $('#outcome_media_form').change(function() {
         $('.alert').alert('close');
     });
+
+    $('#outcome_media_form').on('reset', function(e) {
+        e.preventDefault()
+        deleteForm('media', $('.remove-media-upload'), reset=true);
+        $('#outcome_media_form')[0].reset();
+    });
   </script>
+
 {% endblock custom_js %}

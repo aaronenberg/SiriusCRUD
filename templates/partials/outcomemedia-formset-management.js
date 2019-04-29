@@ -50,10 +50,18 @@ function cloneMore(selector, prefix) {
     return false;
 }
 
-function deleteForm(prefix, btn) {
+function deleteForm(prefix, btn, reset=false) {
     var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
 
     if (total > 1) {
+        if (reset) {
+            var i = 0;
+            $('#outcome_media_form').find('.media-upload').each(function() {
+                i++; 
+                if (i < total)
+                  $(this).remove();
+            });
+        }
       btn.closest('.media-upload').remove();
       var forms = $('.media-upload');
       $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
