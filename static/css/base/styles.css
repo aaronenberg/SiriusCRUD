@@ -382,12 +382,6 @@ label.bmd-label-static {
     background-color:whitesmoke;
 }
 
-@media (max-width: 767.98px) {
-    .form-group {
-        margin-bottom: 0;
-    }
-}
-
 .custom-select.is-valid, .form-control.is-valid, .is-valid.custom-file-control, .was-validated .custom-file-control:valid, .was-validated .custom-select:valid, .was-validated .form-control:valid {
     border-color:rgb(180,180,180);
 }
