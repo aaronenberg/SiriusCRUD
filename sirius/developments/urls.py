@@ -17,6 +17,7 @@ urlpatterns = [
         views.DevelopmentUpdateView.as_view(),
         name='development-update'
     ),
+    path('developments/search/results/', views.SearchResultsView.as_view(), name='search-results'),
     path('developments/create/new/', views.DevelopmentCreateView.as_view(), name='development-create'),
     #path('developments/search/results/', views.SearchResultsView.as_view(), name='search-results'),
     path('developments/drafts/<slug:slug>/', views.DraftDetailView.as_view(), name='draft-detail'),

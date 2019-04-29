@@ -37,9 +37,9 @@
 </ul>
 
 {% if course_detail_url in request.path %}
-<div class="submit-row align-items-center">
+<div class="submit-row m-0 align-items-center">
   <div class="mr-auto">
-    <h6 class="mb-0">{{ outcome_media.outcome.title }}</h6>
+    <h6 class="mb-0 p-1">{{ outcome_media.outcome.title }}</h6>
   </div>
   {% if outcome_media.outcome.author == user or user.is_superuser %}
   <div class="btn-group m-0">

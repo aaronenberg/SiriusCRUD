@@ -15,12 +15,6 @@
   <div id="development_detail_description">
     <p>{{ development.description }}</p>
   </div>
-  <div id="development_detail_subject">
-    {{ development.get_subject_display }}
-  </div>
-  <div id="development_detail_development_type">
-    {{ development.get_development_type_display }}
-  </div>
   <div id="development_detail_semester">
     <p>
       {% if development.semester %} {{ development.get_semester_display }} {% endif %}

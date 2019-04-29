@@ -1,0 +1,20 @@
+{% extends "developments/development_list.html" %}
+{% load static development_tags %}
+
+{% block title %}
+  '{{ request.GET.query }}' Search Results | SIRIUS
+{% endblock title %}
+
+
+{% block development_actions %}
+{% endblock development_actions %}
+
+{% block content-header %}
+<div>
+  <h5>'{{ request.GET.query }}' search results</h5>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+{% endblock custom_js %}

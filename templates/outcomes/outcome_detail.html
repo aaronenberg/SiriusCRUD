@@ -41,15 +41,15 @@
     </div>
     {% endif %}
   </div>
-  <div id="outcome_detail_course_semester">
-      {% if outcome.semester %} | {{ outcome.semester }} {% endif %}
-      {% if outcome.year %}{{ outcome.year }} {% endif %}
-  </div>
   <h6>{{ outcome.title }}</h6>
   <div id="outcome_detail_author">
     <small>Updated by <b>{{ outcome.author.get_full_name }}</b> at: 
       {{ outcome.modified }}
     </small>
+  </div>
+  <div id="outcome_detail_course_semester">
+      {% if outcome.semester %} | {{ outcome.semester }} {% endif %}
+      {% if outcome.year %}{{ outcome.year }} {% endif %}
   </div>
   <div id="outcome_detail_description">
     <p>{{ outcome.description }}</p>

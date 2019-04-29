@@ -214,18 +214,19 @@ a .svg-icon:hover {
         display: flex;
         flex-direction: column;
     }
-    #id_outcome_title {
-        padding-top:0;
-    }
     #id_outcomes {
         height: 30vh;
         border-right: 0;
     }
     #id_outcome_title_description {
         border-top: 2px solid #0f5e7f;
+        border-left: 0;
     }
     #id_outcome_description {
         height: 20vh;
+    }
+    #id_outcome_media {
+        border-left: 0;
     }
     #id_outcome_media_content {
         overflow-y: auto;
@@ -259,7 +260,3 @@ a .svg-icon:hover {
     background-color: darkgrey;
 }
 
-#course_actions a {
-    text-decoration: none;
-    color: black;
-}

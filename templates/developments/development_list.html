@@ -19,10 +19,9 @@
 {% block development_actions %}
   {% if user.is_authenticated and user.is_privileged %}
   <div id="development_actions" class="mt-3">
-    <a 
-      class="btn btn-raised btn-primary" 
-      href="{% url 'developments:development-create' %}">
-      <img class="svg-icon mr-1" src="{% static 'img/font-awesome/plus-circle.svg' %}">
+    <a class="btn" 
+       href="{% url 'developments:development-create' %}">
+      <img class="svg-icon mr-1" src="{% static 'img/font-awesome/plus-circle-black.svg' %}">
       New Development
     </a>
     {% block draft_action %}

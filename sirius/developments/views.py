@@ -1,5 +1,6 @@
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -192,4 +193,15 @@ class DraftUpdateView(DevelopmentUpdateView):
 
     def get_queryset(self):
         return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))
+
+
+class SearchResultsView(ListView):
+    model = Development
+    context_object_name = 'developments'
+    template_name = 'developments/search_results_list.html'
+
+    def get_queryset(self):
+        search_vector = SearchVector('description', 'title')
+        search_query = SearchQuery(self.request.GET.get('query'))
+        return Development.objects.annotate(search=search_vector).filter(search=search_query, is_public=True)
 
