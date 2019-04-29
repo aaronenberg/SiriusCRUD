@@ -321,7 +321,7 @@ form {
 #search_bar {
     padding: .7rem;
     border-radius: 1.6rem;
-    width: 100%;
+    width: fit-content;
 }
 #search_input {
     border: 0;
@@ -445,6 +445,7 @@ label.bmd-label-static {
 #menubar_mobile_right {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 #menubar_desktop .navbar {
     background-color: #0f5e7f;
