@@ -1,6 +1,6 @@
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -11,6 +11,7 @@ from django.urls import reverse
 from .utils import flatten_formset_file_fields, update_files_formset
 from .models import Development, DevelopmentMedia
 from .forms import DevelopmentForm, DevelopmentMediaFormSet
+from outcomes.utils import prepare_search_term
 
 
 class DevelopmentListView(ListView):
@@ -201,7 +202,8 @@ class SearchResultsView(ListView):
     template_name = 'developments/search_results_list.html'
 
     def get_queryset(self):
-        search_vector = SearchVector('description', 'title')
-        search_query = SearchQuery(self.request.GET.get('query'))
-        return Development.objects.annotate(search=search_vector).filter(search=search_query, is_public=True)
-
+        queryset = Development.objects.filter(is_public=True)
+        query = SearchQuery(prepare_search_term(self.request.GET.get('query', '')), search_type='raw')
+        vector = SearchVector('title', weight='A') + SearchVector('description', weight='B')
+        rank = SearchRank(vector, query)
+        return Development.objects.annotate(rank=rank).filter(rank__gt=0.2).order_by('rank')[:20]

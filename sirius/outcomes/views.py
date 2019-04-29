@@ -1,7 +1,7 @@
 from collections import namedtuple
 import re
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -10,7 +10,12 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.urls import reverse
 from courses.models import Course
-from .utils import get_course_from_url, flatten_formset_file_fields, update_files_formset
+from .utils import (
+    get_course_from_url,
+    flatten_formset_file_fields,
+    update_files_formset,
+    prepare_search_term,
+)
 from .models import Outcome, OutcomeMedia
 from .forms import (
     OutcomeForm, 
@@ -351,9 +356,11 @@ class SearchResultsView(ListView):
     template_name = 'outcomes/search_results_list.html'
 
     def get_queryset(self):
-        search_vector = SearchVector('description', 'title')
-        search_query = SearchQuery(self.request.GET.get('query'))
-        return Outcome.objects.annotate(search=search_vector).filter(search=search_query, is_public=True)
+        queryset = Outcome.objects.filter(is_public=True)
+        query = SearchQuery(prepare_search_term(self.request.GET.get('query', '')), search_type='raw')
+        vector = SearchVector('title', weight='A') + SearchVector('description', weight='B')
+        rank = SearchRank(vector, query)
+        return Outcome.objects.annotate(rank=rank).filter(rank__gt=0.2).order_by('rank')[:20]
 
 
 def get_course_sections(request):

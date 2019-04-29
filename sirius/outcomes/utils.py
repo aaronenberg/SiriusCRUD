@@ -134,3 +134,25 @@ def update_files_formset(formset):
 
 def filename(media):
     return os.path.basename(media.name)
+
+
+def prepare_search_term(term):
+    """Sanitize the input term for a search using postgres to_tsquery.
+
+    Cleans a search string to something acceptable for use with to_tsquery.
+    Appends ':*' so that partial matches will also be returned.
+
+    Args:
+        term: the search term to be cleaned and prepared
+
+    Returns:
+        the prepared search string
+    """
+
+    query = re.sub(r'[!\'()|&]', ' ', term).strip()
+    if query:
+        query = re.sub(r'\s+', ' & ', query)
+        query += ':*'
+
+    return query
+

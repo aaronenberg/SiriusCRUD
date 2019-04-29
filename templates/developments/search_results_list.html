@@ -2,7 +2,7 @@
 {% load static development_tags %}
 
 {% block title %}
-  '{{ request.GET.query }}' Search Results | SIRIUS
+  '{{ request.GET.query.strip }}' Search Results | SIRIUS
 {% endblock title %}
 
 
@@ -11,7 +11,7 @@
 
 {% block content-header %}
 <div>
-  <h5>'{{ request.GET.query }}' search results</h5>
+  <h5>'{{ request.GET.query.strip }}' search results</h5>
 </div>
 {% endblock %}
 

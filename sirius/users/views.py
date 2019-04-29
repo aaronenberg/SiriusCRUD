@@ -9,7 +9,7 @@ from django.contrib.auth import (
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from django.contrib.postgres.search import SearchVector, SearchQuery
+from django.contrib.postgres.search import TrigramSimilarity
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
@@ -35,6 +35,7 @@ from .forms import (
 )
 from .models import BaseUser, StaffProfile, FACULTY
 from .tokens import account_activation_token
+from outcomes.utils import prepare_search_term
 
 
 class UserCreateView(UserPassesTestMixin, CreateView):
@@ -215,9 +216,15 @@ class UserSearchResultsView(ListView):
     template_name = 'users/search_results_list.html'
 
     def get_queryset(self):
-        search_vector = SearchVector('username', 'first_name', 'last_name')
-        search_query = SearchQuery(self.request.GET.get('user_query'))
-        return BaseUser.objects.annotate(search=search_vector).filter(search=search_query)
+        query = self.request.GET.get('user_query', '').strip()
+        similarity = (
+            TrigramSimilarity('username', query) +
+            TrigramSimilarity('first_name', query) +
+            TrigramSimilarity('last_name', query)
+
+        )
+        return BaseUser.objects.annotate(
+            similarity=similarity).filter(similarity__gt=0.3).order_by('similarity')
 
 
 User = get_user_model()
