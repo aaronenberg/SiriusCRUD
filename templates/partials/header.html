@@ -23,13 +23,13 @@
       <button class="navbar-toggler" 
               type="button" 
               data-toggle="collapse"
-              data-target="#navbarNavAltMarkup" 
-              aria-controls="navbarNavAltMarkup"
+              data-target="#navbar_collapse" 
+              aria-controls="navbar_collapse"
               aria-expanded="false"
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+      <div class="collapse navbar-collapse justify-content-between" id="navbar_collapse">
         <div id="nav-left" class="navbar-nav">
           <a class="nav-item nav-link {% if subject_list_url in request.path %}active{% endif %}" 
              href="{{ subject_list_url }}">
