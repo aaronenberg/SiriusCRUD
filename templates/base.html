@@ -92,13 +92,15 @@
             $('.alert').alert('close');
         });
 
-        $("#navbar_collapse .nav-item").click(function(e) {
-            e.preventDefault();
-            var href = $(this).attr('href');
-            $('#navbar_collapse').collapse('hide'); 
-            $('#navbar_collapse').on('hidden.bs.collapse', function () {
-                window.location.href = href
-            })
+        $('#navbar_collapse').on('shown.bs.collapse', function () {
+            $("#navbar_collapse .nav-item").click(function(e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                $('#navbar_collapse').collapse('hide'); 
+                $('#navbar_collapse').on('hidden.bs.collapse', function () {
+                    window.location.href = href
+                })
+            });
         });
     });
     </script>
