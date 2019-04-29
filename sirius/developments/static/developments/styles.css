@@ -34,7 +34,7 @@
     height:100%;
 }
 #development-media-forms .bmd-form-group {
-    padding-top: 0;
+    padding-top: 10px;
 }
 
 .input-group>.custom-file-control:not(:first-child),
