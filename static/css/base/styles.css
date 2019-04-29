@@ -77,6 +77,12 @@ p, li {
     #nav_account {
         display: none;
     }
+    #main p {
+        max-width: 75%;
+    }
+    .carousel {
+        width: 40vw;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -98,12 +104,6 @@ p, li {
 
     #main {
         padding: 2rem;
-    }
-    #main p {
-        max-width: 75%;
-    }
-    .carousel {
-        width: 40vw;
     }
 }
 
