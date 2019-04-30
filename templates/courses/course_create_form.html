@@ -84,8 +84,12 @@
   $('#course_title').disableAutoFill();
   $('#course_sections').disableAutoFill();
   $('#course_number').disableAutoFill();
-  $('#course_sections').on('focus', function() {
+
+  $('#course_sections').focus(function() {
       $(this).popover('show');
+  })
+  $('#course_sections').blur(function() {
+      $(this).popover('hide');
   })
 </script>
 {% endblock custom_js %}

@@ -118,7 +118,7 @@
   {% endif  %}
   <div class="submit-row mt-auto">
     <input class="btn btn-raised btn-primary col-lg-2 col-3" type="Submit" value="Save" name="_submit">
-    <div class="row align-items-center ml-auto">
+    <div>
       {% if user.is_superuser and form.instance != user or form.instance == user %}
       <a class="btn" 
          href="javascript:void(0)"

@@ -11,6 +11,6 @@ urlpatterns = [
     path('courses/<str:subject>/<slug:slug>/', views.CourseDetailView.as_view(), name='course-detail'),
     path('courses/<str:subject>/<slug:slug>/delete/', views.CourseDeleteView.as_view(), name='course-delete'),
     path('courses/<str:subject>/<slug:slug>/edit/', views.CourseUpdateView.as_view(), name='course-update'),
-    path('ajax/get-outcome-media/', views.get_outcome_media, name='ajax-get-outcome-media'),
+    path('ajax/courses/get-outcome-media/', views.get_outcome_media, name='ajax-get-outcome-media'),
 ]
 
