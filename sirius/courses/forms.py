@@ -107,7 +107,11 @@ class CourseForm(ModelForm):
             'id': 'course_sections',
             'class': 'form-control',
             'name': 'sections',
-            'placeholder': '1-20, 25, 42' 
+            'placeholder': '1-20, 25, 42',
+            'data-container': "body",
+            'data-toggle': "popover",
+            'data-placement': "bottom",
+            'data-content': "Separate sections with a comma. Quickly specify a consecutive range of numbers using a dash. Ex: 1, 2, 4-15",
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'outcome_description',
