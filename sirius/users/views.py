@@ -56,7 +56,7 @@ class UserCreateView(UserPassesTestMixin, CreateView):
 
     def send_activation_email(self, request, user, token):
         current_site = get_current_site(request)
-        uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
         activation_link = "{0}/activate/?uid={1}&token={2}".format(current_site, uid, token)
         subject = 'SIRIUS Project Email Confirmation'
         html_message = render_to_string(
@@ -76,11 +76,38 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         user = form.save()
         token = account_activation_token.make_token(user)
         self.send_activation_email(request, user, token)
-        return HttpResponse('A confirmation email has been sent to your email address. Please confirm your email to activate your account.')
+        return render(request, 'registration/activation_sent.html')
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
         return render(self.request, self.get_template_names(), context)
+
+
+User = get_user_model()
+
+class UserActivateView(View):
+
+    def get(self, request):
+        uidb64 = request.GET.get('uid')
+        token = request.GET.get('token')
+        user = self.get_user(uidb64)
+        if not user or not token:
+            raise Http404()
+        if not account_activation_token.check_token(user, token):
+            return HttpResponse('Activation link is invalid!')
+        user.is_active = True
+        user.save()
+        login(request, user, backend='users.auth.EmailBackend')
+        return redirect(settings.LOGIN_REDIRECT_URL)
+
+    def get_user(self, uidb64):
+        try:
+            # urlsafe_base64_decode() decodes to bytestring
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        return user
 
 
 class AccountUpdateView(LoginRequiredMixin, UpdateView):
@@ -226,33 +253,6 @@ class UserSearchResultsView(ListView):
         )
         return BaseUser.objects.annotate(
             similarity=similarity).filter(similarity__gt=0.3).order_by('similarity')
-
-
-User = get_user_model()
-
-class UserActivateView(View):
-
-    def get(self, request):
-        uidb64 = request.GET.get('uid')
-        token = request.GET.get('token')
-        user = self.get_user(uidb64)
-        if not user or not token:
-            raise Http404()
-        if not account_activation_token.check_token(user, token):
-            return HttpResponse('Activation link is invalid!')
-        user.is_active = True
-        user.save()
-        login(request, user, backend='users.auth.EmailBackend')
-        return redirect(settings.LOGIN_REDIRECT_URL)
-
-    def get_user(self, uidb64):
-        try:
-            # urlsafe_base64_decode() decodes to bytestring
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        return user
 
 
 class PasswordChangeView(auth_views.PasswordChangeView):

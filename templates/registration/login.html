@@ -31,14 +31,14 @@
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ next }}">
 
-    <div class="form-row">
+    <div class="form-row bmd-form-group mt-3">
       {{ form.username }}
       <div class="invalid-feedback">
         Enter a valid Username or Email.
       </div>
     </div>
 
-    <div class="form-row">
+    <div class="form-row bmd-form-group mt-2">
       {{ form.password }}
     </div>
 

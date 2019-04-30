@@ -67,9 +67,6 @@ p, li {
     color: black;
 }
 
-
-
-
 .navbar-submit {
     border-radius: 4px;
     margin-left: auto;
@@ -525,7 +522,7 @@ a > .svg-icon {
     #nav_account {
         display: none;
     }
-    #main p {
+    #main p.center {
         max-width: 75%;
     }
     .carousel {
