@@ -76,10 +76,12 @@
                href="{{ account_url }}">
                SIRIUS Account
             </a>
-              <a class="nav-item nav-link {% if draft_list_url in request.path %}active{% endif %}"
-                 href="{{ draft_list_url }}">
-                 Saved Drafts
-              </a>
+            {% if user.is_privileged %}
+            <a class="nav-item nav-link {% if draft_list_url in request.path %}active{% endif %}"
+               href="{{ draft_list_url }}">
+               Saved Drafts
+            </a>
+            {% endif %}
             <a class="nav-item nav-link" href="{% url 'users:logout' %}">Logout</a>
           </div>
           {% else %}

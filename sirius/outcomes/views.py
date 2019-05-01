@@ -159,24 +159,30 @@ def get_outcome_media(request):
     if outcome_slug is None:
         raise ValueError("Need slug or primary key of an Outcome to get OutcomeMedia")
     outcome = Outcome.objects.get(slug=outcome_slug)
-    raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+    if request.user.is_authenticated:
+        raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+    else:
+        raw_data = None
     analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
     curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
     year_choices = outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
     semester_choices = outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
 
     if section is not None:
-        raw_data = raw_data.filter(section=section)
+        if raw_data:
+            raw_data = raw_data.filter(section=section)
         analyzed_data = analyzed_data.filter(section=section)
         curriculum = curriculum.filter(Q(section=None) | Q(section=section))
 
     if year is not None:
-        raw_data = raw_data.filter(year=year)
+        if raw_data:
+            raw_data = raw_data.filter(year=year)
         analyzed_data = analyzed_data.filter(year=year)
         curriculum = curriculum.filter(Q(year=None) | Q(year=year))
 
     if semester is not None:
-        raw_data = raw_data.filter(semester=semester)
+        if raw_data:
+            raw_data = raw_data.filter(semester=semester)
         analyzed_data = analyzed_data.filter(semester=semester)
         curriculum = curriculum.filter(Q(semester=None) | Q(semester=semester))
 
@@ -294,7 +300,7 @@ class OutcomeSubmissionsUpdateView(LoginRequiredMixin, UserPassesTestMixin, Upda
         return render(self.request, self.get_template_names(), context)
 
 
-class DraftListView(LoginRequiredMixin, ListView):
+class DraftListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     ''' Displays a list of the current user's unpublished drafts.
         The drafts in this list are only available to the currently logged in user. '''
     model = Outcome
@@ -302,16 +308,22 @@ class DraftListView(LoginRequiredMixin, ListView):
 
     template_name = 'outcomes/draft_list.html'
 
+    def test_func(self):
+        return self.request.user.is_privileged
+
     def get_queryset(self):
             return Outcome.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
-class DraftDetailView(OutcomeMediaUpdateView):
+class DraftDetailView(UserPassesTestMixin, OutcomeMediaUpdateView):
     ''' Displays details of an outcome. Allows a user to hide their private outcomes from
         other users. Additionally, unauthenticated users may not view certain types of outcomes '''
 
     template_name = 'outcomes/outcome_detail.html'
     model = Outcome
+
+    def test_func(self):
+        return self.request.user.is_privileged and self.request.user == self.get_object().author
 
     def get_queryset(self):
         return Outcome.objects.filter(Q(is_public=False), Q(author=self.request.user))

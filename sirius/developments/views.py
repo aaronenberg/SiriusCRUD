@@ -84,7 +84,7 @@ class DevelopmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return Development.objects.exclude(Q(is_public=False))
 
     def test_func(self):
-        return self.request.user == self.get_object().author
+        return self.request.user.is_superuser and self.request.user == self.get_object().author
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -159,23 +159,29 @@ class DevelopmentDetailView(DetailView):
         return render(request, self.get_template_names(), context) 
 
 
-class DraftListView(LoginRequiredMixin, DevelopmentListView):
+class DraftListView(LoginRequiredMixin, UserPassesTestMixin, DevelopmentListView):
     ''' Displays a list of the current user's unpublished drafts.
         The drafts in this list are only available to the currently logged in user. '''
 
     template_name = 'developments/draft_list.html'
 
+    def test_func(self):
+        self.request.user.is_superuser
+
     def get_queryset(self):
             return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
-class DraftDetailView(LoginRequiredMixin, DetailView):
+class DraftDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     ''' Displays details of an development. Allows a user to hide their private developments from
         other users. Additionally, unauthenticated users may not view certain types of developments '''
 
     template_name = 'developments/development_detail.html'
     model = Development
     context_object_name = 'development'
+
+    def test_func(self):
+        self.request.user.is_superuser
 
     def get_queryset(self):
         return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))

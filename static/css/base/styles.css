@@ -5,7 +5,7 @@ label, h1, h2, h3, h4, h5, h6, th, .nav-item, .nav-link {
     font-family: 'Lato', sans-serif;
 }
 
-p, li, td {
+p, li, td, .nav-link.outcome {
     font-family: 'Neuton', serif;
 }
 p, li {

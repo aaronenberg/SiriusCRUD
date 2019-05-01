@@ -219,11 +219,8 @@ a .svg-icon:hover {
         border-right: 0;
     }
     #id_outcome_title_description {
-        border-top: 2px solid #0f5e7f;
-        border-left: 0;
-    }
-    #id_outcome_description {
-        height: 20vh;
+        border: none;
+        order: 5;
     }
     #id_outcome_media {
         border-left: 0;
