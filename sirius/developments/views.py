@@ -143,11 +143,7 @@ class DevelopmentDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = DevelopmentMedia.objects.filter(Q(development__pk=self.object.pk), Q(is_public=True))
-        if self.request.user.is_authenticated:
-            media = queryset
-        else:
-            media = queryset.filter(~Q(development_type=DevelopmentMedia.RAW_DATA))
+        media = DevelopmentMedia.objects.filter(development__pk=self.object.pk, is_public=True)
         context['developmentmedia_list'] = media
         types = [t['development_type'] for t in media.values('development_type')]
         context['DEVELOPMENT_TYPES'] = [t[1] for t in DevelopmentMedia.DEVELOPMENT_TYPES if t[0] in types]

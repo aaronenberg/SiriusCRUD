@@ -1,3 +1,4 @@
+import operator
 from collections import namedtuple
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
@@ -103,6 +104,9 @@ class CourseDetailView(DetailView):
             return context
         latest_outcome = context['course_outcomes'][0]
         raw_data = latest_outcome.media.filter(outcome_type='RD', is_public=True)
+        # sort by filename alphabetically
+        #raw_data = list(latest_outcome.media.filter(outcome_type='RD', is_public=True))
+        #raw_data.sort(key=lambda x: x.filename)
         analyzed_data = latest_outcome.media.filter(outcome_type='AD', is_public=True)
         curriculum = latest_outcome.media.filter(outcome_type='CU', is_public=True)
         year_choices = latest_outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)

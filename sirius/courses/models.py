@@ -8,13 +8,11 @@ class Course(models.Model):
 
     BIOLOGY = 'BIO'
     CHEMISTRY = 'CHEM'
-    CIVIL_ENGINEERING = 'CE'
     ENVIRONMENTAL_STUDIES = 'ENVS'
     GEOLOGY = 'GEOL'
     SUBJECT_CHOICES = BLANK_CHOICE_DASH + [
         (BIOLOGY, 'Biology'),
         (CHEMISTRY, 'Chemistry'),
-        (CIVIL_ENGINEERING, 'Civil Engineering'),
         (ENVIRONMENTAL_STUDIES, 'Environmental Studies'),
         (GEOLOGY, 'Geology'),
     ]

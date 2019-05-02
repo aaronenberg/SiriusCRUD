@@ -94,16 +94,16 @@ class Development(models.Model):
 
 class DevelopmentMedia(models.Model):
 
-    ANALYZED_DATA = 'SD'
-    POSTER = 'PO'
-    RAW_DATA = 'RD'
-    REPORT = 'RE'
+    AGENDA = 'AG'
+    ASSESSMENT = 'AS'
+    PEOPLE = 'PE'
+    PRESENTATION = 'PR'
     OTHER = 'OT'
     DEVELOPMENT_TYPES = BLANK_CHOICE_DASH + [
-        (ANALYZED_DATA, 'Analyzed Data'),
-        (POSTER, 'Poster'),
-        (RAW_DATA, 'Raw Data'),
-        (REPORT, 'Report'),
+        (AGENDA, 'Agenda'),
+        (ASSESSMENT, 'Assessment'),
+        (PEOPLE, 'People'),
+        (PRESENTATION, 'Presentation'),
         (OTHER, 'Other'),
     ]
 
