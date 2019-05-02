@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.virtualenvs/
 #aws configuration
 config/json_env/
 
