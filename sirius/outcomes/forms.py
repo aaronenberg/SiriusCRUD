@@ -41,7 +41,9 @@ OutcomeMediaFormSet = inlineformset_factory(
     validate_max=True,
     widgets={'media': FileInput(attrs={
                 'class': 'custom-file',
-                'multiple': True
+                'multiple': True,
+                'webkitdirectory': True,
+                'mozdirectory': True,
             }),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
