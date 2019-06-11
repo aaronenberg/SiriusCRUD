@@ -2,7 +2,7 @@ import datetime
 import itertools
 import os
 import uuid
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxLengthValidator
 from django.db import models
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
@@ -127,27 +127,35 @@ class OutcomeMedia(models.Model):
 
     outcome = models.ForeignKey('Outcome', on_delete=models.CASCADE, related_name='media')
 
-    # insert uuid to prevent renaming file when a file with same name already exists
     def upload_to(instance, filename):
-        today = datetime.datetime.now().strftime("%Y%m%d")
-        return 'uploads/{0}/{1}/{2}'.format(today, uuid.uuid4(), filename)
+        if not instance.upload_directory:
+            return 'uploads/{0}/{1}'.format(instance.outcome.slug, filename)
+        return 'uploads/{0}/{1}/{2}'.format(
+            instance.outcome.slug,
+            instance.upload_directory,
+            filename
+        )
 
     media = models.FileField(_('file upload'), upload_to=upload_to)
+
+    upload_directory = models.CharField(max_length=2048, default='', blank=True)
 
     outcome_type = models.CharField(
         _('outcome type'),
         max_length=2,
         choices=OUTCOME_TYPES,
-        default="",
+        default='',
         blank=True,
         help_text=_("Select the file type")
     )
+
     author = models.ForeignKey(
         'users.BaseUser',
         on_delete=models.CASCADE,
         related_name='uploads',
         verbose_name=_('author')
     )
+
     created = models.DateTimeField(auto_now_add=True)
 
     modified = models.DateTimeField(auto_now=True)
@@ -165,14 +173,14 @@ class OutcomeMedia(models.Model):
         blank=True,
         null=True
     )
+
     year = models.PositiveSmallIntegerField(
         _('year'),
         validators=[MinValueValidator(2000), max_value_current_year],
         blank=True,
         null=True
     )
-    
-    # chop off relative path to Storage to get just the name of file
+
     @property
     def filename(self):
         return os.path.basename(self.media.name)

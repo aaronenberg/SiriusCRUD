@@ -2,11 +2,15 @@ import datetime
 import math
 import os
 import re
+
 from django.core.validators import MaxValueValidator
 from django.core.files.uploadedfile import UploadedFile
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
+
 from courses.models import Course
+from config.custom_filehandlers import UploadedFileWithDirectory
+
 
 
 def time_since(time):
@@ -104,7 +108,18 @@ def flatten_formset_file_fields(formset):
             if isinstance(fp, UploadedFile):
                 outcome_type = formset.forms[form_id].cleaned_data['outcome_type']
                 outcome = formset.forms[form_id].cleaned_data['outcome']
-                media.append(OutcomeMedia(media=fp, outcome_type=outcome_type, outcome=outcome))
+                if not isinstance(fp, UploadedFileWithDirectory):
+                    upload_directory = ''
+                else:
+                    upload_directory = fp.directory_name
+                media.append(
+                    OutcomeMedia(
+                        media=fp,
+                        upload_directory=upload_directory,
+                        outcome_type=outcome_type,
+                        outcome=outcome
+                    )
+                )
     return media
 
 
