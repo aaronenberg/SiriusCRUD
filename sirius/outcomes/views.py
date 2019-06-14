@@ -30,10 +30,12 @@ from .forms import (
     OutcomeMediaUpdateFormSet,
     OutcomeSubmissionsUpdateFormSet,
 )
-from config.custom_filehandlers import TemporaryFileWithDirectoryUploadHandler
+from config.custom_filehandlers import (
+    MemoryFileWithDirectoryUploadHandler,
+    TemporaryFileWithDirectoryUploadHandler
+)
 
-
-#@method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ''' Displays a form to create a new outcome and a separate form for uploaded attachments
         only for authenticated users '''
@@ -66,11 +68,12 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
-    #    request.upload_handlers.insert(0, TemporaryFileWithDirectoryUploadHandler(request))
-    #    return self._post(request)
+        request.upload_handlers.insert(0, MemoryFileWithDirectoryUploadHandler(request))
+        request.upload_handlers.insert(1, TemporaryFileWithDirectoryUploadHandler(request))
+        return self._post(request)
 
-    #@method_decorator(csrf_protect)
-    #def _post(self, request, *args, **kwargs):
+    @method_decorator(csrf_protect)
+    def _post(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -102,7 +105,6 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if '_save_draft' in self.request.POST.keys():
             form.instance.is_public = False
         outcome = form.save()
-        import pdb; pdb.set_trace()
         directory_fields = [k for k in outcomemedia_form.files.keys() if k.startswith('directory')]
         file_fields = [k for k in outcomemedia_form.files.keys() if not k.startswith('directory')]
         for k in directory_fields:

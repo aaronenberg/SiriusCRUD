@@ -129,9 +129,3 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-FILE_UPLOAD_HANDLERS = [
-    "config.custom_filehandlers.MemoryFileWithDirectoryUploadHandler",
-    "config.custom_filehandlers.TemporaryFileWithDirectoryUploadHandler",
-    "django.core.files.uploadhandler.MemoryFileUploadHandler",
-    "django.core.files.uploadhandler.TemporaryFileUploadHandler"
-]

@@ -15,7 +15,8 @@ function setTargetLabelForAddDirectoryInput()
 }
 
 
-function updateElementIndex(el, prefix, ndx) {
+function updateElementIndex(el, prefix, ndx)
+{
     var id_regex = new RegExp('(' + prefix + '-\\d+)');
     var replacement = prefix + '-' + ndx;
 
@@ -29,7 +30,8 @@ function updateElementIndex(el, prefix, ndx) {
         el.name = el.name.replace(id_regex, replacement);
 }
 
-function cloneUpload(selector, prefix) {
+function cloneUpload(selector, prefix)
+{
     var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
     var max = parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
 
@@ -133,6 +135,7 @@ $('#outcome-media-forms select').click(function() {
         file_input.required = false;
 });
 
+
 $('#outcome-media-forms input').change(function() {
     var select_input_id = $(this).attr('id').replace('-media', '-outcome_type');
     var select_input = document.getElementById(select_input_id)
@@ -153,8 +156,28 @@ $('#outcome-media-forms input').change(function() {
     }
     else
         select_input.required = false;
+    insertFileInputValue($(this));
 });
 
+function insertFileInputValue(file_input)
+{
+    if (!isDirectoryInput(file_input)) {
+        var file_name = $(file_input).val().split('\\').pop();
+        $(file_input).before("<span>" + file_name + "</span>");
+        return;
+    }
+
+    let output = $(file_input).parents(".media-upload").children(".media-listing");
+    let files = $(file_input).prop("files");
+    let rootDirectoryName = files[0].webkitRelativePath.split("/")[0]
+    $(file_input).before("<span>" + rootDirectoryName + "</span>");
+
+     for (let i=0; i<files.length; i++) {
+       let item = document.createElement("li");
+       item.innerHTML = files[i].webkitRelativePath;
+       output.append(item);
+     };
+}
 
 function isDirectoryInput(input_element)
 {

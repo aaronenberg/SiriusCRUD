@@ -36,6 +36,9 @@
 #outcome-media-forms .bmd-form-group {
     padding-top: 10px;
 }
+.media-upload input[type="file"] {
+    display: none;
+}
 
 .input-group>.custom-file-control:not(:first-child),
 .input-group>.custom-file-control:not(:last-child),
