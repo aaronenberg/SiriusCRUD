@@ -31,9 +31,12 @@ MEDIA_ROOT = os.environ['MEDIA_ROOT']
 
 INTERNAL_IPS = '127.0.0.1'
 
-INSTALLED_APPS += ['debug_toolbar', 'django_extensions']
+INSTALLED_APPS += ['debug_toolbar', 'django_extensions', 's3file']
 
-MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    's3file.middleware.S3FileMiddleware',
+]
 
 TEMPLATES[0]['DIRS'] = ['templates',]
 
@@ -63,3 +66,7 @@ LOGGING = {
         },
     },
 }
+
+DEFAULT_FILE_STORAGE = 's3file.storages.DummyS3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = "sirius-static-media"
+

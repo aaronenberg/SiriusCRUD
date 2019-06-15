@@ -30,7 +30,6 @@ urlpatterns = [
     path('', include('outcomes.urls', namespace='outcomes')),
     path('', include('developments.urls', namespace='developments')),
     path('', include('courses.urls', namespace='courses')),
-# static() ONLY FOR DEVELOPMENT https://docs.djangoproject.com/en/2.1/howto/static-files/deployment/
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
@@ -38,4 +37,5 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
+        path('_s3_mock/', include('s3file.urls')),
     ] + urlpatterns

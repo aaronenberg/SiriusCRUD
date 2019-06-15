@@ -39,10 +39,7 @@ OutcomeMediaFormSet = inlineformset_factory(
     fields=('media', 'outcome_type'),
     extra=1,
     validate_max=True,
-    widgets={'media': ClearableFileInput(attrs={
-                'class': 'custom-file',
-                'multiple': True,
-            }),
+    widgets={'media': ClearableFileInput(attrs={'multiple': True}),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
             })
@@ -57,7 +54,6 @@ OutcomeMediaDirectoryFormSet = inlineformset_factory(
     extra=1,
     validate_max=True,
     widgets={'media': ClearableFileInput(attrs={
-                'class': 'custom-file',
                 'webkitdirectory': True,
                 'mozdirectory': True,
             }),
