@@ -35,7 +35,7 @@ from config.custom_filehandlers import (
     TemporaryFileWithDirectoryUploadHandler
 )
 
-@method_decorator(csrf_exempt, name='dispatch')
+#@method_decorator(csrf_exempt, name='dispatch')
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ''' Displays a form to create a new outcome and a separate form for uploaded attachments
         only for authenticated users '''
@@ -68,12 +68,12 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
-        request.upload_handlers.insert(0, MemoryFileWithDirectoryUploadHandler(request))
-        request.upload_handlers.insert(1, TemporaryFileWithDirectoryUploadHandler(request))
-        return self._post(request)
-
-    @method_decorator(csrf_protect)
-    def _post(self, request, *args, **kwargs):
+#        request.upload_handlers.insert(0, MemoryFileWithDirectoryUploadHandler(request))
+#        request.upload_handlers.insert(1, TemporaryFileWithDirectoryUploadHandler(request))
+#        return self._post(request)
+#
+#    @method_decorator(csrf_protect)
+#    def _post(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)

@@ -33,7 +33,12 @@ DEBUG = False
 
 SECRET_KEY = get_env_var('SECRET_KEY')
 
-INSTALLED_APPS += ['storages']
+INSTALLED_APPS += [
+    'storages',
+    's3file'
+]
+
+MIDDLEWARE += ['s3file.middleware.S3FileMiddleware']
 
 ALLOWED_HOSTS += ['.elasticbeanstalk.com']
 

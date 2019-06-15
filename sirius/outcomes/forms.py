@@ -1,6 +1,6 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
-from django.forms.widgets import TextInput, Select, NumberInput
+from django.forms.widgets import TextInput, Select, NumberInput, ClearableFileInput
 from .models import Outcome, OutcomeMedia
 from courses.models import Course
 from .utils import current_year, filename
@@ -39,7 +39,7 @@ OutcomeMediaFormSet = inlineformset_factory(
     fields=('media', 'outcome_type'),
     extra=1,
     validate_max=True,
-    widgets={'media': FileInput(attrs={
+    widgets={'media': ClearableFileInput(attrs={
                 'class': 'custom-file',
                 'multiple': True,
             }),
@@ -56,7 +56,7 @@ OutcomeMediaDirectoryFormSet = inlineformset_factory(
     fields=('media', 'outcome_type'),
     extra=1,
     validate_max=True,
-    widgets={'media': FileInput(attrs={
+    widgets={'media': ClearableFileInput(attrs={
                 'class': 'custom-file',
                 'webkitdirectory': True,
                 'mozdirectory': True,
