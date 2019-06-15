@@ -42,7 +42,7 @@ function cloneUpload(selector, prefix)
     if (total >= max - 1) {
         newElement.find('.add-media-upload')
         .removeClass('add-media-upload').addClass('remove-media-upload')
-        .html('<img class="mr-2 svg-icon" src="{% static "img/font-awesome/layer-minus.svg" %}"> Remove File');
+        .html('<img class="svg-icon-small" src="{% static "img/font-awesome/times.svg" %}">');
     }
 
     newElement.find(':input').each(function() {
@@ -64,7 +64,7 @@ function cloneUpload(selector, prefix)
         conditionRow = $('input[multiple]').parents('.media-upload');
     conditionRow.find('.add-media-upload')
     .removeClass('add-media-upload').addClass('remove-media-upload')
-    .html('<img class="mr-2 svg-icon" src="{% static "img/font-awesome/layer-minus.svg" %}"> Remove File');
+    .html('<img class="svg-icon-small" src="{% static "img/font-awesome/times.svg" %}">');
 
     $(selector).parents('.media-upload').after(newElement);
 
@@ -96,20 +96,13 @@ function deleteForm(prefix, btn) {
       }
     }
 
-    if (total <= 2)
-    {
-       $('.remove-media-upload')
-        .removeClass('remove-media-upload')
-        .addClass('add-media-upload')
-    }
-
     return false;
 }
 
 $(document).on('click', '.remove-media-upload', function(e){
     e.preventDefault();
 
-    if (isDirectoryInput($(this).parent().prev('.custom-file').children('input')))
+    if (isDirectoryInput($(this).prev('.custom-file').children('input')))
     {
         deleteForm('directory', $(this));
         setTargetLabelForAddDirectoryInput();
@@ -157,26 +150,23 @@ $('#outcome-media-forms input').change(function() {
     else
         select_input.required = false;
     insertFileInputValue($(this));
+    if ($(this).parents('.media-upload').css('display') == 'none')
+        $(this).parents('.media-upload').show();
 });
 
 function insertFileInputValue(file_input)
 {
-    if (!isDirectoryInput(file_input)) {
+    if (!isDirectoryInput(file_input))
+    {
         var file_name = $(file_input).val().split('\\').pop();
-        $(file_input).before("<span>" + file_name + "</span>");
+    $(file_input).before('<span><img class="mb-1 mr-2 svg-icon-small" src="{% static "img/font-awesome/file.svg" %}">' + file_name + '</span>');
         return;
     }
 
     let output = $(file_input).parents(".media-upload").children(".media-listing");
     let files = $(file_input).prop("files");
     let rootDirectoryName = files[0].webkitRelativePath.split("/")[0]
-    $(file_input).before("<span>" + rootDirectoryName + "</span>");
-
-     for (let i=0; i<files.length; i++) {
-       let item = document.createElement("li");
-       item.innerHTML = files[i].webkitRelativePath;
-       output.append(item);
-     };
+    $(file_input).before('<span><img class="mb-1 mr-2 svg-icon" src="{% static "img/font-awesome/folder.svg" %}">' + rootDirectoryName + '</span>');
 }
 
 function isDirectoryInput(input_element)

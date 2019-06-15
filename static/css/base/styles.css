@@ -232,6 +232,7 @@ ul.pagination {
 
 .btn {
     border-radius: 1rem; 
+    text-transform: none;
 }
 
 input[type="text"],
@@ -485,13 +486,17 @@ body::-webkit-scrollbar-track {
     width: calc(100% - 2rem);
 }
 
-a > .svg-icon {
+a > .svg-icon, 
+span > .svg-icon {
     width: 1em;
 }
 
-.add-media-upload,
-.remove-media-upload {
-    margin-left: 2rem;
+.svg-icon-small {
+    width: 0.75em;
+}
+
+.media-upload {
+    display: none;
 }
 
 #goals_list {

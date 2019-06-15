@@ -3,7 +3,7 @@
 
 <div class="media-upload spacer">
   <hr/>
-  <div class="custom-file">
+  <div class="custom-file col-11">
     {% if upload_form.instance.media %}
       {{ upload_form.id }}
       Current:
@@ -13,6 +13,10 @@
     {% endif %}
     {{ upload_form.media }}
   </div>
+    {% if not upload_form.instance.id %}
+    <a href="javascript:void(0)" class="ml-auto add-media-upload">
+    </a>
+    {% endif %}
   <div class="bmd-form-group input-group flex-column">
     <div class="col-12 col-xl-6 col-lg-8">
     {% if 'development' in request.path %}
@@ -21,10 +25,6 @@
       {{ upload_form.outcome_type }}
     {% endif %}
     </div>
-    {% if not upload_form.instance.id %}
-    <a href="javascript:void(0)" class="mt-2 mb-2 add-media-upload">
-    </a>
-    {% endif %}
     <div class="invalid-feedback">
       Select a file type
     </div>

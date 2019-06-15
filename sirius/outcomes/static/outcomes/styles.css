@@ -30,11 +30,11 @@
     align-items:center;
 }
 #outcome-media-forms {
-    overflow-y: auto;
+    overflow-y: scroll;
     height:100%;
 }
 #outcome-media-forms .bmd-form-group {
-    padding-top: 10px;
+    padding-top: 0;
 }
 .media-upload input[type="file"] {
     display: none;

@@ -87,8 +87,8 @@
 
   <div id="outcome-media-forms-row">
     <div id="outcome-media-forms">
-      <label id="file_add" for="id_media-0-media">Add a file</label>
-      <label id="directory_add" for="id_directory-0-media">Add a folder</label>
+      <label id="file_add" class="btn btn-outline-primary" for="id_media-0-media">+ Add a file</label>
+      <label id="directory_add" class="btn btn-outline-primary" for="id_directory-0-media">+ Add a folder</label>
       {% for upload_form in outcomemedia_form %}
         {% include 'partials/media_upload.html' %}
       {% endfor %}
@@ -120,56 +120,6 @@
 {% block custom_js %}
 <script type='text/javascript'>
     {% include 'partials/js/outcomemedia-formset-management.js' %}
-    
-
-    //function toArray(list) {
-    //  return Array.prototype.slice.call(list || [], 0);
-    //}
-
-    //function readDirectoryEntry(entry)
-    //{
-    //  var reader = entry.createReader();
-    //  var entries = [];
-    //  var readEntries = function() {
-    //    reader.readEntries(function(results) {
-    //        if (!results.length) {
-    //          console.log(entries.sort());
-    //        }
-    //        else {
-    //          entries = entries.concat(toArray(results));
-    //          readEntries();
-    //        }
-    //    });
-    //  }
-    //  readEntries();
-    //  return entries;
-    //}
-  
-    //var dropzone = document.getElementById('outcome-media-forms-row');
-
-    //dropzone.ondragover = dropzone.ondragenter = function(e) {
-    //  e.preventDefault();
-    //}
-    //dropzone.ondrop = function(e) {
-    //  fileInput = document.querySelector('#id_media-0-media');
-    //  e.preventDefault();
-    //  var length = e.dataTransfer.items.length;
-    //  for (var i = 0; i < length; i++) {
-    //    var entry = e.dataTransfer.items[i].webkitGetAsEntry();
-    //    if (entry.isFile) {
-    //      console.log(entry)
-    //    } 
-    //    else if (entry.isDirectory) {
-    //      fileInput.files = entry;
-    //      var all_entries = readDirectoryEntry(entry);
-    //    };
-    //  }
-    //  for (let o of all_entries) {
-    //    if (o.isDirectory) {
-    //      console.log(o)
-    //    }
-    //  }
-    //}
 </script>
 <script src="{% static 'js/get-course-sections.js'%}" type='text/javascript'></script>
 <script>$('#outcome_title').disableAutoFill();</script>
