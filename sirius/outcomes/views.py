@@ -96,7 +96,7 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if not all([form.is_valid(),
                     outcomemedia_form.is_valid(),
                     outcomemediadirectory_form.is_valid()]):
-            return self.form_invalid(form, outcomemedia_form, context) 
+            return self.form_invalid(form, outcomemedia_form, outcomemediadirectory_form, context)
         return self.form_valid(form, outcomemedia_form, outcomemediadirectory_form)
 
     def form_valid(self, form, outcomemedia_form, outcomemediadirectory_form):

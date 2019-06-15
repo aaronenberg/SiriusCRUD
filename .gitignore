@@ -127,3 +127,6 @@ set-path
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# pycharm
+.idea/
