@@ -41,7 +41,7 @@ INSTALLED_APPS += [
 MIDDLEWARE += ['s3file.middleware.S3FileMiddleware']
 
 ALLOWED_HOSTS += [
-    'sirius-test.elasticbeanstalk.com',
+    'sirius-test.us-west-1.elasticbeanstalk.com',
     '.siriusproject1.org',
 ]
 
@@ -88,6 +88,7 @@ STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'config.custom_storages.MediaStorage'
+S3FILE_UPLOAD_PATH = '/media/tmp/s3file'
 
 boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
                         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
