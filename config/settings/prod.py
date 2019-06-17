@@ -40,7 +40,10 @@ INSTALLED_APPS += [
 
 MIDDLEWARE += ['s3file.middleware.S3FileMiddleware']
 
-ALLOWED_HOSTS += ['.elasticbeanstalk.com']
+ALLOWED_HOSTS += [
+    'sirius-test.elasticbeanstalk.com',
+    '.siriusproject1.org',
+]
 
 DATABASES = {
     'default': {
