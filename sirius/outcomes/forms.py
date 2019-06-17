@@ -53,7 +53,7 @@ OutcomeMediaDirectoryFormSet = inlineformset_factory(
     fields=('media', 'outcome_type'),
     extra=1,
     validate_max=True,
-    widgets={'media': ClearableFileInput(attrs={
+    widgets={'media': FileInput(attrs={
                 'webkitdirectory': True,
                 'mozdirectory': True,
             }),
