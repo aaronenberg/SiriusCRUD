@@ -4,7 +4,7 @@ import os
 import re
 
 from django.core.validators import MaxValueValidator
-from django.core.files.uploadedfile import UploadedFile
+from django.core.files.base import File
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 
@@ -105,7 +105,7 @@ def flatten_formset_file_fields(formset):
     for file_field in formset.files.keys():
         form_id = int(id_match.search(file_field).groups()[0])
         for fp in formset.files.getlist(file_field):
-            if isinstance(fp, UploadedFile):
+            if isinstance(fp, File):
                 outcome_type = formset.forms[form_id].cleaned_data['outcome_type']
                 outcome = formset.forms[form_id].cleaned_data['outcome']
                 if not isinstance(fp, UploadedFileWithDirectory):
@@ -140,7 +140,7 @@ def update_files_formset(formset):
                 files = formset.files.getlist(file_field)
                 media = files.pop()
                 formset.files.setlist(file_field, files)
-                if isinstance(media, UploadedFile):
+                if isinstance(media, File):
                     outcomemedia = form.save(commit=False)
                     outcomemedia.media.save(media.name, media)
             except KeyError:
