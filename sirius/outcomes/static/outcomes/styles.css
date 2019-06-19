@@ -76,6 +76,9 @@
 #outcome-media-forms .media-upload:first-child hr {
     display: none;
 }
+.media-upload:nth-child(2) hr{
+    display: none;
+}
 
 .list-group-item-action:first-child,
 .list-group-item-action:last-child,
@@ -207,3 +210,4 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+

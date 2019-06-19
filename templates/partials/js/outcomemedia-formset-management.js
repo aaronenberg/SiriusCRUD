@@ -1,9 +1,23 @@
 {% load static %}
 
 
+
+function setTargetLabelFor(input_element, prefix)
+{
+    if (checkRemainingNumForms(prefix) === 0 && $('input[type="file"]:last').val() !== "") {
+        document.getElementById('file_add').setAttribute("for", "");
+        return;
+    }
+    if (isDirectoryInput(input_element))
+        setTargetLabelForAddDirectoryInput();
+    else
+        setTargetLabelForAddFileInput();
+    return;
+}
+
 function setTargetLabelForAddFileInput()
 {
-    var file_upload_last = $('input[multiple]:last').attr('id');
+    var file_upload_last = $('input:not([webkitdirectory])[type="file"]:last').attr('id');
     document.querySelector('#file_add').setAttribute('for', file_upload_last);
 }
 
@@ -12,6 +26,27 @@ function setTargetLabelForAddDirectoryInput()
 {
     var directory_upload_last = $('input[webkitdirectory]:last').attr('id');
     document.querySelector('#directory_add').setAttribute('for', directory_upload_last);
+}
+
+function getTotalNumForms(prefix)
+{
+    return parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+}
+
+function getMaxNumForms(prefix)
+{
+    return parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
+}
+function getMinNumForms(prefix)
+{
+    return parseInt($('#id_' + prefix + '-MIN_NUM_FORMS').val());
+}
+
+function checkRemainingNumForms(prefix)
+{
+    var total = getTotalNumForms(prefix);
+    var max = getMaxNumForms(prefix);
+    return max - total;
 }
 
 
@@ -32,14 +67,13 @@ function updateElementIndex(el, prefix, ndx)
 
 function cloneUpload(selector, prefix)
 {
-    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-    var max = parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
+    var total = getTotalNumForms(prefix);
 
-    if (total >= max)
+    if (checkRemainingNumForms(prefix) === 0)
         return false;
 
     var newElement = $(selector).parents('.media-upload').clone(true);
-    if (total >= max - 1) {
+    if (checkRemainingNumForms(prefix) === 1) {
         newElement.find('.add-media-upload')
         .removeClass('add-media-upload').addClass('remove-media-upload')
         .html('<img class="svg-icon-small" src="{% static "img/font-awesome/times.svg" %}">');
@@ -61,7 +95,7 @@ function cloneUpload(selector, prefix)
     if (prefix === 'directory')
         conditionRow = $('input[webkitdirectory]').parents('.media-upload');
     else
-        conditionRow = $('input[multiple]').parents('.media-upload');
+        conditionRow = $('input:not([webkitdirectory])[type="file"]').parents('.media-upload');
     conditionRow.find('.add-media-upload')
     .removeClass('add-media-upload').addClass('remove-media-upload')
     .html('<img class="svg-icon-small" src="{% static "img/font-awesome/times.svg" %}">');
@@ -72,21 +106,24 @@ function cloneUpload(selector, prefix)
 }
 
 function deleteForm(prefix, btn) {
-    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-    if (total <= 1)
+    var forms;
+    var total = getTotalNumForms(prefix);
+    if (total <= getMinNumForms(prefix)) {
         return false;
+    }
 
     btn.closest('.media-upload').remove();
+    total--;
 
-    var forms;
     if (prefix === 'directory')
         forms = $('.media-upload input[webkitdirectory]')
     else
-        forms = $('.media-upload input[multiple]')
+        forms = $('input:not([webkitdirectory])[type="file"]')
 
-    $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
 
-    for (var i = 0, formCount = forms.length; i < formCount; i++)
+    $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+
+    for (var i = 0; i < total; i++)
     {
       if (typeof($(this).attr('name')) != 'undefined')
       {
@@ -102,16 +139,31 @@ function deleteForm(prefix, btn) {
 $(document).on('click', '.remove-media-upload', function(e){
     e.preventDefault();
 
-    if (isDirectoryInput($(this).prev('.custom-file').children('input')))
-    {
-        deleteForm('directory', $(this));
-        setTargetLabelForAddDirectoryInput();
-    }
+    var input_element = $(this).prev('.custom-file').children('input');
+
+    if (isDirectoryInput(input_element))
+        var prefix = 'directory';
     else
-    {
-        deleteForm('media', $(this));
-        setTargetLabelForAddFileInput();
+        var prefix = 'media';
+
+    var total = getTotalNumForms(prefix);
+    deleteForm(prefix, $(this));
+
+    if (total >= getMaxNumForms(prefix) && $('input[type="file"]:last').parents('.media-upload').css('display') !== 'none') {
+        if (prefix === 'directory')
+            cloneUpload('input[webkitdirectory]:last', prefix)
+        else
+            cloneUpload('input:not([webkitdirectory])[type="file"]:last', prefix)
+        var last_input = $('input[type="file"]:last');
+        $(last_input).val("");
+        $(last_input).parents('.media-upload').find(':input').each(function() {
+            $(this).required = false;
+        });
+        $(last_input).prev().remove();
+        $(last_input).parents('.media-upload').css('display', 'none');
     }
+
+    setTargetLabelFor(input_element, prefix);
 
     return false;
 });
@@ -136,19 +188,22 @@ $('#outcome-media-forms input').change(function() {
     if ($(this).prop("files").length > 0) {
         select_input.required = true;
 
-        if (isDirectoryInput($(this)))
-        {
-            cloneUpload('input[webkitdirectory]:last', 'directory');
-            setTargetLabelForAddDirectoryInput();
+        var input_selector;
+        var directory;
+        if (isDirectoryInput($(this))) {
+            input_selector = 'input[webkitdirectory]:last';
+            prefix = 'directory'
         }
-        else
-        {
-            cloneUpload('input[multiple]:last', 'media');
-            setTargetLabelForAddFileInput();
+        else {
+            input_selector = 'input:not([webkitdirectory])[type="file"]:last';
+            prefix = 'media'
         }
+        cloneUpload(input_selector, prefix)
+        setTargetLabelFor($(this), prefix);
     }
     else
         select_input.required = false;
+
     insertFileInputValue($(this));
     if ($(this).parents('.media-upload').css('display') == 'none')
         $(this).parents('.media-upload').show();

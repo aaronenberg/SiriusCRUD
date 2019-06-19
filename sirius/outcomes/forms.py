@@ -1,6 +1,20 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
-from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
-from django.forms.widgets import TextInput, Select, NumberInput, ClearableFileInput
+from django.forms import (
+    BaseInlineFormSet,
+    BooleanField,
+    ChoiceField,
+    ClearableFileInput,
+    FileInput,
+    inlineformset_factory,
+    ModelChoiceField,
+    ModelForm,
+    Textarea,
+    ValidationError,
+    TextInput,
+    NumberInput,
+    Select,
+)
+
 from .models import Outcome, OutcomeMedia
 from courses.models import Course
 from .utils import current_year, filename
@@ -37,8 +51,9 @@ OutcomeMediaFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
-    extra=1,
+    extra=0,
     validate_max=True,
+    min_num=1,
     widgets={'media': ClearableFileInput(attrs={'multiple': True}),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
@@ -51,8 +66,9 @@ OutcomeMediaDirectoryFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
-    extra=1,
+    extra=0,
     validate_max=True,
+    min_num=1,
     widgets={'media': FileInput(attrs={
                 'webkitdirectory': True,
                 'mozdirectory': True,
@@ -68,13 +84,11 @@ OutcomeMediaUpdateFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaUpdateFormSet,
     fields=('media', 'outcome_type'),
-    extra=1,
+    extra=0,
     max_num=5,
     validate_max=True,
-    widgets={'media': FileInput(attrs={
-                'class': 'custom-file',
-                'required': 'true'
-            }),
+    min_num=1,
+    widgets={'media': ClearableFileInput(attrs={'required': 'true'}),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height',
                 'required': 'true'

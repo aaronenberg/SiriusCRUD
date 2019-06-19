@@ -34,16 +34,18 @@
       Choose your section
     </div>
   </div>
+  <label id="file_add" class="btn btn-outline-primary mr-auto" for="id_media-0-media">+ Add a file</label>
+  <label id="maxform_notice" class="small ml-auto">Uploads are limited to 5 files per submission.</label>
 
   {{ form.management_form }}
 
-  {% for upload_form in form %}
   <div class="w-100 mt-1" id="outcome-media-forms-row">
     <div id="outcome-media-forms">
-      {% include 'partials/media_upload.html' %}
+      {% for upload_form in form %}
+        {% include 'partials/media_upload.html' %}
+      {% endfor %}
     </div>
   </div>
-  {% endfor %}
 
   <div class="form-row submit-row">
     <div class="mr-auto">
@@ -68,6 +70,7 @@
         e.preventDefault()
         deleteForm('media', $('.remove-media-upload'), reset=true);
         $('#outcome_media_form')[0].reset();
+        $('#file_add').attr('for', 'id_media-0-media');
     });
   </script>
 
