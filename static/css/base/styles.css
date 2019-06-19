@@ -44,9 +44,7 @@ p, li {
 }
 
 .carousel-inner {
-    background-color: rgba(200,200,200, 0.5);
-    border: 2px solid black;
-    border-radius: 5px;
+    background-color: rgba(200,200,200, 0.1);
 }
 
 .carousel-caption {
@@ -59,8 +57,10 @@ p, li {
 .carousel-caption p {
     text-align:center;
     width: 100%;
-    color: black;
+    color: #3d424d;
     margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 .carousel-indicators {
     position: relative;

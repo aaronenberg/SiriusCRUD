@@ -74,9 +74,6 @@
 }
 
 
-.media-upload[style*="display:block"]:last-child hr {
-    display: none;
-}
 
 .list-group-item-action:first-child,
 .list-group-item-action:last-child,
