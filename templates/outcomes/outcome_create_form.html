@@ -40,6 +40,7 @@
   method="post"
   data-sections-url="{% url 'outcomes:ajax-get-sections' %}"
   enctype="multipart/form-data"
+  autocomplete="off"
   novalidate>
   {% csrf_token %}
 

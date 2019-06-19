@@ -73,10 +73,8 @@
     align-self: center;
 }
 
-#outcome-media-forms .media-upload:first-child hr {
-    display: none;
-}
-.media-upload:nth-child(2) hr{
+
+.media-upload[style*="display:block"]:last-child hr {
     display: none;
 }
 
