@@ -418,6 +418,7 @@ label.bmd-label-static {
     padding-bottom: 2rem;
     min-height:70vh;
     word-break: break-word;
+    box-shadow: 1px 3px 8px 0.01px darkgray;
 }
 #footer {
     grid-area: footer;
