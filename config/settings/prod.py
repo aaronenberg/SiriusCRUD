@@ -56,14 +56,9 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = get_env_var('SERVER_EMAIL')
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = get_env_var('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = get_env_var('SERVER_EMAIL')
-EMAIL_HOST = get_env_var('EMAIL_HOST')
-EMAIL_PORT = 587
-EMAIL_HOST_USER = get_env_var('SERVER_EMAIL')
-EMAIL_HOST_PASSWORD = get_env_var('SERVER_EMAIL_PASSWORD')
 
 
 TEMPLATES[0]['DIRS'] = ['templates',]

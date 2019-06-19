@@ -1,5 +1,6 @@
 awsebcli==3.15.0
 blessed==1.15.0
+boto==2.49.0
 boto3==1.9.140
 botocore==1.12.140
 cached-property==1.5.1
@@ -10,6 +11,7 @@ colorama==0.3.9
 Django==2.2.2
 django-debug-toolbar==1.11
 django-extensions==2.1.6
+django-ses==0.8.10
 django-storages==1.7.1
 docker==3.7.2
 docker-compose==1.23.2
@@ -26,7 +28,7 @@ psycopg2-binary==2.7.7
 pygraphviz==1.5
 python-dateutil==2.8.0
 pytz==2018.9
-PyYAML==5.1.1
+PyYAML==3.13
 requests==2.20.1
 s3transfer==0.2.0
 semantic-version==2.5.0
