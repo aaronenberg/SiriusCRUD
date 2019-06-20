@@ -59,8 +59,8 @@ p, li {
     width: 100%;
     color: #3d424d;
     margin: 0 auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 .carousel-indicators {
     position: relative;
@@ -502,10 +502,10 @@ span > .svg-icon {
 
 
 #goals_list {
-    width: 75%;
+    padding-top: 3rem;
 }
-#goals_list li {
-    list-style: decimal;
+#project_statement {
+    padding-top:3rem;
 }
 
 
@@ -525,6 +525,45 @@ span > .svg-icon {
     }
 }
 
+@media (min-width: 1200px) {
+    #container-index {
+        display: grid;
+        grid-template-rows: max-content max-content max-content;
+        grid-template-areas:
+            "top"
+            "middle"
+            "bottom";
+    }
+    #carousel_indicator {
+        grid-area: top;
+        margin: 0 auto;
+    }
+    #goals_list {
+        grid-area: bottom;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
+    #project_statement {
+        width: 80%;
+        grid-area: middle;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+    }
+}
+ol {
+    padding-inline-start: 0px;
+}
+
+ol li {
+    list-style: decimal;
+    list-style-position: inside;
+    margin-bottom: 1rem;
+}
+
+
+
 @media (min-width: 992px) {
     #nav_account {
         display: none;
@@ -532,15 +571,15 @@ span > .svg-icon {
     #main p.center {
         max-width: 75%;
     }
-    .carousel {
-        width: 40vw;
-    }
     #menubar_mobile_right {
         width: 26vw;
     }
 }
 
 @media (min-width:1200px) {
+    .carousel {
+        width: 35vw;
+    }
     div#nav-left {
         margin-right: auto;
         margin-left: 0;
