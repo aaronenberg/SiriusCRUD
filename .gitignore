@@ -5,7 +5,8 @@ __pycache__/
 
 .virtualenvs/
 #aws configuration
-config/json_env/
+config/misc/env/
+config/misc/aws_credentials/
 
 # C extensions
 *.so
