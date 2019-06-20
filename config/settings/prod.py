@@ -41,7 +41,7 @@ INSTALLED_APPS += [
 MIDDLEWARE += ['s3file.middleware.S3FileMiddleware']
 
 ALLOWED_HOSTS += [
-    'sirius-test.us-west-1.elasticbeanstalk.com',
+    'sirius-staging.us-west-1.elasticbeanstalk.com',
     '.siriusproject1.org',
 ]
 

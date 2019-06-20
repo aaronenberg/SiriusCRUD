@@ -112,9 +112,9 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/courses/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/courses'
+LOGOUT_REDIRECT_URL = '/login'
 
 AUTHENTICATION_BACKENDS = (
     'users.auth.EmailBackend',
