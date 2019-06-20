@@ -162,10 +162,10 @@ class DraftListView(LoginRequiredMixin, UserPassesTestMixin, DevelopmentListView
     template_name = 'developments/draft_list.html'
 
     def test_func(self):
-        self.request.user.is_superuser
+        return self.request.user.is_superuser
 
     def get_queryset(self):
-            return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))
+        return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))
 
 
 class DraftDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
@@ -177,7 +177,7 @@ class DraftDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     context_object_name = 'development'
 
     def test_func(self):
-        self.request.user.is_superuser
+        return self.request.user.is_superuser
 
     def get_queryset(self):
         return Development.objects.filter(Q(is_public=False), Q(author=self.request.user))
