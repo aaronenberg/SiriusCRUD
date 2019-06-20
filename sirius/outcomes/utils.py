@@ -88,8 +88,8 @@ def max_value_current_year(value):
 
 def get_course_from_url(url):
     if url and reverse('courses:subject-list') in url:
+        course_slug_from_path = url.rstrip('/').split('/')[-1]
         try:
-            course_slug_from_path = url.split('/')[-2]
             course = Course.objects.get(slug=course_slug_from_path)
         except Course.DoesNotExist:
             return None
