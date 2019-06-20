@@ -82,22 +82,14 @@
 </div>
 {% endif %}
 
-<div class="align-items-center row m-0 mr-auto" id="id_course_detail_description">
-  <h6 class="mr-1 mb-0">Course Description</h6>
-  <a href="javascript:void(0)"
-     data-toggle="collapse" 
-     data-target="#collapseExample"
-     aria-expanded="false"
-     aria-controls="collapseExample">
-    <img class="svg-icon">
-  </a>
+<div class="p-4">
+  <div class="align-items-center row m-0 mr-auto" id="id_course_detail_description">
+    <h6 class="mr-1 mb-0">Course Description</h6>
+  </div>
+  <p class="p-3">{{ course.description }}</p>
 </div>
 
-<div class="collapse show" id="collapseExample">
-  <p class="m-auto center">{{ course.description }}</p>
-</div>
-
-<h6 class="mb-4 mt-3">Course Outcomes</h6>
+<h6 class="mb-4">Course Outcomes</h6>
 <div id="id_course_outcomes">
     {% if user.is_authenticated and user.is_privileged and course in user.staffprofile.courses.all or user.is_superuser %}
     <a id="id_new_outcome" class="btn-dark nav-link" href="{% url 'outcomes:outcome-create' %}">
