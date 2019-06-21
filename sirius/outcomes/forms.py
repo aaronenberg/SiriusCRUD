@@ -51,9 +51,8 @@ OutcomeMediaFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
-    extra=0,
+    extra=1,
     validate_max=True,
-    min_num=1,
     widgets={'media': ClearableFileInput(attrs={'multiple': True}),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height'
@@ -66,9 +65,8 @@ OutcomeMediaDirectoryFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaFormSet,
     fields=('media', 'outcome_type'),
-    extra=0,
+    extra=1,
     validate_max=True,
-    min_num=1,
     widgets={'media': FileInput(attrs={
                 'webkitdirectory': True,
                 'mozdirectory': True,
@@ -84,10 +82,9 @@ OutcomeMediaUpdateFormSet = inlineformset_factory(
     OutcomeMedia,
     formset=BaseOutcomeMediaUpdateFormSet,
     fields=('media', 'outcome_type'),
-    extra=0,
+    extra=1,
     max_num=5,
     validate_max=True,
-    min_num=1,
     widgets={'media': ClearableFileInput(attrs={'required': 'true'}),
             'outcome_type': Select(attrs={
                 'class': 'form-control select-fix-height',

@@ -92,7 +92,8 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             form=form,
             outcomemedia_form=outcomemedia_form,
             outcomemediadirectory_form=outcomemediadirectory_form
-            )
+        )
+        import pdb; pdb.set_trace()
         if not all([form.is_valid(),
                     outcomemedia_form.is_valid(),
                     outcomemediadirectory_form.is_valid()]):
@@ -151,7 +152,12 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = self.get_form(form_class)
         outcomemedia_form = OutcomeMediaFormSet(
             instance=form.instance,
-            queryset=OutcomeMedia.objects.filter(author=form.instance.author))
+            queryset=OutcomeMedia.objects.filter(author=form.instance.author)
+        )
+        outcomemediadirectory_form = OutcomeMediaDirectoryFormSet(
+            prefix='directory',
+            instance=form.instance
+        )
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
         return render(request, self.get_template_names(), context) 
 
@@ -164,8 +170,8 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
         actual_is_public = form.instance.is_public
         if not all([form.is_valid(), outcomemedia_form.is_valid()]):
-            # not using BooleanField widget in form. it's initial value is always False,
-            # so is_public becomes False after calling form.is_valid()
+            # not using BooleanField widget in form for is_public. 
+            # BooleanField default value is False if not marked in form
             form.instance.is_public = actual_is_public
             return self.form_invalid(form, outcomemedia_form) 
         return self.form_valid(form, outcomemedia_form)

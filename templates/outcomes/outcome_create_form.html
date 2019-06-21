@@ -12,26 +12,26 @@
 {% block content-main %}
 
 {% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-danger">
-              <strong>Error on field "{{ field.label |capfirst }}": {{ error |escape }}</strong>
-            </div>
-        {% endfor %}
+  {% for field in form %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+      <strong>Error on field "{{ field.label |capfirst }}": {{ error |escape }}</strong>
+    </div>
     {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
+  {% endfor %}
+  {% for error in form.non_field_errors %}
+  <div class="alert alert-danger">
+    <strong>{{ error|escape }}</strong>
+  </div>
+  {% endfor %}
 {% endif %}
 
 {% if outcomemedia_form.errors %}
-    {% for error in outcomemedia_form.non_form_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
+  {% for error in outcomemedia_form.non_form_errors %}
+  <div class="alert alert-danger">
+    <strong>{{ error|escape }}</strong>
+  </div>
+  {% endfor %}
 {% endif %}
 
 <form 
@@ -87,6 +87,7 @@
     <label id="file_add" class="btn btn-outline-primary" for="id_media-0-media">+ Add a file</label>
     <label id="directory_add" class="btn btn-outline-primary" for="id_directory-0-media">+ Add a folder</label>
   </div>
+
   {{ outcomemedia_form.management_form }}
   {{ outcomemediadirectory_form.management_form }}
 

@@ -37,10 +37,6 @@ function getMaxNumForms(prefix)
 {
     return parseInt($('#id_' + prefix + '-MAX_NUM_FORMS').val());
 }
-function getMinNumForms(prefix)
-{
-    return parseInt($('#id_' + prefix + '-MIN_NUM_FORMS').val());
-}
 
 function checkRemainingNumForms(prefix)
 {
@@ -108,7 +104,7 @@ function cloneUpload(selector, prefix)
 function deleteForm(prefix, btn) {
     var forms;
     var total = getTotalNumForms(prefix);
-    if (total <= getMinNumForms(prefix)) {
+    if (total <= 1) {
         return false;
     }
 

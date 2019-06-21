@@ -187,6 +187,9 @@
     .tab-content {
         height: 75vh;
     }
+    #directory_add {
+        display: none;
+    }
 }
 
 #outcome_media_tabs .dropdown-menu {
