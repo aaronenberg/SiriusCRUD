@@ -101,6 +101,9 @@
 #id_outcomes .svg-icon {
     width: 0;
 }
+.outcome.nav-link:hover {
+    text-decoration: underline;
+}
 #id_outcomes .outcome {
     width: 85%;
     color: #004a43;

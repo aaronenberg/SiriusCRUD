@@ -57,9 +57,10 @@
             {% elif course.subject == 'CE' %} subject-ce
             {% endif %}"
      href="{{ course.get_absolute_url }}">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ course }}</h5>
-    </div>
+      <small>
+        {{ course.subject }} {{ course.number }}
+      </small>
+      <h5 class="mt-1">{{ course.title }}</h5>
   </a>
   {% endfor %}
 </div>

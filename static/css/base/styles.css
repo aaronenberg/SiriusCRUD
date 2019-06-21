@@ -176,6 +176,10 @@ ul.pagination {
     background-color: #0f5e7f;
 }
 
+.list-group-item-action:hover {
+    color: white;
+    text-decoration:underline;
+}
 .list-group-item-action:first-child,
 .list-group-item-action:last-child,
 .list-group-item-action,
