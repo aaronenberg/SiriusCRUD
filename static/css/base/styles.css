@@ -180,6 +180,7 @@ ul.pagination {
     color: white;
     text-decoration:underline;
 }
+
 .list-group-item-action:first-child,
 .list-group-item-action:last-child,
 .list-group-item-action,
@@ -560,7 +561,7 @@ ol {
     padding-inline-start: 0px;
 }
 
-ol li {
+#goals_list li {
     list-style: decimal;
     list-style-position: inside;
     margin-bottom: 1rem;
