@@ -98,8 +98,8 @@
 #id_outcomes .btn-secondary .svg-icon {
     width: 1em;
 }
-#id_outcomes .svg-icon {
-    width: 0;
+#id_outcomes .nav-item:not(.btn-secondary) .svg-icon {
+    display: none;
 }
 .outcome.nav-link:hover {
     text-decoration: underline;
@@ -168,8 +168,14 @@ a .svg-icon:hover {
     color: white;
 }
 
-#id_course_detail_description .svg-icon {
-    width: 8px;
+#id_course_detail_description {
+    padding-top: 1rem;
+}
+
+@media (min-width: 567px) {
+    #id_course_detail_description {
+        padding: 1rem 1rem;
+    }
 }
 
 .tab-content {

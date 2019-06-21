@@ -82,14 +82,11 @@
 </div>
 {% endif %}
 
-<div class="p-4">
-  <div class="align-items-center row m-0 mr-auto" id="id_course_detail_description">
-    <h6 class="mr-1 mb-0">Course Description</h6>
-  </div>
-  <p class="p-3">{{ course.description }}</p>
+<div id="id_course_detail_description">
+  <h6>Course Description</h6>
+  <p>{{ course.description }}</p>
 </div>
 
-<h6 class="mb-4">Course Outcomes</h6>
 <div id="id_course_outcomes">
     {% if user.is_authenticated and user.is_privileged and course in user.staffprofile.courses.all or user.is_superuser %}
     <a id="id_new_outcome" class="btn-dark nav-link" href="{% url 'outcomes:outcome-create' %}">

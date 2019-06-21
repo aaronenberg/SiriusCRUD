@@ -10,6 +10,8 @@ function ajax_outcome_media(url, data, success)
 
 $("#id_outcomes .nav-item").click(function() {
     var previous_item = $("#id_outcomes .btn-secondary");
+    if ($(previous_item).is($(this)))
+        return;
 
     $(this).find(".outcome-link").attr("hidden", false);
     previous_item.find(".outcome-link").attr("hidden", true);
