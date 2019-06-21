@@ -9,7 +9,7 @@
 {% block content-main %}
 
 <div id="container-index">
-  <div id="carousel_indicator" class="carousel slide" data-ride="carousel">
+  <div id="carousel_indicator" class="carousel slide lazy" data-ride="carousel">
     <ol class="carousel-indicators">
       <li data-target="#carousel_indicator" data-slide-to="0" class="active"></li>
       <li data-target="#carousel_indicator" data-slide-to="1"></li>
@@ -26,7 +26,7 @@
       </div>
       <div class="carousel-item">
         <img class="d-block w-100" 
-             src="{% static 'img/SIRIUSKeckCollection/SIRIUS 16.jpg' %}"
+             data-src="{% static 'img/SIRIUSKeckCollection/SIRIUS 16.jpg' %}"
              alt="Second slide">
         <div class="carousel-caption d-none d-md-block">
           <p>Preparing mammalian cell cultures as part of the American River toxicology study in BIO 187</p>
@@ -34,7 +34,7 @@
       </div>
       <div class="carousel-item">
         <img class="d-block w-100"
-             src="{% static 'img/SIRIUSKeckCollection/SIRIUS 18.jpg' %}"
+             data-src="{% static 'img/SIRIUSKeckCollection/SIRIUS 18.jpg' %}"
              alt="Third slide">
         <div class="carousel-caption d-none d-md-block">
           <p>Students and faculty collecting plant and fungi samples along the American River</p>
@@ -42,7 +42,7 @@
       </div>
       <div class="carousel-item">
         <img class="d-block w-100"
-             src="{% static 'img/SIPhotos/IMG_3009.jpg' %}"
+             data-src="{% static 'img/SIPhotos/IMG_3009.jpg' %}"
              alt="Fourth slide">
         <div class="carousel-caption d-none d-md-block">
           <p>The SIRIUS Project includes faculty, staff and students from the Departments of Biological Sciences, Chemistry, Geology and Environmental Studies.</p>
@@ -50,7 +50,7 @@
       </div>
       <div class="carousel-item">
         <img class="d-block w-100"
-             src="{% static 'img/SIRIUSKeckCollection/SIRIUS 12.jpg' %}"
+             data-src="{% static 'img/SIRIUSKeckCollection/SIRIUS 12.jpg' %}"
              alt="Fifth slide">
         <div class="carousel-caption d-none d-md-block">
           <p>Students working on the digitally-linked microscopes during their BIO 2 laboratory</p>
@@ -58,8 +58,8 @@
       </div>
       <div class="carousel-item">
         <img class="d-block w-100"
-             src="{% static 'img/SIRIUSKeckCollection/SIRIUS 22.jpg' %}"
-             alt="Fifth slide">
+             data-src="{% static 'img/SIRIUSKeckCollection/SIRIUS 22.jpg' %}"
+             alt="Sixth slide">
         <div class="carousel-caption d-none d-md-block">
           <p>The Guy West bridge spanning across the American River, linking the campus of Sacramento State with the neighboring Campus Commons development.</p>
         </div>
@@ -104,3 +104,16 @@
 
 {% endblock content-main %}
 
+
+{% block custom_js %}
+<script type="text/javascript">
+  $(function() {
+    return $(".carousel.lazy").on("slide.bs.carousel", function(ev) {
+      var lazy;
+      lazy = $(ev.relatedTarget).find("img[data-src]");
+      lazy.attr("src", lazy.data('src'));
+      lazy.removeAttr("data-src");
+    });
+  });
+</script>
+{% endblock custom_js %}
