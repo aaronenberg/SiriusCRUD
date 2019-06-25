@@ -1,8 +1,11 @@
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import UploadedFile
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import (
     BaseInlineFormSet,
     BooleanField,
     ChoiceField,
+    CheckboxInput,
     ClearableFileInput,
     FileInput,
     inlineformset_factory,
@@ -14,101 +17,18 @@ from django.forms import (
     NumberInput,
     Select,
 )
+from django.utils.text import get_valid_filename
+from storages.backends.s3boto3 import S3Boto3StorageFile
 
 from .models import Outcome, OutcomeMedia
 from courses.models import Course
 from .utils import current_year, filename
 
 
-class BaseOutcomeMediaFormSet(BaseInlineFormSet):
-    def clean(self):
-        super().clean()
-        for form in self.forms:
-            outcome_type = form.cleaned_data.get('outcome_type')
-            media = form.cleaned_data.get('media')
-            if outcome_type and not media:
-                raise ValidationError("File type was chosen without uploading a file.")
-            if media and not outcome_type:
-                raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
-
-
-class BaseOutcomeSubmissionsUpdateFormSet(BaseInlineFormSet):
-    def __init__(self, *args, **kwargs):
-        super(BaseOutcomeSubmissionsUpdateFormSet, self).__init__(*args, **kwargs)
-        for form in self.forms:
-            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
-
-
-class BaseOutcomeMediaUpdateFormSet(BaseOutcomeMediaFormSet):
-    def __init__(self, *args, **kwargs):
-        super(BaseOutcomeMediaUpdateFormSet, self).__init__(*args, **kwargs)
-        for form in self.forms:
-            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
-
-
-OutcomeMediaFormSet = inlineformset_factory(
-    Outcome,
-    OutcomeMedia,
-    formset=BaseOutcomeMediaFormSet,
-    fields=('media', 'outcome_type'),
-    extra=1,
-    validate_max=True,
-    widgets={'media': ClearableFileInput(attrs={'multiple': True}),
-            'outcome_type': Select(attrs={
-                'class': 'form-control select-fix-height'
-            })
-    }
-)
-
-OutcomeMediaDirectoryFormSet = inlineformset_factory(
-    Outcome,
-    OutcomeMedia,
-    formset=BaseOutcomeMediaFormSet,
-    fields=('media', 'outcome_type'),
-    extra=1,
-    validate_max=True,
-    widgets={'media': FileInput(attrs={
-                'webkitdirectory': True,
-                'mozdirectory': True,
-            }),
-            'outcome_type': Select(attrs={
-                'class': 'form-control select-fix-height'
-            })
-    }
-)
-
-OutcomeMediaUpdateFormSet = inlineformset_factory(
-    Outcome,
-    OutcomeMedia,
-    formset=BaseOutcomeMediaUpdateFormSet,
-    fields=('media', 'outcome_type'),
-    extra=1,
-    max_num=5,
-    validate_max=True,
-    widgets={'media': ClearableFileInput(attrs={'required': 'true'}),
-            'outcome_type': Select(attrs={
-                'class': 'form-control select-fix-height',
-                'required': 'true'
-            })
-    }
-)
-
-OutcomeSubmissionsUpdateFormSet = inlineformset_factory(
-    Outcome,
-    OutcomeMedia,
-    formset=BaseOutcomeSubmissionsUpdateFormSet,
-    exclude = ('media', 'author', 'year', 'section',),
-    extra=0,
-    validate_max=True,
-    widgets={'outcome_type': Select(attrs={
-                'class': 'form-control select-fix-height'
-            })
-    }
-)
-
 YEAR_CHOICES = [] + BLANK_CHOICE_DASH
 for y in reversed(range(2000, (current_year()+1))):
         YEAR_CHOICES.append((y,y))
+
 
 class OutcomeForm(ModelForm):
 
@@ -145,6 +65,7 @@ class OutcomeForm(ModelForm):
         required=False,
         empty_label="Select a course"
     )
+
     class Meta:
         model = Outcome
         fields = (
@@ -211,3 +132,100 @@ class OutcomeForm(ModelForm):
         if section:
             return section
         return None
+
+
+class MediaClearableFileInput(ClearableFileInput):
+    initial_text = ''
+    input_text = ''
+    template_name = 'partials/clearable_file_input.html'
+    filename = ''
+
+    def filename(self, value):
+        if value is not None:
+            return value.name.split('/')[-1]
+    
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget'].update({
+            'filename': self.filename(value),
+        })
+        return context
+
+
+class BaseOutcomeMediaFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            outcome_type = form.cleaned_data.get('outcome_type')
+            media = form.cleaned_data.get('media')
+            if media and not outcome_type:
+                raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
+            if isinstance(media, (UploadedFile, S3Boto3StorageFile)) \
+                and default_storage.exists(
+                    'uploads/' + self.instance.slug + '/' + get_valid_filename(form.cleaned_data.get('media').name)):
+                import pdb; pdb.set_trace()
+                form.cleaned_data['DELETE'] = True
+
+
+class BaseOutcomeSubmissionsUpdateFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseOutcomeSubmissionsUpdateFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
+
+
+class BaseOutcomeMediaUpdateFormSet(BaseOutcomeMediaFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseOutcomeMediaUpdateFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['outcome_type'].choices = OutcomeMedia.UNPRIVILEGED_OUTCOME_TYPES
+
+
+OutcomeMediaFormSet = inlineformset_factory(
+    Outcome, OutcomeMedia,
+    formset=BaseOutcomeMediaFormSet,
+    fields=('media', 'outcome_type'),
+    extra=1,
+    validate_max=True,
+    
+    widgets={
+        'media': MediaClearableFileInput(attrs={'multiple': True}),
+        'outcome_type': Select(attrs={'class': 'form-control select-fix-height'}),
+    }
+)
+
+OutcomeMediaDirectoryFormSet = inlineformset_factory(
+    Outcome, OutcomeMedia,
+    formset=BaseOutcomeMediaFormSet,
+    fields=('media', 'outcome_type'),
+    extra=1,
+    validate_max=True,
+    widgets={
+        'media': MediaClearableFileInput(attrs={'webkitdirectory': True, 'mozdirectory': True}),
+        'outcome_type': Select(attrs={'class': 'form-control select-fix-height'})
+    }
+)
+
+OutcomeMediaUpdateFormSet = inlineformset_factory(
+    Outcome, OutcomeMedia,
+    formset=BaseOutcomeMediaUpdateFormSet,
+    fields=('media', 'outcome_type'),
+    extra=1,
+    max_num=5,
+    validate_max=True,
+    widgets={
+        'media': ClearableFileInput(attrs={'required': 'true'}),
+        'outcome_type': Select(attrs={'class': 'form-control select-fix-height', 'required': 'true'})
+    }
+)
+
+OutcomeSubmissionsUpdateFormSet = inlineformset_factory(
+    Outcome, OutcomeMedia,
+    formset=BaseOutcomeSubmissionsUpdateFormSet,
+    exclude=('media', 'author', 'year', 'section',),
+    extra=0,
+    validate_max=True,
+    widgets={'outcome_type': Select(attrs={'class': 'form-control select-fix-height'})}
+)
+
+

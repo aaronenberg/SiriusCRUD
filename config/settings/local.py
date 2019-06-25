@@ -40,7 +40,7 @@ MIDDLEWARE += [
 ]
 
 
-TEMPLATES[0]['DIRS'] = ['templates',]
+TEMPLATES[0]['DIRS'] = ['templates', '/home/aaron/dev/sirius/templates/partials']
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,

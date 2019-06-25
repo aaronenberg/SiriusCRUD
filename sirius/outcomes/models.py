@@ -8,6 +8,8 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
+from storages.utils import safe_join
 from .utils import max_value_current_year, current_year, current_semester
 
 
@@ -125,15 +127,16 @@ class OutcomeMedia(models.Model):
         (ANALYZED_DATA, 'Analyzed Data'),
     ]
 
+    UPLOADS_ROOT_DIR = 'uploads' 
+
     outcome = models.ForeignKey('Outcome', on_delete=models.CASCADE, related_name='media')
 
     def upload_to(instance, filename):
-        if not instance.upload_directory:
-            return 'uploads/{0}/{1}'.format(instance.outcome.slug, filename)
-        return 'uploads/{0}/{1}/{2}'.format(
+        return safe_join(
+            instance.UPLOADS_ROOT_DIR,
             instance.outcome.slug,
             instance.upload_directory,
-            filename
+            instance.filename
         )
 
     media = models.FileField(_('file upload'), upload_to=upload_to)
@@ -194,3 +197,10 @@ class OutcomeMedia(models.Model):
             self.semester = current_semester()
         super(OutcomeMedia, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return safe_join(
+            self.UPLOADS_ROOT_DIR,
+            self.outcome.slug,
+            self.upload_directory,
+            self.filename
+        )

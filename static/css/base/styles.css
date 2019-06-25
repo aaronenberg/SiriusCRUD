@@ -501,10 +501,29 @@ span > .svg-icon {
     width: 0.75em;
 }
 
-.media-upload {
-    display: none;
+.custom-file {
+    display: flex;
+    align-items: center;
 }
 
+.media-upload.has-instance {
+    display: flex;
+}
+.media-upload {
+    display: none;
+    border-bottom: #6c757d61 solid 1px;
+    align-items: center;
+    padding: 5px;
+    justify-content:space-between;
+}
+
+.media-upload-headers {
+    display: flex;
+    flex: 0 1 auto;
+    border-bottom: #6c757d61 solid 1px;
+    align-items: center;
+    padding: 5px;
+}
 
 #goals_list {
     padding-top: 3rem;
@@ -594,6 +613,22 @@ ol {
     }
     #menubar_mobile_right {
         width: 22vw;
+    }
+}
+@media (max-width: 1198.98px) {
+    .media-upload {
+        flex-wrap: wrap;
+    }
+    .media-upload-headers {
+        flex-wrap: wrap;
+    }
+    .remove-media-upload .custom-file {
+        order: -1;
+        flex: 1 0 50%;
+    }
+    .media-upload-file-type .media-upload-delete {
+        order: -1;
+        flex: 1 0 50%;
     }
 }
 

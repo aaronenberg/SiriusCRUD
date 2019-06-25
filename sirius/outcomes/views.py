@@ -93,7 +93,6 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             outcomemedia_form=outcomemedia_form,
             outcomemediadirectory_form=outcomemediadirectory_form
         )
-        import pdb; pdb.set_trace()
         if not all([form.is_valid(),
                     outcomemedia_form.is_valid(),
                     outcomemediadirectory_form.is_valid()]):
@@ -152,13 +151,24 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = self.get_form(form_class)
         outcomemedia_form = OutcomeMediaFormSet(
             instance=form.instance,
-            queryset=OutcomeMedia.objects.filter(author=form.instance.author)
+            queryset=OutcomeMedia.objects.filter(
+                author=form.instance.author,
+                upload_directory=''
+            )
         )
         outcomemediadirectory_form = OutcomeMediaDirectoryFormSet(
             prefix='directory',
-            instance=form.instance
+            instance=form.instance,
+            queryset=OutcomeMedia.objects.filter(
+                author=form.instance.author).exclude(
+                upload_directory=''
+            )
         )
-        context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
+        context = self.get_context_data(
+            form=form,
+            outcomemedia_form=outcomemedia_form,
+            outcomemediadirectory_form=outcomemediadirectory_form
+        )
         return render(request, self.get_template_names(), context) 
 
 
@@ -167,32 +177,64 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         outcomemedia_form = OutcomeMediaFormSet(request.POST, request.FILES, instance=form.instance)
-        context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
+        outcomemediadirectory_form = OutcomeMediaDirectoryFormSet(
+            request.POST,
+            request.FILES.copy(),
+            instance=form.instance,
+            prefix='directory',
+        )
+        context = self.get_context_data(
+            form=form,
+            outcomemedia_form=outcomemedia_form,
+            outcomemediadirectory_form=outcomemediadirectory_form
+        )
         actual_is_public = form.instance.is_public
-        if not all([form.is_valid(), outcomemedia_form.is_valid()]):
+
+        if not all([form.is_valid(), 
+                    outcomemedia_form.is_valid(),
+                    outcomemediadirectory_form.is_valid()]):
             # not using BooleanField widget in form for is_public. 
             # BooleanField default value is False if not marked in form
             form.instance.is_public = actual_is_public
-            return self.form_invalid(form, outcomemedia_form) 
-        return self.form_valid(form, outcomemedia_form)
+            return self.form_invalid(form, outcomemedia_form, outcomemediadirectory_form, context)
+        #    return self.form_invalid(form, outcomemedia_form, context)
+        return self.form_valid(form, outcomemedia_form, outcomemediadirectory_form)
+        #return self.form_valid(form, outcomemedia_form)
 
-    def form_valid(self, form, outcomemedia_form):
+    #def form_valid(self, form, outcomemedia_form):
+    def form_valid(self, form, outcomemedia_form, outcomemediadirectory_form):
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
         else:
             form.instance.is_public = True
+
         outcome = form.save()
+
+        directory_fields = [k for k in outcomemedia_form.files.keys() if k.startswith('directory')]
+        file_fields = [k for k in outcomemedia_form.files.keys() if not k.startswith('directory')]
+        for k in directory_fields:
+            outcomemedia_form.files.pop(k)
+        for k in file_fields:
+            outcomemediadirectory_form.files.pop(k)
+
         update_files_formset(outcomemedia_form)
+        import pdb; pdb.set_trace()
+        update_files_formset(outcomemediadirectory_form)
         if self.request.FILES:
-            outcomemedia = flatten_formset_file_fields(outcomemedia_form)
+            # for a file field to accept multiple files we save each file, creating a new OutcomeMedia object
+            outcomemedia = flatten_formset_file_fields(outcomemediadirectory_form)
+            outcomemedia += flatten_formset_file_fields(outcomemedia_form)
+        #    outcomemedia = flatten_formset_file_fields(outcomemedia_form)
             for media in outcomemedia:
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
+            for form in outcomemedia_form.deleted_forms + outcomemediadirectory_form.deleted_forms:
+                form.instance.delete()
         return redirect(outcome.get_absolute_url())
 
-    def form_invalid(self, form, outcomemedia_form):
-        context = self.get_context_data(form=form, outcomemedia_form=outcomemedia_form)
+    def form_invalid(self, form, outcomemedia_form, outcomemediadirectory_form, context):
+    #def form_invalid(self, form, outcomemedia_form, context):
         return render(self.request, self.get_template_names(), context)
 
 

@@ -102,20 +102,24 @@ function cloneUpload(selector, prefix)
 }
 
 function deleteForm(prefix, btn) {
-    var forms;
     var total = getTotalNumForms(prefix);
-    if (total <= 1) {
+    if (total <= 1)
         return false;
+
+    var media_upload = btn.closest('.media-upload')
+    if ($(media_upload).hasClass('has-instance')) {
+        var input_delete_id = $(media_upload).find('input[type="file"]').attr('id').replace('-media', '-DELETE');
+        document.getElementById(input_delete_id).setAttribute('checked', 'checked');
+        $(media_upload).hide();
+    }
+    else {
+        $(media_upload).remove()
+        total--;
     }
 
-    btn.closest('.media-upload').remove();
-    total--;
-
+    var forms = $('input:not([webkitdirectory])[type="file"]');
     if (prefix === 'directory')
-        forms = $('.media-upload input[webkitdirectory]')
-    else
-        forms = $('input:not([webkitdirectory])[type="file"]')
-
+        forms = $('.media-upload input[webkitdirectory]');
 
     $('#id_' + prefix + '-TOTAL_FORMS').val(total);
 
@@ -133,9 +137,8 @@ function deleteForm(prefix, btn) {
 }
 
 $(document).on('click', '.remove-media-upload', function(e){
-    e.preventDefault();
 
-    var input_element = $(this).prev('.custom-file').children('input');
+    var input_element = $(this).prevAll('.custom-file').children('input');
 
     if (isDirectoryInput(input_element))
         var prefix = 'directory';
@@ -156,12 +159,12 @@ $(document).on('click', '.remove-media-upload', function(e){
             $(this).required = false;
         });
         $(last_input).prev().remove();
-        $(last_input).parents('.media-upload').css('display', 'none');
+        $(last_input).parents('.media-upload').hide();
     }
 
     setTargetLabelFor(input_element, prefix);
 
-    return false;
+    return true;
 });
 
 $('#outcome-media-forms select').click(function() {
@@ -177,7 +180,7 @@ $('#outcome-media-forms select').click(function() {
 });
 
 
-$('#outcome-media-forms input').change(function() {
+$('#outcome-media-forms input[type="file"]').change(function() {
     var select_input_id = $(this).attr('id').replace('-media', '-outcome_type');
     var select_input = document.getElementById(select_input_id)
 
@@ -201,8 +204,9 @@ $('#outcome-media-forms input').change(function() {
         select_input.required = false;
 
     insertFileInputValue($(this));
-    if ($(this).parents('.media-upload').css('display') == 'none')
-        $(this).parents('.media-upload').show();
+    if ($(this).parents('.media-upload').css('display') == 'none') {
+        $(this).parents('.media-upload').css('display', 'flex');
+    }
 });
 
 function insertFileInputValue(file_input)

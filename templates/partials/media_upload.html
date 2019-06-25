@@ -1,23 +1,14 @@
 {% load static %}
 
 
-<div class="media-upload spacer">
-  <div class="custom-file col-11">
-    {% if upload_form.instance.media %}
+<div class="media-upload spacer{% if upload_form.instance.id >= 0 %} has-instance{% endif %}">
+  <div class="custom-file col-xl-6 col-12">
+    {% if upload_form.instance.media and upload_form.instance.id %}
       {{ upload_form.id }}
-      Current:
-      <a href="{{ upload_form.instance.media.url }}">
-        {{ upload_form.instance.filename }}
-      </a>
     {% endif %}
     {{ upload_form.media }}
   </div>
-    {% if not upload_form.instance.id %}
-    <a href="javascript:void(0)" class="ml-auto add-media-upload">
-    </a>
-    {% endif %}
-  <div class="bmd-form-group input-group flex-column">
-    <div class="col-12 col-xl-6 col-lg-8">
+  <div class="outcomemedia-type col-xl-4 col-sm-7 col-10">
     {% if 'development' in request.path %}
       {{ upload_form.development_type }}
     {% elif 'outcome' in request.path %}
@@ -26,7 +17,10 @@
     </div>
     <div class="invalid-feedback">
       Select a file type
-    </div>
   </div>
-  <hr/>
+  {% if not upload_form.instance.id %}
+  <a href="javascript:void(0)" class="col-2 text-right add-media-upload"></a>
+  {% else %}
+  <div class="col-2 text-right">{{ upload_form.DELETE }}</div>
+  {% endif %}
 </div>
