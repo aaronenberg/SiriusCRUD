@@ -1,3 +1,4 @@
+import os.path
 import operator
 from collections import namedtuple
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -46,9 +47,35 @@ class SubjectCoursesListView(ListView):
         return queryset
 
 
-Outcome_Media = namedtuple('Outcome_Media',
-    ['outcome', 'raw_data', 'analyzed_data', 'curriculum', 'year_choices', 'semester_choices']
-)
+def get_subdirs_and_media(media, cwd):
+    '''get the contents of the 'cwd' which may include files and/or subdirectories'''
+    subdirs = {}
+    media_in_cwd = set()
+    for m in media:
+        if not os.path.dirname(str(m)).startswith(cwd.rstrip('/')):
+            continue
+        try:
+            dir_name = os.path.dirname(str(m)).split(cwd, 1)[1].split('/', 1)[0]
+            subdirs[dir_name] = os.path.join(cwd, dir_name)
+        except IndexError:
+            media_in_cwd.add(m.pk)
+    media = media.filter(pk__in=media_in_cwd)
+    return subdirs, media
+
+
+Outcome_Media = namedtuple('Outcome_Media', [
+    'outcome', 
+    'raw_data', 
+    'raw_data_subdirs',
+    'analyzed_data',
+    'analyzed_data_subdirs',
+    'curriculum',
+    'curriculum_subdirs',
+    'year_choices',
+    'semester_choices'
+])
+
+
 def get_outcome_media(request):
     outcome_id = request.GET.get('outcome_id')
     section = request.GET.get('section')
@@ -58,9 +85,18 @@ def get_outcome_media(request):
     if outcome_id is None:
         raise ValueError("Need primary key of an Outcome to get OutcomeMedia")
     outcome = Outcome.objects.get(pk=outcome_id)
+
+    cwd = request.GET.get('cwd', outcome.slug) + '/'
+
     raw_data = outcome.media.filter(outcome_type='RD', is_public=True)
+    raw_data_subdirs, raw_data = get_subdirs_and_media(raw_data, cwd)
+
     analyzed_data = outcome.media.filter(outcome_type='AD', is_public=True)
+    analyzed_data_subdirs, analyzed_data = get_subdirs_and_media(analyzed_data, cwd)
+
     curriculum = outcome.media.filter(outcome_type='CU', is_public=True)
+    curriculum_subdirs, curriculum = get_subdirs_and_media(curriculum, cwd)
+
     year_choices = outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
     semester_choices = outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
 
@@ -82,8 +118,11 @@ def get_outcome_media(request):
     outcome_media = Outcome_Media(
             outcome, 
             raw_data, 
+            raw_data_subdirs,
             analyzed_data,
+            analyzed_data_subdirs,
             curriculum,
+            curriculum_subdirs,
             year_choices,
             semester_choices
     )
@@ -103,20 +142,28 @@ class CourseDetailView(DetailView):
             context['latest_outcome'] = None
             return context
         latest_outcome = context['course_outcomes'][0]
+        cwd = latest_outcome.slug + '/'
+
         raw_data = latest_outcome.media.filter(outcome_type='RD', is_public=True)
-        # sort by filename alphabetically
-        #raw_data = list(latest_outcome.media.filter(outcome_type='RD', is_public=True))
-        #raw_data.sort(key=lambda x: x.filename)
+        raw_data_subdirs, raw_data = get_subdirs_and_media(raw_data, cwd)
+
         analyzed_data = latest_outcome.media.filter(outcome_type='AD', is_public=True)
+        analyzed_data_subdirs, analyzed_data = get_subdirs_and_media(analyzed_data, cwd)
+
         curriculum = latest_outcome.media.filter(outcome_type='CU', is_public=True)
+        curriculum_subdirs, curriculum = get_subdirs_and_media(curriculum, cwd)
+
         year_choices = latest_outcome.media.all().distinct('year').exclude(year__isnull=True).values_list('year', flat=True)
         semester_choices = latest_outcome.media.all().distinct('semester').exclude(semester__isnull=True).values_list('semester', flat=True)
 
         context['latest_outcome'] = Outcome_Media(
             latest_outcome, 
             raw_data, 
+            raw_data_subdirs,
             analyzed_data,
+            analyzed_data_subdirs,
             curriculum,
+            curriculum_subdirs,
             year_choices,
             semester_choices
         )

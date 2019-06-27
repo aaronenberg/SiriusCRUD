@@ -1,36 +1,65 @@
+{% load static %}
 {% url 'courses:course-detail' as course_detail_url %}
 
 
 <ul id="media_raw_data">
 {% if user.is_authenticated %}
-{% for raw_data in outcome_media.raw_data %}
+  {% for subdir, full_path in outcome_media.raw_data_subdirs.items %}
   <li class="w-100 row mt-1">
-    <a href="{{ raw_data.media.url }}">
-      {{ raw_data.filename }}
+    <a href="javascript:void(0)"
+       data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+       data-full-path="{{ full_path }}">
+      <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
     </a>
   </li>
-{% endfor %}
+  {% endfor %}
+  {% for raw_data in outcome_media.raw_data %}
+  <li class="w-100 row mt-1">
+    <a href="{{ raw_data.media.url }}">
+      <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ raw_data.filename }}
+    </a>
+  </li>
+  {% endfor %}
 {% else %}
   <li><p>Please login to view this data set.</p></li>
 {% endif %}
 </ul>
 
 
+
 <ul id="media_analyzed_data">
+  {% for subdir, full_path in outcome_media.analyzed_data_subdirs.items %}
+  <li class="w-100 row mt-1">
+    <a href="javascript:void(0)"
+       data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+       data-full-path="{{ full_path }}">
+      <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+    </a>
+  </li>
+  {% endfor %}
 {% for analyzed_data in outcome_media.analyzed_data %}
   <li class="w-100 row mt-1">
     <a href="{{ analyzed_data.media.url }}">
-      {{ analyzed_data.filename }}
+      <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ analyzed_data.filename }}
     </a>
   </li>
 {% endfor %}
 </ul>
 
 <ul id="media_curriculum">
+  {% for subdir, full_path in outcome_media.curriculum_subdirs.items %}
+  <li class="w-100 row mt-1">
+    <a href="javascript:void(0)"
+       data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+       data-full-path="{{ full_path }}">
+      <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+    </a>
+  </li>
+  {% endfor %}
 {% for curriculum in outcome_media.curriculum %}
   <li class="w-100 row mt-1">
     <a href="{{ curriculum.media.url }}">
-      {{ curriculum.filename }}
+      <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ curriculum.filename }}
     </a>
   </li>
 {% endfor %}
@@ -68,3 +97,4 @@
   {{ outcome_media.outcome.description }}
 </p>
 {% endif %}
+

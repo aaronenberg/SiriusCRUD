@@ -199,7 +199,6 @@ class OutcomeMedia(models.Model):
 
     def __str__(self):
         return safe_join(
-            self.UPLOADS_ROOT_DIR,
             self.outcome.slug,
             self.upload_directory,
             self.filename

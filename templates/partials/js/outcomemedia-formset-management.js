@@ -221,7 +221,7 @@ function insertFileInputValue(file_input)
     let output = $(file_input).parents(".media-upload").children(".media-listing");
     let files = $(file_input).prop("files");
     let rootDirectoryName = files[0].webkitRelativePath.split("/")[0]
-    $(file_input).before('<span><img class="mb-1 mr-2 svg-icon" src="{% static "img/font-awesome/folder.svg" %}">' + rootDirectoryName + '</span>');
+    $(file_input).before('<span><img class="mb-1 mr-2 svg-icon" src="{% static "img/font-awesome/folder-open.svg" %}">' + rootDirectoryName + '</span>');
 }
 
 function isDirectoryInput(input_element)

@@ -1,11 +1,13 @@
 import datetime
 import math
-import os
+import os.path
 import re
 
+from django.conf import settings
 from django.core.validators import MaxValueValidator
 from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
+from django.core.files.storage import default_storage
 from django.db.models.fields.files import FieldFile
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
@@ -13,7 +15,6 @@ from storages.backends.s3boto3 import S3Boto3StorageFile
 from storages.utils import safe_join
 
 from courses.models import Course
-from config.custom_filehandlers import UploadedFileWithDirectory
 
 
 def time_since(time):
@@ -111,25 +112,27 @@ def flatten_formset_file_fields(formset):
             continue
         form_key = int(form_key.groups()[0])
         for idx, fp in enumerate(formset.files.getlist(file_field)):
-            if isinstance(fp, File):
-                outcome_type = formset.forms[form_key].cleaned_data['outcome_type']
-                outcome = formset.forms[form_key].cleaned_data['outcome']
-                if not isinstance(fp, UploadedFileWithDirectory):
-                    try:
-                        dir_as_list = os.path.dirname(formset.data.getlist(file_field)[idx]).split('/')[4:]
-                        upload_directory = safe_join(*dir_as_list)
-                    except IndexError:
-                        upload_directory = ''
-                else:
-                    upload_directory = fp.directory_name
-                media.append(
-                    OutcomeMedia(
-                        media=fp,
-                        upload_directory=upload_directory,
-                        outcome_type=outcome_type,
-                        outcome=outcome
-                    )
+            if not isinstance(fp, File):
+                continue
+            outcome_type = formset.forms[form_key].cleaned_data['outcome_type']
+            outcome = formset.forms[form_key].cleaned_data['outcome']
+            upload_directory = ''
+            if isinstance(fp, S3Boto3StorageFile):
+                upload_path = os.path.join(default_storage.location, settings.S3FILE_UPLOAD_PATH) + '/'
+                try:
+                    upload_directory = os.path.dirname(
+                        formset.data.getlist(file_field)[idx]
+                    ).split(upload_path, 1)[1].split('/', 1)[1]  # removes S3 upload path+base64
+                except IndexError:
+                    pass
+            media.append(
+                OutcomeMedia(
+                    media=fp,
+                    upload_directory=upload_directory,
+                    outcome_type=outcome_type,
+                    outcome=outcome
                 )
+            )
     return media
 
 

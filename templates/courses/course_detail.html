@@ -166,6 +166,7 @@
            id="tab_raw_data"
            href="#raw_data"
            data-toggle="tab"
+           data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
            role="tab"
            aria-controls="home"
            aria-selected="true">
@@ -178,6 +179,7 @@
            id="tab_analyzed_data"
            href="#analyzed_data"
            data-toggle="tab"
+           data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
            role="tab"
            aria-controls="profile"
            aria-selected="false">
@@ -190,6 +192,7 @@
            id="tab_curriculum"
            href="#curriculum"
            data-toggle="tab"
+           data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
            role="tab"
            aria-controls="contact"
            aria-selected="false">
@@ -261,10 +264,19 @@
            aria-labelledby="tab_raw_data">
         <ul>
           {% if user.is_authenticated %}
+          {% for subdir, full_path in latest_outcome.raw_data_subdirs.items %}
+          <li class="w-100 row mt-1">
+            <a href="javascript:void(0)" 
+               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+               data-full-path="{{ full_path }}">
+               <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+            </a>
+          </li>
+          {% endfor %}
           {% for raw_data in latest_outcome.raw_data %}
           <li class="w-100 row mt-1">
             <a href="{{ raw_data.media.url }}">
-              {{ raw_data.filename }}
+              <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ raw_data.filename }}
             </a>
           </li>
           {% endfor %}
@@ -279,10 +291,19 @@
            role="tabpanel"
            aria-labelledby="tab_analyzed_data">
         <ul>
+          {% for subdir, full_path in latest_outcome.analyzed_data_subdirs.items %}
+          <li class="w-100 row mt-1">
+            <a href="javascript:void(0)"
+               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+               data-full-path="{{ full_path }}">
+              <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+            </a>
+          </li>
+          {% endfor %}
           {% for analyzed_data in latest_outcome.analyzed_data %}
           <li class="w-100 row mt-1">
             <a href="{{ analyzed_data.media.url }}">
-              {{ analyzed_data.filename }}
+              <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ analyzed_data.filename }}
             </a>
           </li>
           {% endfor %}
@@ -294,10 +315,19 @@
            role="tabpanel"
            aria-labelledby="tab_curriculum">
         <ul>
+          {% for subdir, full_path in latest_outcome.curriculum_subdirs.items %}
+          <li class="w-100 row mt-1">
+            <a href="javascript:void(0)"
+               data-outcome-media-url="{% url 'courses:ajax-get-outcome-media' %}"
+               data-full-path="{{ full_path }}">
+              <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+            </a>
+          </li>
+          {% endfor %}
           {% for curriculum in latest_outcome.curriculum %}
           <li class="w-100 row mt-1">
             <a href="{{ curriculum.media.url }}">
-              {{ curriculum.filename }}
+              <img class="svg-icon-small mr-2 text-right" src="{% static 'img/font-awesome/file.svg' %}"> {{ curriculum.filename }}
             </a>
           </li>
           {% endfor %}

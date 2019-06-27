@@ -163,7 +163,6 @@ class BaseOutcomeMediaFormSet(BaseInlineFormSet):
             if isinstance(media, (UploadedFile, S3Boto3StorageFile)) \
                 and default_storage.exists(
                     'uploads/' + self.instance.slug + '/' + get_valid_filename(form.cleaned_data.get('media').name)):
-                import pdb; pdb.set_trace()
                 form.cleaned_data['DELETE'] = True
 
 

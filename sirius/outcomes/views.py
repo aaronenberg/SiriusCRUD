@@ -4,7 +4,6 @@ import re
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Q
 from django.middleware.csrf import CsrfViewMiddleware
 from django.shortcuts import redirect, render
@@ -30,12 +29,7 @@ from .forms import (
     OutcomeMediaUpdateFormSet,
     OutcomeSubmissionsUpdateFormSet,
 )
-from config.custom_filehandlers import (
-    MemoryFileWithDirectoryUploadHandler,
-    TemporaryFileWithDirectoryUploadHandler
-)
 
-#@method_decorator(csrf_exempt, name='dispatch')
 class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ''' Displays a form to create a new outcome and a separate form for uploaded attachments
         only for authenticated users '''
@@ -68,12 +62,6 @@ class OutcomeCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
-#        request.upload_handlers.insert(0, MemoryFileWithDirectoryUploadHandler(request))
-#        request.upload_handlers.insert(1, TemporaryFileWithDirectoryUploadHandler(request))
-#        return self._post(request)
-#
-#    @method_decorator(csrf_protect)
-#    def _post(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -171,7 +159,6 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         )
         return render(request, self.get_template_names(), context) 
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
@@ -197,11 +184,8 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             # BooleanField default value is False if not marked in form
             form.instance.is_public = actual_is_public
             return self.form_invalid(form, outcomemedia_form, outcomemediadirectory_form, context)
-        #    return self.form_invalid(form, outcomemedia_form, context)
         return self.form_valid(form, outcomemedia_form, outcomemediadirectory_form)
-        #return self.form_valid(form, outcomemedia_form)
 
-    #def form_valid(self, form, outcomemedia_form):
     def form_valid(self, form, outcomemedia_form, outcomemediadirectory_form):
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
@@ -218,13 +202,11 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             outcomemediadirectory_form.files.pop(k)
 
         update_files_formset(outcomemedia_form)
-        import pdb; pdb.set_trace()
         update_files_formset(outcomemediadirectory_form)
         if self.request.FILES:
             # for a file field to accept multiple files we save each file, creating a new OutcomeMedia object
             outcomemedia = flatten_formset_file_fields(outcomemediadirectory_form)
             outcomemedia += flatten_formset_file_fields(outcomemedia_form)
-        #    outcomemedia = flatten_formset_file_fields(outcomemedia_form)
             for media in outcomemedia:
                 media.author = self.request.user
                 media.is_public = True
@@ -234,7 +216,6 @@ class OutcomeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return redirect(outcome.get_absolute_url())
 
     def form_invalid(self, form, outcomemedia_form, outcomemediadirectory_form, context):
-    #def form_invalid(self, form, outcomemedia_form, context):
         return render(self.request, self.get_template_names(), context)
 
 
