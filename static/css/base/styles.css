@@ -6,10 +6,12 @@ label, h1, h2, h3, h4, h5, h6, th, .nav-item, .nav-link {
 }
 
 p, li, td, .nav-link.outcome {
-    font-family: 'Neuton', serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
-p, li {
-    font-size: large;
+
+p {
+    font-size: 11pt;
 }
 .btn:hover,
 .btn.btn-primary:hover,

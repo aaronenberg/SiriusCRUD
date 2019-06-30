@@ -27,11 +27,11 @@
 {% endif %}
 
 {% if developmentmedia_form.errors %}
-    {% for error in developmentmedia_form.non_form_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
+  {% for error in developmentmedia_form.non_form_errors %}
+  <div class="alert alert-danger">
+      <strong>{{ error|escape }}</strong>
+  </div>
+  {% endfor %}
 {% endif %}
 
 <form 
@@ -39,6 +39,7 @@
   class="custom-validation"
   method="post"
   enctype="multipart/form-data"
+  autocomplete="off"
   novalidate>
   {% csrf_token %}
 
@@ -70,12 +71,36 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label 
+      id="file_add"
+      class="btn btn-outline-primary"
+      for="id_development_media-{{ developmentmedia_form.initial_form_count }}-media">
+        + Add a file
+    </label>
+    <label
+      id="directory_add" 
+      class="btn btn-outline-primary"
+      for="id_directory-{{ developmentmediadirectory_form.initial_form_count }}-media">
+        + Add a folder
+    </label>
+  </div>
+
   {{ developmentmedia_form.management_form }}
+  {{ developmentmediadirectory_form.management_form }}
 
   <div id="development-media-forms-row">
+    <div id="development-media-headers" class="media-upload-headers">
+      <h6 class="media-upload-name col-xl-6 col-12">name</h6> 
+      <h6 class="media-upload-file-type col-xl-4 col-7">file type</h6>
+      <h6 class="media-upload-delete col-xl-2 col-5 text-right">delete</h6>
+    </div>
     <div id="development-media-forms">
       {% for upload_form in developmentmedia_form %}
-      {% include 'partials/media_upload.html' %}
+        {% include 'partials/media_upload.html' %}
+      {% endfor %}
+      {% for upload_form in developmentmediadirectory_form %}
+        {% include 'partials/media_upload.html' %}
       {% endfor %}
     </div>
   </div>
@@ -100,4 +125,5 @@
     {% include 'partials/js/developmentmedia-formset-management.js'%}
   </script>
 <script>$('#development_title').disableAutoFill();</script>
+<script src="{% static 's3file/js/s3file.js'%}" type='text/javascript'></script>
 {% endblock custom_js %}

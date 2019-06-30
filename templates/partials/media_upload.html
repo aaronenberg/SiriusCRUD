@@ -8,7 +8,7 @@
     {% endif %}
     {{ upload_form.media }}
   </div>
-  <div class="outcomemedia-type col-xl-4 col-sm-7 col-10">
+  <div class="media-type col-xl-4 col-sm-7 col-10">
     {% if 'development' in request.path %}
       {{ upload_form.development_type }}
     {% elif 'outcome' in request.path %}

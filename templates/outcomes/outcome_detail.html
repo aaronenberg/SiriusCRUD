@@ -44,11 +44,6 @@
     {% endif %}
   </div>
   <h6>{{ outcome.title }}</h6>
-  <div id="outcome_detail_author">
-    <small>Updated by <b>{{ outcome.author.get_full_name }}</b> at: 
-      {{ outcome.modified }}
-    </small>
-  </div>
   <div id="outcome_detail_course_semester">
       {% if outcome.semester %} | {{ outcome.semester }} {% endif %}
       {% if outcome.year %}{{ outcome.year }} {% endif %}
@@ -57,156 +52,10 @@
     <p>{{ outcome.description }}</p>
   </div>
 
-{% if outcome.is_public %}
-  {% block outcomemedia_update_form %}{% endblock %}
-{% endif %}
+  {% if outcome.is_public %}
+    {% block outcomemedia_update_form %}{% endblock %}
+  {% endif %}
 
-<div id="id_course_outcomes">
-
-  <div id="id_outcome_media">
-    <ul class="nav nav-tabs" id="outcome_media_tabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active"
-           id="tab_raw_data"
-           href="#raw_data"
-           data-toggle="tab"
-           role="tab"
-           aria-controls="home"
-           aria-selected="true">
-          Raw Data
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"
-           id="tab_analyzed_data"
-           href="#analyzed_data"
-           data-toggle="tab"
-           role="tab"
-           aria-controls="profile"
-           aria-selected="false">
-           Analyzed Data
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"
-           id="tab_curriculum"
-           href="#curriculum"
-           data-toggle="tab"
-           role="tab"
-           aria-controls="contact"
-           aria-selected="false">
-           Curriculum
-        </a>
-      </li>
-    </ul>
-
-    <div id="outcomemedia_filters" class="form-row justify-content-around">
-      <div class="form-group bmd-form-group col-4">
-        <label for="outcomemedia_semester" class="bmd-label-static">Semester</label>
-        <select class="form-control custom-select select-fix-height"
-                data-outcome-media-url="{% url 'outcomes:ajax-get-outcome-media' %}"
-                id="outcomemedia_semester"
-                name="semester">
-          <option value="any">
-            ---------
-          </option>
-          {% for semester in outcome_media.semester_choices %}
-          <option value="{{ semester }}">
-            {{ semester }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group bmd-form-group col-3">
-        <label for="outcomemedia_year" class="bmd-label-static">Year</label>
-        <select class="form-control custom-select select-fix-height"
-                data-outcome-media-url="{% url 'outcomes:ajax-get-outcome-media' %}"
-                id="outcomemedia_year"
-                name="year">
-          <option value="any">
-            ---------
-          </option>
-          {% for year in outcome_media.year_choices %}
-          <option value="{{ year }}">
-            {{ year }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-
-
-      <div class="form-group bmd-form-group col-3">
-        <label for="outcomemedia_section" class="bmd-label-static">Section</label>
-        <select class="form-control custom-select select-fix-height"
-                data-outcome-media-url="{% url 'outcomes:ajax-get-outcome-media' %}"
-                id="outcomemedia_section"
-                name="section">
-          <option value="any">
-            ---------
-          </option>
-          {% for section in outcome.course.sections %}
-          <option value="{{ section }}">
-            {{ section | stringformat:"02d" }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
-
-    <div class="tab-content" id="id_outcome_media_content">
-      <div class="tab-pane show active" 
-           id="raw_data"
-           role="tabpanel" 
-           aria-labelledby="tab_raw_data">
-        <ul>
-          {% if user.is_authenticated %}
-          {% for raw_data in outcome_media.raw_data %}
-          <li class="w-100 row mt-1">
-            <a href="{{ raw_data.media.url }}">
-              {{ raw_data.filename }}
-            </a>
-          </li>
-          {% endfor %}
-          {% else %}
-            <li><p>Please login to view this data set.</p></li>
-          {% endif %}
-        </ul>
-      </div>
-
-      <div class="tab-pane"
-           id="analyzed_data" 
-           role="tabpanel"
-           aria-labelledby="tab_analyzed_data">
-        <ul>
-          {% for analyzed_data in outcome_media.analyzed_data %}
-          <li class="w-100 row mt-1">
-            <a href="{{ analyzed_data.media.url }}">
-              {{ analyzed_data.filename }}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <div class="tab-pane"
-           id="curriculum"
-           role="tabpanel"
-           aria-labelledby="tab_curriculum">
-        <ul>
-          {% for curriculum in outcome_media.curriculum %}
-          <li class="w-100 row mt-1">
-            <a href="{{ curriculum.media.url }}">
-              {{ curriculum.filename }}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
 </div>
 
 {% endblock content-main %}

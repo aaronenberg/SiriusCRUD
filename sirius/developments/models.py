@@ -2,28 +2,31 @@ import datetime
 import itertools
 import os
 import uuid
+
+from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
-from django.utils.text import slugify
+from django.utils.text import slugify, get_valid_filename
 from django.utils.translation import gettext_lazy as _
+
+from storages.utils import safe_join
 from .utils import max_value_current_year, current_semester, current_year
 
 
-FALL = 'FA'
-WINTER = 'WI'
-SPRING = 'SP'
-SUMMER = 'SU'
-SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
-    (FALL, 'Fall'),
-    (WINTER, 'Winter'),
-    (SPRING, 'Spring'),
-    (SUMMER, 'Summer'),
-]
-
-
 class Development(models.Model):
+
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+        (SUMMER, 'Summer'),
+    ]
 
     author = models.ForeignKey(
         'users.BaseUser',
@@ -51,7 +54,7 @@ class Development(models.Model):
 
     semester = models.CharField(
         _('semester'),
-        max_length=2,
+        max_length=6,
         choices=SEMESTER_CHOICES,
         default=FALL,
         blank=True
@@ -94,6 +97,17 @@ class Development(models.Model):
 
 class DevelopmentMedia(models.Model):
 
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
+    SEMESTER_CHOICES = BLANK_CHOICE_DASH + [
+        (FALL, 'Fall'),
+        (WINTER, 'Winter'),
+        (SPRING, 'Spring'),
+        (SUMMER, 'Summer'),
+    ]
+
     AGENDA = 'AG'
     ASSESSMENT = 'AS'
     PEOPLE = 'PE'
@@ -107,20 +121,27 @@ class DevelopmentMedia(models.Model):
         (OTHER, 'Other'),
     ]
 
+    UPLOADS_ROOT_DIR = 'uploads/development'
+
     development = models.ForeignKey('Development', on_delete=models.CASCADE, related_name='development_media')
 
-    # insert uuid to prevent renaming file when a file with same name already exists
     def upload_to(instance, filename):
-        today = datetime.datetime.now().strftime("%Y%m%d")
-        return 'uploads/{0}/{1}/{2}'.format(today, uuid.uuid4(), filename)
+        return safe_join(
+            instance.UPLOADS_ROOT_DIR,
+            instance.development.slug,
+            instance.upload_directory,
+            instance.filename
+        )
 
     media = models.FileField(_('file upload'), upload_to=upload_to)
+
+    upload_directory = models.CharField(max_length=2048, default='', blank=True)
 
     development_type = models.CharField(
         _('development type'),
         max_length=2,
         choices=DEVELOPMENT_TYPES,
-        default="",
+        default='',
         blank=True,
         help_text=_("Select the file type")
     )
@@ -140,7 +161,7 @@ class DevelopmentMedia(models.Model):
 
     semester = models.CharField(
         _('semester'),
-        max_length=2,
+        max_length=6,
         choices=SEMESTER_CHOICES,
         default=FALL,
         blank=True
@@ -155,10 +176,30 @@ class DevelopmentMedia(models.Model):
     # chop off relative path to Storage to get just the name of file
     @property
     def filename(self):
-        return os.path.basename(self.media.name)
+        return get_valid_filename(os.path.basename(self.media.name))
+
+    def rename_dup(self):
+        max_length = self._meta.get_field('media').max_length
+        name, ext = os.path.splitext(self.media.name)
+        for i in itertools.count(1):
+            dup_count_str = '_%s' % i
+            name_truncated = name[:max_length - len(dup_count_str) - len(ext)]
+            file_path = safe_join(
+                self.UPLOADS_ROOT_DIR,
+                os.path.dirname(str(self)),
+                get_valid_filename(name + dup_count_str + ext)
+            )
+            if not default_storage.exists(file_path):
+                return os.path.basename(file_path)
 
     def save(self, *args, **kwargs):
         self.year = current_year()
         self.semester = current_semester()
         super(DevelopmentMedia, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return safe_join(
+            self.development.slug,
+            self.upload_directory,
+            self.filename
+        )

@@ -10,8 +10,8 @@ from django.views.generic.list import ListView
 from django.urls import reverse
 from .utils import flatten_formset_file_fields, update_files_formset
 from .models import Development, DevelopmentMedia
-from .forms import DevelopmentForm, DevelopmentMediaFormSet
-from outcomes.utils import prepare_search_term
+from .forms import DevelopmentForm, DevelopmentMediaFormSet, DevelopmentMediaDirectoryFormSet
+from developments.utils import prepare_search_term
 
 
 class DevelopmentListView(ListView):
@@ -39,34 +39,62 @@ class DevelopmentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         developmentmedia_form = DevelopmentMediaFormSet()
-        context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
+        developmentmediadirectory_form = DevelopmentMediaDirectoryFormSet(prefix='directory')
+        context = self.get_context_data(
+            form=form,
+            developmentmedia_form=developmentmedia_form,
+            developmentmediadirectory_form=developmentmediadirectory_form
+        )
         return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        developmentmedia_form = DevelopmentMediaFormSet(request.POST, request.FILES, instance=form.instance)
-        context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
-        if not all([form.is_valid(), developmentmedia_form.is_valid()]):
-            return self.form_invalid(form, developmentmedia_form, context) 
-        return self.form_valid(form, developmentmedia_form)
+        developmentmedia_form = DevelopmentMediaFormSet(
+            request.POST,
+            request.FILES,
+            instance=form.instance
+        )
+        developmentmediadirectory_form = DevelopmentMediaDirectoryFormSet(
+            request.POST,
+            request.FILES.copy(),
+            instance=form.instance,
+            prefix='directory',
+        )
+        context = self.get_context_data(
+            form=form,
+            developmentmedia_form=developmentmedia_form,
+            developmentmediadirectory_form=developmentmediadirectory_form
+        )
+        if not all([form.is_valid(),
+                    developmentmedia_form.is_valid(),
+                    developmentmediadirectory_form.is_valid()]):
+            return self.form_invalid(form, developmentmedia_form, developmentmediadirectory_form, context)
+        return self.form_valid(form, developmentmedia_form, developmentmediadirectory_form)
 
-    def form_valid(self, form, developmentmedia_form):
+    def form_valid(self, form, developmentmedia_form, developmentmediadirectory_form):
         form.instance.author = self.request.user
         form.instance.is_public = True
-        if '_save_draft' in self.request.POST:
+        if '_save_draft' in self.request.POST.keys():
             form.instance.is_public = False
         development = form.save()
+        directory_fields = [k for k in developmentmedia_form.files.keys() if k.startswith('directory')]
+        file_fields = [k for k in developmentmedia_form.files.keys() if not k.startswith('directory')]
+        for k in directory_fields:
+            developmentmedia_form.files.pop(k)
+        for k in file_fields:
+            developmentmediadirectory_form.files.pop(k)
         # for a file field to accept multiple files we save each file, creating a new DevelopmentMedia object
-        developmentmedia = flatten_formset_file_fields(developmentmedia_form)
+        developmentmedia = flatten_formset_file_fields(developmentmediadirectory_form)
+        developmentmedia += flatten_formset_file_fields(developmentmedia_form)
         for media in developmentmedia:
             media.author = self.request.user
             media.is_public = True
             media.save()
         return redirect(development.get_absolute_url())
 
-    def form_invalid(self, form, developmentmedia_form, context):
+    def form_invalid(self, form, developmentmedia_form, developmentmediadirectory_form, context):
         return render(self.request, self.get_template_names(), context)
 
 
@@ -92,41 +120,79 @@ class DevelopmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         form = self.get_form(form_class)
         developmentmedia_form = DevelopmentMediaFormSet(
             instance=form.instance,
-            queryset=DevelopmentMedia.objects.filter(author=form.instance.author))
-        context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
-        return render(request, self.get_template_names(), context) 
+            queryset=DevelopmentMedia.objects.filter(author=form.instance.author, upload_directory='')
+        )
+        developmentmediadirectory_form = DevelopmentMediaDirectoryFormSet(
+            prefix='directory',
+            instance=form.instance,
+            queryset=DevelopmentMedia.objects.filter(
+                author=form.instance.author
+            ).exclude(upload_directory='')
+        )
+        context = self.get_context_data(
+            form=form,
+            developmentmedia_form=developmentmedia_form,
+            developmentmediadirectory_form=developmentmediadirectory_form
+        )
+        return render(request, self.get_template_names(), context)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         developmentmedia_form = DevelopmentMediaFormSet(request.POST, request.FILES, instance=form.instance)
-        context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
+        developmentmediadirectory_form = DevelopmentMediaDirectoryFormSet(
+            request.POST,
+            request.FILES.copy(),
+            instance=form.instance,
+            prefix='directory',
+        )
+        context = self.get_context_data(
+            form=form,
+            developmentmedia_form=developmentmedia_form,
+            developmentmediadirectory_form=developmentmediadirectory_form
+        )
         actual_is_public = form.instance.is_public
-        if not all([form.is_valid(), developmentmedia_form.is_valid()]):
-            # not using BooleanField widget in form. it's initial value is always False,
-            # so is_public becomes False after calling form.is_valid()
-            form.instance.is_public = actual_is_public
-            return self.form_invalid(form, developmentmedia_form) 
-        return self.form_valid(form, developmentmedia_form)
 
-    def form_valid(self, form, developmentmedia_form):
+        if not all([form.is_valid(), 
+                    developmentmedia_form.is_valid(),
+                    developmentmediadirectory_form.is_valid()]):
+            # not using BooleanField widget in form for is_public. 
+            # BooleanField default value is False if not marked in form
+            form.instance.is_public = actual_is_public
+            return self.form_invalid(form, developmentmedia_form, developmentmediadirectory_form, context)
+        return self.form_valid(form, developmentmedia_form, developmentmediadirectory_form)
+
+    def form_valid(self, form, developmentmedia_form, developmentmediadirectory_form):
         if '_save_draft' in self.request.POST:
             form.instance.is_public = False
         else:
             form.instance.is_public = True
-        form.save()
+
+        development = form.save()
+
+        directory_fields = [k for k in developmentmedia_form.files.keys() if k.startswith('directory')]
+        file_fields = [k for k in developmentmedia_form.files.keys() if not k.startswith('directory')]
+        for k in directory_fields:
+            developmentmedia_form.files.pop(k)
+        for k in file_fields:
+            developmentmediadirectory_form.files.pop(k)
+
         update_files_formset(developmentmedia_form)
+        update_files_formset(developmentmediadirectory_form)
         if self.request.FILES:
-            developmentmedia = flatten_formset_file_fields(developmentmedia_form)
+            # for a file field to accept multiple files we save each file, creating a new DevelopmentMedia object
+            developmentmedia = flatten_formset_file_fields(developmentmediadirectory_form)
+            developmentmedia += flatten_formset_file_fields(developmentmedia_form)
             for media in developmentmedia:
                 media.author = self.request.user
                 media.is_public = True
                 media.save()
-        return redirect(self.object.get_absolute_url())
+            for form in developmentmedia_form.deleted_forms + developmentmediadirectory_form.deleted_forms:
+                form.instance.delete()
+        return redirect(development.get_absolute_url())
 
-    def form_invalid(self, form, developmentmedia_form):
-        context = self.get_context_data(form=form, developmentmedia_form=developmentmedia_form)
+    def form_invalid(self, form, developmentmedia_form, developmentmediadirectory_form, context):
         return render(self.request, self.get_template_names(), context)
 
 

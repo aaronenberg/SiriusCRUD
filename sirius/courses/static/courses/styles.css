@@ -70,7 +70,7 @@
 #id_course_outcomes {
     display:grid;
     grid-template-columns: 30% 70%;
-    grid-template-rows: 5vh 20vh 40vh;
+    grid-template-rows: 0.5fr 2fr 25em;
     grid-template-areas:
         "new_outcome outcome_description"
         "outcomes outcome_description"
@@ -78,6 +78,7 @@
     background-color: whitesmoke;
     border: 2px solid #0f5e7f;
     border-radius: 5px;
+    height: 40em;
 }
 #id_new_outcome {
     grid-area: new_outcome;
@@ -150,7 +151,6 @@ a .svg-icon:hover {
 #id_outcome_title_description {
     grid-area: outcome_description;
     border-left: 2px solid #0f5e7f;
-    border-bottom: 2px solid #0f5e7f;
     display: flex;
     flex-direction: column;
 }
@@ -222,6 +222,7 @@ a .svg-icon:hover {
     #id_course_outcomes {
         display: flex;
         flex-direction: column;
+        height: auto;
     }
     #id_outcomes {
         height: 30vh;

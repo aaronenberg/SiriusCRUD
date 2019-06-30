@@ -1,4 +1,4 @@
-from outcomes.utils import time_since as ts
+from developments.utils import time_since as ts
 from django import template
 
 

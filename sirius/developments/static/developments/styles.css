@@ -46,6 +46,10 @@
     border-radius: 1rem;
 }
 
+.media-upload input[type="file"] {
+    display: none;
+}
+
 @media (max-width: 767.98px) {
     #development-media-forms-row {
         margin-top:1rem;

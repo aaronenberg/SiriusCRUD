@@ -1,59 +1,37 @@
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import UploadedFile
 from django.db.models.fields import BLANK_CHOICE_DASH
-from django.forms import inlineformset_factory, ModelForm, FileInput, ValidationError, ModelChoiceField, ChoiceField, Textarea, FileField, BooleanField, BaseInlineFormSet
-from django.forms.widgets import TextInput, Select, NumberInput
-from .models import Development, DevelopmentMedia, SEMESTER_CHOICES 
+from django.forms import (
+    inlineformset_factory,
+    ModelForm,
+    FileInput,
+    ValidationError,
+    ModelChoiceField,
+    ChoiceField,
+    Textarea,
+    FileField,
+    BooleanField,
+    BaseInlineFormSet,
+    NumberInput,
+    TextInput,
+    Select,
+    ClearableFileInput
+)
+from django.utils.text import get_valid_filename
+from storages.backends.s3boto3 import S3Boto3StorageFile
+
+from .models import Development, DevelopmentMedia
 from .utils import current_year, filename
 
-
-class BaseDevelopmentMediaFormSet(BaseInlineFormSet):
-    def clean(self):
-        super().clean()
-        for form in self.forms:
-            development_type = form.cleaned_data.get('development_type')
-            media = form.cleaned_data.get('media')
-            if development_type and not media:
-                raise ValidationError("File type was chosen without uploading a file.")
-            if media and not development_type:
-                raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
-
-
-DevelopmentMediaFormSet = inlineformset_factory(
-    Development,
-    DevelopmentMedia,
-    formset=BaseDevelopmentMediaFormSet,
-    fields=('media', 'development_type'),
-    extra=1,
-    widgets={'media': FileInput(attrs={
-                'class': 'custom-file',
-                'multiple': True
-            }),
-            'development_type': Select(attrs={
-                'class': 'form-control select-fix-height'
-            })
-    }
-)
-
-'''
-DevelopmentMediaUpdateFormSet = inlineformset_factory(
-    Development,
-    DevelopmentMedia,
-    formset=BaseInlineFormSet,
-    exclude = ('media', 'author'),
-    extra=0,
-    widgets={'development_type': Select(attrs={
-                'class': 'form-control select-fix-height'
-            })
-    }
-)
-'''
 
 YEAR_CHOICES = [] + BLANK_CHOICE_DASH
 for y in reversed(range(2000, (current_year()+1))):
         YEAR_CHOICES.append((y,y))
 
+
 class DevelopmentForm(ModelForm):
 
-    semester = ChoiceField(choices=SEMESTER_CHOICES,
+    semester = ChoiceField(choices=Development.SEMESTER_CHOICES,
         widget = Select(attrs={
             'id': 'development_semester',
             'class': 'form-control custom-select select-fix-height',
@@ -101,3 +79,62 @@ class DevelopmentForm(ModelForm):
         if year:
             return year
         return None
+
+
+class MediaClearableFileInput(ClearableFileInput):
+    initial_text = ''
+    input_text = ''
+    template_name = 'partials/clearable_file_input.html'
+    filename = ''
+
+    def filename(self, value):
+        if value is not None:
+            return value.name.split('/')[-1]
+    
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget'].update({
+            'filename': self.filename(value),
+        })
+        return context
+
+
+class BaseDevelopmentMediaFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            development_type = form.cleaned_data.get('development_type')
+            media = form.cleaned_data.get('media')
+            if media and not development_type:
+                raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
+            if isinstance(media, (UploadedFile, S3Boto3StorageFile)) \
+                and default_storage.exists(
+                    'uploads/' + self.instance.slug + '/' + get_valid_filename(form.cleaned_data.get('media').name)):
+                form.cleaned_data['DELETE'] = True
+
+
+DevelopmentMediaFormSet = inlineformset_factory(
+    Development, DevelopmentMedia,
+    formset=BaseDevelopmentMediaFormSet,
+    fields=('media', 'development_type'),
+    extra=1,
+    validate_max=True,
+    widgets={
+        'media': MediaClearableFileInput(attrs={'multiple': True}),
+        'development_type': Select(attrs={'class': 'form-control select-fix-height'}),
+    }
+)
+
+
+DevelopmentMediaDirectoryFormSet = inlineformset_factory(
+    Development, DevelopmentMedia,
+    formset=BaseDevelopmentMediaFormSet,
+    fields=('media', 'development_type'),
+    extra=1,
+    validate_max=True,
+    widgets={
+        'media': MediaClearableFileInput(attrs={'webkitdirectory': True, 'mozdirectory': True}),
+        'development_type': Select(attrs={'class': 'form-control select-fix-height'})
+    }
+)
+

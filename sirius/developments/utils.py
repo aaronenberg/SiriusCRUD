@@ -1,11 +1,18 @@
 import datetime
 import math
-import os
+import os.path
 import re
+
+from django.conf import settings
 from django.core.validators import MaxValueValidator
+from django.core.files.base import File
 from django.core.files.uploadedfile import UploadedFile
+from django.core.files.storage import default_storage
+from django.db.models.fields.files import FieldFile
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
+from storages.backends.s3boto3 import S3Boto3StorageFile
+from storages.utils import safe_join
 
 
 def time_since(time):
@@ -54,10 +61,10 @@ def current_year():
 
 
 def current_semester():
-    FALL = 'FA'
-    WINTER = 'WI'
-    SPRING = 'SP'
-    SUMMER = 'SU'
+    FALL = 'Fall'
+    WINTER = 'Winter'
+    SPRING = 'Spring'
+    SUMMER = 'Summer'
 
     today = datetime.date.today()
 
@@ -77,7 +84,6 @@ def current_semester():
     return SUMMER
 
 
-
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
@@ -87,38 +93,89 @@ def flatten_formset_file_fields(formset):
     media = []
     id_match = re.compile('-([0-9]+)-')
     for file_field in formset.files.keys():
-        form_id = int(id_match.search(file_field).groups()[0])
-        for fp in formset.files.getlist(file_field):
-            if isinstance(fp, UploadedFile):
-                development_type = formset.forms[form_id].cleaned_data['development_type']
-                development = formset.forms[form_id].cleaned_data['development']
-                media.append(DevelopmentMedia(media=fp, development_type=development_type, development=development))
+        form_key = id_match.search(file_field)
+        if not form_key:
+            continue
+        form_key = int(form_key.groups()[0])
+        for idx, fp in enumerate(formset.files.getlist(file_field)):
+            if not isinstance(fp, File):
+                continue
+            development_type = formset.forms[form_key].cleaned_data['development_type']
+            development = formset.forms[form_key].cleaned_data['development']
+            upload_directory = ''
+            if isinstance(fp, S3Boto3StorageFile):
+                upload_path = os.path.join(default_storage.location, settings.S3FILE_UPLOAD_PATH) + '/'
+                try:
+                    upload_directory = os.path.dirname(
+                        formset.data.getlist(file_field)[idx]
+                    ).split(upload_path, 1)[1].split('/', 1)[1]  # removes S3 upload path+base64
+                except IndexError:
+                    pass
+            media.append(
+                DevelopmentMedia(
+                    media=fp,
+                    upload_directory=upload_directory,
+                    development_type=development_type,
+                    development=development
+                )
+            )
     return media
 
 
 def update_files_formset(formset):
-    for form in formset:
-        if form.instance.id:
-            form.save()
-
+    '''Save media if it's not being updated, otherwise delete original before update with new.
+       Also delete media attached to forms that are marked for deletion
+    '''
     uploaded_file_fields = list(formset.files.keys())
     id_match = re.compile('-([0-9]+)-')
+    for form in formset:
+        if form.instance.id is not None:
+            # if FieldFile then existing media is still valid, else it was replaced by a new upload
+            if isinstance(form.cleaned_data['media'], FieldFile):
+                form.save()
+                uploaded_file_fields.remove(form.prefix + '-media')
 
     for file_field in uploaded_file_fields:
-        form_id = int(id_match.search(file_field).groups()[0])
-        form = formset.forms[form_id]
-        developmentmedia = form.cleaned_data['id']
-        if developmentmedia:
-            try:
-                files = formset.files.getlist(file_field)
-                media = files.pop()
-                formset.files.setlist(file_field, files)
-                if isinstance(media, UploadedFile):
-                    developmentmedia = form.save(commit=False)
-                    developmentmedia.media.save(media.name, media)
-            except KeyError:
-                continue
+        files = formset.files.getlist(file_field)
+        if not files:
+            continue
+        form_key = int(id_match.search(file_field).groups()[0])
+        form = formset.forms[form_key]
+        if form.cleaned_data['DELETE'] == True:
+            formset.files.setlist(file_field, [])
+            continue
+        developmentmedia = form.cleaned_data.get('id')
+        if not developmentmedia:
+            continue
+        media = files.pop()
+        formset.files.setlist(file_field, files)
+        if isinstance(media, (UploadedFile, S3Boto3StorageFile)):
+            developmentmedia.media.delete()
+            developmentmedia = form.save(commit=False)
+            developmentmedia.media.save(media.name, media)
 
 
 def filename(media):
     return os.path.basename(media.name)
+
+
+def prepare_search_term(term):
+    """Sanitize the input term for a search using postgres to_tsquery.
+
+    Cleans a search string to something acceptable for use with to_tsquery.
+    Appends ':*' so that partial matches will also be returned.
+
+    Args:
+        term: the search term to be cleaned and prepared
+
+    Returns:
+        the prepared search string
+    """
+
+    query = re.sub(r'[!\'()|&]', ' ', term).strip()
+    if query:
+        query = re.sub(r'\s+', ' & ', query)
+        query += ':*'
+
+    return query
+

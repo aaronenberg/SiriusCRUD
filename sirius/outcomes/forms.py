@@ -160,10 +160,6 @@ class BaseOutcomeMediaFormSet(BaseInlineFormSet):
             media = form.cleaned_data.get('media')
             if media and not outcome_type:
                 raise ValidationError("Please select a file type for file: {}.".format(filename(media)))
-            if isinstance(media, (UploadedFile, S3Boto3StorageFile)) \
-                and default_storage.exists(
-                    'uploads/' + self.instance.slug + '/' + get_valid_filename(form.cleaned_data.get('media').name)):
-                form.cleaned_data['DELETE'] = True
 
 
 class BaseOutcomeSubmissionsUpdateFormSet(BaseInlineFormSet):

@@ -138,7 +138,7 @@ def flatten_formset_file_fields(formset):
 
 def update_files_formset(formset):
     '''Save media if it's not being updated, otherwise delete original before update with new.
-       Also delete media attached to forms that are marked for deletion
+       Also delete files attached to forms that are marked for deletion
     '''
     uploaded_file_fields = list(formset.files.keys())
     id_match = re.compile('-([0-9]+)-')

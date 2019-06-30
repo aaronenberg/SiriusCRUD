@@ -2,11 +2,13 @@ import datetime
 import itertools
 import os
 import uuid
+
+from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator, MaxLengthValidator
 from django.db import models
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.urls import reverse
-from django.utils.text import slugify
+from django.utils.text import slugify, get_valid_filename
 from django.utils.translation import gettext_lazy as _
 
 from storages.utils import safe_join
@@ -127,7 +129,7 @@ class OutcomeMedia(models.Model):
         (ANALYZED_DATA, 'Analyzed Data'),
     ]
 
-    UPLOADS_ROOT_DIR = 'uploads' 
+    UPLOADS_ROOT_DIR = 'uploads/outcomes' 
 
     outcome = models.ForeignKey('Outcome', on_delete=models.CASCADE, related_name='media')
 
@@ -186,7 +188,21 @@ class OutcomeMedia(models.Model):
 
     @property
     def filename(self):
-        return os.path.basename(self.media.name)
+        return get_valid_filename(os.path.basename(self.media.name))
+
+    def rename_dup(self):
+        max_length = self._meta.get_field('media').max_length
+        name, ext = os.path.splitext(self.media.name)
+        for i in itertools.count(1):
+            dup_count_str = '_%s' % i
+            name_truncated = name[:max_length - len(dup_count_str) - len(ext)]
+            file_path = safe_join(
+                self.UPLOADS_ROOT_DIR,
+                os.path.dirname(str(self)),
+                get_valid_filename(name + dup_count_str + ext)
+            )
+            if not default_storage.exists(file_path):
+                return os.path.basename(file_path)
 
     def save(self, *args, **kwargs):
         if self.outcome_type == OutcomeMedia.CURRICULUM:
