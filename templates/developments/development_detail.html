@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load development_tags %}
+{% load static %}
 
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'developments/styles.css' %}">
+{% endblock custom_css %}
 
 {% block title %}
   {{ development.title }} | SIRIUS
@@ -35,31 +40,210 @@
     </div>
     {% endif %}
   </div>
-    <h6>{{ development.title }}</h6>
-  <div id="development_detail_description">
-    <p>{{ development.description }}</p>
-  </div>
+    <h5>{{ development.title }}</h5>
   <div id="development_detail_semester">
     <p>
       {% if development.semester %} {{ development.get_semester_display }} {% endif %}
       {% if development.year %}{{ development.year }} {% endif %}
     </p>
   </div>
-  <div id="development_detail_media">
-    <ul>
-    {% for type in DEVELOPMENT_TYPES %}
-    <h6>{{ type }}</h6>
-      {% for media in developmentmedia_list %}
-        {% if media.get_development_type_display == type %}
-        <li>
-          <a href="{{ media.media.url }}">{{ media.filename }}</a>
-          {{ media.modified }}
-        </li>
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-    </ul>
+  <div id="development_detail_description">
+    <p>{{ development.description }}</p>
   </div>
+</div>
+
+
+<div id="id_development_media">
+  <ul class="nav nav-tabs" id="development_media_tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active"
+         id="tab_agenda"
+         href="#agenda"
+         data-toggle="tab"
+         data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+         role="tab"
+         aria-controls="home"
+         aria-selected="true">
+        Agenda
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         id="tab_assessment"
+         href="#assessment"
+         data-toggle="tab"
+         data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+         role="tab"
+         aria-controls="profile"
+         aria-selected="false">
+        Assessment
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         id="tab_people"
+         href="#people"
+         data-toggle="tab"
+         data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+         role="tab"
+         aria-controls="contact"
+         aria-selected="false">
+         People
+      </a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link"
+         id="tab_presentation"
+         href="#presentation"
+         data-toggle="tab"
+         data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+         role="tab"
+         aria-controls="contact"
+         aria-selected="false">
+         Presentation
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link"
+         id="tab_other"
+         href="#other"
+         data-toggle="tab"
+         data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+         role="tab"
+         aria-controls="contact"
+         aria-selected="false">
+        Other
+      </a>
+    </li>
+  </ul>
+
+  {% if development_media %}
+  <div class="tab-content" id="id_development_media_content">
+    <div class="tab-pane show active" 
+         id="agenda"
+         role="tabpanel" 
+         aria-labelledby="tab_agenda">
+      <ul>
+        {% for subdir, full_path in development_media.agenda_subdirs.items %}
+        <li class="w-100 row mt-1">
+          <a href="javascript:void(0)" 
+             data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+             data-full-path="{{ full_path }}">
+             <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+          </a>
+        </li>
+        {% endfor %}
+        {% for agenda in development_media.agenda %}
+        <li class="w-100 row mt-1">
+          <a href="{{ agenda.media.url }}">
+            <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ agenda.filename }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tab-pane"
+         id="assessment" 
+         role="tabpanel"
+         aria-labelledby="tab_assessment">
+      <ul>
+        {% for subdir, full_path in development_media.assessment_subdirs.items %}
+        <li class="w-100 row mt-1">
+          <a href="javascript:void(0)"
+             data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+             data-full-path="{{ full_path }}">
+            <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+          </a>
+        </li>
+        {% endfor %}
+        {% for assessment in development_media.assessment %}
+        <li class="w-100 row mt-1">
+          <a href="{{ assessment.media.url }}">
+            <img class="svg-icon-small mr-2" src="{% static 'img/font-awesome/file.svg' %}"> {{ assessment.filename }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tab-pane"
+         id="people"
+         role="tabpanel"
+         aria-labelledby="tab_people">
+      <ul>
+        {% for subdir, full_path in development_media.people_subdirs.items %}
+        <li class="w-100 row mt-1">
+          <a href="javascript:void(0)"
+             data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+             data-full-path="{{ full_path }}">
+            <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+          </a>
+        </li>
+        {% endfor %}
+        {% for people in development_media.people %}
+        <li class="w-100 row mt-1">
+          <a href="{{ people.media.url }}">
+            <img class="svg-icon-small mr-2 text-right" src="{% static 'img/font-awesome/file.svg' %}"> {{ people.filename }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tab-pane"
+         id="presentation"
+         role="tabpanel"
+         aria-labelledby="tab_presentation">
+      <ul>
+        {% for subdir, full_path in development_media.presentation_subdirs.items %}
+        <li class="w-100 row mt-1">
+          <a href="javascript:void(0)"
+             data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+             data-full-path="{{ full_path }}">
+            <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+          </a>
+        </li>
+        {% endfor %}
+        {% for presentation in development_media.presentation %}
+        <li class="w-100 row mt-1">
+          <a href="{{ presentation.media.url }}">
+            <img class="svg-icon-small mr-2 text-right" src="{% static 'img/font-awesome/file.svg' %}"> {{ presentation.filename }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tab-pane"
+         id="other"
+         role="tabpanel"
+         aria-labelledby="tab_other">
+      <ul>
+        {% for subdir, full_path in development_media.other_subdirs.items %}
+        <li class="w-100 row mt-1">
+          <a href="javascript:void(0)"
+             data-development-media-url="{% url 'developments:ajax-get-development-media' %}"
+             data-full-path="{{ full_path }}">
+            <img class="svg-icon mr-2" src="{% static 'img/font-awesome/folder-open.svg' %}">{{ subdir }}
+          </a>
+        </li>
+        {% endfor %}
+        {% for other in development_media.other %}
+        <li class="w-100 row mt-1">
+          <a href="{{ other.media.url }}">
+            <img class="svg-icon-small mr-2 text-right" src="{% static 'img/font-awesome/file.svg' %}"> {{ other.filename }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 {% block extra-content %}
@@ -67,3 +251,6 @@
 
 {% endblock content-main %}
 
+{% block custom_js %}
+  <script type="text/javascript" src={% static 'js/get-development-media.js' %}></script>
+{% endblock custom_js %}

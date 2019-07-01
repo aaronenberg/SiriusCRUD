@@ -12,16 +12,11 @@ function get_outcome_media(el)
 {
     var data;
     var outcome = $("#id_outcomes .btn-secondary .outcome");
-    if (outcome.length === 0) {
-        var outcome_slug = window.location.pathname.split('/').slice(-2)[0];
-        data = {'outcome_slug': outcome_slug};
-    }
-    else {
-        var outcome_id = parseInt(outcome.attr('id').split('_').slice(-1).pop());
-        data = {'outcome_id': outcome_id};
-    }
-    if (outcome_id === null && outcome_slug === null)
+    if (outcome.length === 0)
         return false;
+
+    var outcome_id = parseInt(outcome.attr('id').split('_').slice(-1).pop());
+    data = {'outcome_id': outcome_id};
 
     var success;
     var url = $(el).attr("data-outcome-media-url");

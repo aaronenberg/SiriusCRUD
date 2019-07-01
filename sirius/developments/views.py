@@ -1,4 +1,6 @@
+from collections import namedtuple
 import re
+import os
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.files.uploadedfile import UploadedFile
@@ -196,6 +198,76 @@ class DevelopmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return render(self.request, self.get_template_names(), context)
 
 
+def get_subdirs_and_media(media, cwd):
+    '''get the contents of the 'cwd' which may include files and/or subdirectories'''
+    subdirs = {}
+    media_in_cwd = set()
+    for m in media:
+        if not os.path.dirname(str(m)).startswith(cwd.rstrip('/')):
+            continue
+        try:
+            dir_name = os.path.dirname(str(m)).split(cwd, 1)[1].split('/', 1)[0]
+            subdirs[dir_name] = os.path.join(cwd, dir_name)
+        except IndexError:
+            media_in_cwd.add(m.pk)
+    media = media.filter(pk__in=media_in_cwd)
+    return subdirs, media
+
+
+Development_Media = namedtuple('Development_Media', [
+    'development', 
+    'agenda', 
+    'agenda_subdirs',
+    'assessment',
+    'assessment_subdirs',
+    'people',
+    'people_subdirs',
+    'presentation',
+    'presentation_subdirs',
+    'other',
+    'other_subdirs'
+])
+
+
+def get_development_media(request):
+    development_slug = request.GET.get('development_slug')
+
+    if development_slug is None:
+        raise ValueError("Need slug of an Development to get DevelopmentMedia")
+    development = Development.objects.get(slug=development_slug)
+
+    cwd = request.GET.get('cwd', development.slug) + '/'
+
+    agenda = development.development_media.filter(development_type='AG', is_public=True)
+    agenda_subdirs, agenda = get_subdirs_and_media(agenda, cwd)
+
+    assessment = development.development_media.filter(development_type='AS', is_public=True)
+    assessment_subdirs, assessment = get_subdirs_and_media(assessment, cwd)
+
+    people = development.development_media.filter(development_type='PE', is_public=True)
+    people_subdirs, people = get_subdirs_and_media(people, cwd)
+    
+    presentation = development.development_media.filter(development_type='PR', is_public=True)
+    presentation_subdirs, presentation = get_subdirs_and_media(presentation, cwd)
+
+    other = development.development_media.filter(development_type='OT', is_public=True)
+    other_subdirs, other = get_subdirs_and_media(other, cwd)
+
+    development_media = Development_Media(
+            development, 
+            agenda, 
+            agenda_subdirs,
+            assessment,
+            assessment_subdirs,
+            people,
+            people_subdirs,
+            presentation,
+            presentation_subdirs,
+            other,
+            other_subdirs
+    )
+    return render(request, 'partials/development_media.html', {'development_media': development_media})
+
 class DevelopmentDetailView(DetailView):
     ''' Displays user-submitted posts for an development. Template hides form to 
         submit a post and certain types of developments from unauthenticated users.'''
@@ -208,17 +280,42 @@ class DevelopmentDetailView(DetailView):
         return Development.objects.exclude(Q(is_public=False))
 
     def get_context_data(self, **kwargs):
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
-        media = DevelopmentMedia.objects.filter(development__pk=self.object.pk, is_public=True)
-        context['developmentmedia_list'] = media
-        types = [t['development_type'] for t in media.values('development_type')]
-        context['DEVELOPMENT_TYPES'] = [t[1] for t in DevelopmentMedia.DEVELOPMENT_TYPES if t[0] in types]
+        agenda = self.object.development_media.filter(development_type='AG', is_public=True)
+        assessment = self.object.development_media.filter(development_type='AS', is_public=True)
+        people = self.object.development_media.filter(development_type='PE', is_public=True)
+        presentation = self.object.development_media.filter(development_type='PR', is_public=True)
+        other = self.object.development_media.filter(development_type='OT', is_public=True)
+
+        cwd = self.request.GET.get('cwd', self.object.slug) + '/'
+        agenda_subdirs, agenda = get_subdirs_and_media(agenda, cwd)
+        assessment_subdirs, assessment = get_subdirs_and_media(assessment, cwd)
+        people_subdirs, people = get_subdirs_and_media(people, cwd)
+        presentation_subdirs, presentation = get_subdirs_and_media(presentation, cwd)
+        other_subdirs, other = get_subdirs_and_media(other, cwd)
+
+        context['development_media'] = Development_Media(
+            self.object,
+            agenda, 
+            agenda_subdirs, 
+            assessment,
+            assessment_subdirs,
+            people,
+            people_subdirs,
+            presentation,
+            presentation_subdirs,
+            other,
+            other_subdirs
+        )
         return context
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data()
         return render(request, self.get_template_names(), context) 
+
+
 
 
 class DraftListView(LoginRequiredMixin, UserPassesTestMixin, DevelopmentListView):

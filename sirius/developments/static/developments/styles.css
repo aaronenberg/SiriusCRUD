@@ -21,20 +21,22 @@
 }
 
 #development-media-forms-row {
+    display: flex;
+    flex-flow: column;
     border: 0.2rem solid gainsboro; 
     border-radius: 5px;
     background-color: rgba(18,85,74, 0.1);
-    height:23vh;
+    height:35vh;
     margin-bottom: 1rem;
-    padding: 0.8rem;
-    align-items:center;
+    padding-right: 0;
 }
 #development-media-forms {
-    overflow-y: auto;
-    height:100%;
+    overflow-y: scroll;
+    flex: 1 1 auto;
+    padding-left: 0.5rem;
 }
 #development-media-forms .bmd-form-group {
-    padding-top: 10px;
+    padding-top: 0;
 }
 
 .input-group>.custom-file-control:not(:first-child),
@@ -55,6 +57,29 @@
         margin-top:1rem;
         height:35vh;
     }
+}
+
+#id_development_media {
+    display:flex;
+    flex-direction: column;
+    border-radius: 5px;
+    height: 40em;
+    background-color: whitesmoke;
+    border: 2px solid #0f5e7f;
+}
+
+
+#development_media_tabs {
+    background-color: #0f5e7f;
+}
+
+.nav-tabs .nav-link {
+    padding: 1em;
+    color: white;
+}
+
+.nav-tabs .nav-link.active {
+    color: snow;
 }
 
 #development_list {

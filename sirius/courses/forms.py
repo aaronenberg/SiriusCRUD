@@ -110,7 +110,7 @@ class CourseForm(ModelForm):
             'data-container': "body",
             'data-toggle': "popover",
             'data-placement': "bottom",
-            'data-content': "Separate sections with a comma. To specify a steady range of numbers use a dash. Ex: 1, 2, 12-15",
+            'data-content': "Separate sections with a comma. Use a dash to specify all numbers within a range. Ex: 1, 2, 12-15",
         })
         self.fields['description'].widget = Textarea(attrs={
             'id': 'outcome_description',

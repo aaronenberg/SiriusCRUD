@@ -12,5 +12,6 @@ urlpatterns = [
     path('drafts/development', views.DraftListView.as_view(), name='draft-list'),
     path('drafts/development/<slug:slug>', views.DraftDetailView.as_view(), name='draft-detail'),
     path('drafts/development/<slug:slug>/edit', views.DraftUpdateView.as_view(), name='draft-update'),
+    path('ajax/development/get-development-media', views.get_development_media, name='ajax-get-development-media'),
 ]
 
